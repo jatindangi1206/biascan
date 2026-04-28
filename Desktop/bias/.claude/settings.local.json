@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -m venv .venv)",
+      "Bash(.venv/bin/pip install *)",
+      "Bash(.venv/bin/python -m uvicorn app.main:app --port 8000 --log-level warning)",
+      "Bash(curl -sf http://localhost:8000/api/health)",
+      "Bash(curl -s http://localhost:8000/api/health)",
+      "Bash(curl -s http://localhost:8000/api/agents)",
+      "Bash(curl -s -X POST http://localhost:8000/api/analyze -H 'Content-Type: application/json' -d '{\"text\":\"This clearly demonstrates X.\",\"mode\":\"premium\"}')",
+      "Bash(npm install *)",
+      "Bash(npm run *)",
+      "Bash(kill %1)",
+      "Bash(pkill -f \"uvicorn app.main\")"
+    ]
+  }
+}
