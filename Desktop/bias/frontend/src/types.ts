@@ -8,7 +8,7 @@ export type BiasType =
   | "causal_inference_error";
 
 export type AgentName = "ARGUS" | "LIBRA" | "LENS" | "QUILL" | "VIGIL";
-export type ProviderName = "ollama" | "groq" | "together" | "nvidia" | "anthropic" | "openai" | "gemini";
+export type ProviderName = "ollama" | "groq" | "together" | "nvidia" | "anthropic" | "openai" | "gemini" | "lightning";
 
 export interface ProviderInfo {
   name: ProviderName;

@@ -6,11 +6,32 @@
   --paper: rgba(255, 252, 247, 0.78);
   --paper-strong: #fffdf9;
   --ink: #2a2622;
+  --ink-2: #4a4238;
   --muted: #8b8279;
   --line: rgba(90, 73, 56, 0.14);
   --line-strong: rgba(90, 73, 56, 0.22);
   --accent: #c96f45;
   --accent-soft: rgba(201, 111, 69, 0.12);
+
+  /* surface colors referenced in JS-generated html */
+  --surface-card: rgba(255, 255, 255, 0.50);
+  --surface-input: rgba(255, 255, 255, 0.56);
+  --surface-popover: rgba(255, 252, 247, 0.96);
+  --surface-drawer: rgba(250, 247, 242, 0.98);
+  --shadow-popover: 0 12px 28px rgba(60, 45, 35, 0.08);
+  --body-bg: radial-gradient(circle at top left, rgba(255,255,255,0.45), transparent 36%),
+             linear-gradient(180deg, #faf7f2 0%, var(--bg) 100%);
+
+  /* semantic text shades */
+  --text-secondary: #7f766d;
+  --text-tertiary: #8f857c;
+  --text-subtle: #82796f;
+  --text-faint: #766d64;
+  --text-dim: #756c63;
+  --text-link: #7e746b;
+  --text-warn: #8a5e38;
+  --text-warn-border: rgba(164, 81, 53, 0.18);
+  --text-warn-bg: rgba(201, 111, 69, 0.08);
 
   /* Typography scale */
   --text-2xs: 10px;
@@ -24,6 +45,196 @@
   --text-2xl:  28px;
   --text-3xl:  36px;
 }
+
+/* ── Dark mode ─────────────────────────────────────────────────────────── */
+
+[data-theme="dark"] {
+  --bg:            #171411;
+  --bg-soft:       #1d1a16;
+  --paper:         rgba(30, 26, 21, 0.88);
+  --paper-strong:  #26211b;
+  --ink:           #f0ebe4;
+  --ink-2:         #c9c0b7;
+  --muted:         #7a736b;
+  --line:          rgba(255, 220, 185, 0.09);
+  --line-strong:   rgba(255, 220, 185, 0.16);
+  --accent:        #d4784e;
+  --accent-soft:   rgba(212, 120, 78, 0.14);
+
+  --surface-card:    rgba(38, 33, 27, 0.85);
+  --surface-input:   rgba(38, 33, 27, 0.72);
+  --surface-popover: rgba(28, 24, 19, 0.97);
+  --surface-drawer:  rgba(20, 17, 13, 0.98);
+  --shadow-popover:  0 12px 28px rgba(0, 0, 0, 0.35);
+  --body-bg: radial-gradient(circle at top left, rgba(60, 50, 35, 0.45), transparent 36%),
+             linear-gradient(180deg, #1c1814 0%, var(--bg) 100%);
+
+  --text-secondary: #9e958c;
+  --text-tertiary:  #8b837b;
+  --text-subtle:    #8b837b;
+  --text-faint:     #9a9087;
+  --text-dim:       #938b82;
+  --text-link:      #9e958c;
+  --text-warn:      #c99a75;
+  --text-warn-border: rgba(212, 120, 78, 0.22);
+  --text-warn-bg:   rgba(212, 120, 78, 0.12);
+
+  color-scheme: dark;
+}
+
+[data-theme="dark"] body {
+  background: var(--body-bg);
+}
+
+/* Dark: hero / landing button */
+[data-theme="dark"] .hero-button,
+[data-theme="dark"] .run-button {
+  background: #f0ebe4;
+  color: #1d1a16;
+}
+
+[data-theme="dark"] .hero-button:hover,
+[data-theme="dark"] .run-button:hover:not(:disabled) {
+  background: #e0d8cf;
+}
+
+/* Dark: textarea / input shells */
+[data-theme="dark"] .input-shell {
+  background: rgba(30, 26, 21, 0.62);
+  border-color: var(--line-strong);
+}
+
+[data-theme="dark"] .references-textarea {
+  background: rgba(30, 26, 21, 0.52);
+  border-color: var(--line);
+}
+
+[data-theme="dark"] .mode-tabs {
+  background: rgba(30, 26, 21, 0.45);
+}
+
+[data-theme="dark"] .mode-tab:hover:not(.active) {
+  background: rgba(255, 220, 185, 0.06);
+}
+
+[data-theme="dark"] .mode-tab.active {
+  background: rgba(212, 120, 78, 0.14);
+  color: var(--accent);
+}
+
+/* Dark: settings drawer */
+[data-theme="dark"] .settings-drawer {
+  background: var(--surface-drawer);
+}
+
+[data-theme="dark"] .provider-option,
+[data-theme="dark"] .choice-card,
+[data-theme="dark"] .agent-option {
+  background: rgba(40, 35, 28, 0.7);
+}
+
+[data-theme="dark"] .provider-option.active,
+[data-theme="dark"] .choice-card.active,
+[data-theme="dark"] .agent-option.active {
+  background: rgba(212, 120, 78, 0.12);
+  border-color: rgba(212, 120, 78, 0.22);
+}
+
+[data-theme="dark"] .drawer-input,
+[data-theme="dark"] .drawer-select {
+  background: var(--surface-input);
+  border-color: var(--line);
+  color: var(--ink);
+}
+
+[data-theme="dark"] .drawer-input:focus,
+[data-theme="dark"] .drawer-select:focus {
+  border-color: var(--line-strong);
+}
+
+[data-theme="dark"] .drawer-meta-card {
+  background: rgba(38, 33, 27, 0.65);
+}
+
+[data-theme="dark"] .settings-backdrop {
+  background: rgba(0, 0, 0, 0.38);
+}
+
+/* Dark: annotation popover */
+[data-theme="dark"] .annotation-popover {
+  background: var(--surface-popover);
+  border-color: var(--line-strong);
+  box-shadow: var(--shadow-popover);
+  color: var(--ink);
+}
+
+/* Dark: flag cards */
+[data-theme="dark"] .flag-card {
+  background: var(--surface-card);
+  border-color: var(--line);
+}
+
+[data-theme="dark"] .flag-card-extra pre {
+  background: rgba(10, 8, 6, 0.95);
+}
+
+/* Dark: progress rows */
+[data-theme="dark"] .progress-row.phase-running {
+  background: rgba(212, 120, 78, 0.07);
+}
+
+[data-theme="dark"] .progress-icon.done {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+/* Dark: banners */
+[data-theme="dark"] .error-banner {
+  background: var(--text-warn-bg);
+  border-color: var(--text-warn-border);
+  color: var(--text-warn);
+}
+
+[data-theme="dark"] .boot-banner {
+  background: rgba(30, 26, 21, 0.68);
+  border-color: var(--line);
+  color: var(--muted);
+}
+
+/* Dark: nav link primary */
+[data-theme="dark"] .nav-link-primary {
+  border-color: rgba(212, 120, 78, 0.38);
+}
+
+[data-theme="dark"] .nav-link-primary:hover:not(:disabled) {
+  background: var(--accent-soft);
+}
+
+/* Dark mode toggle button */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border-radius: 6px;
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  transition: color 150ms ease, border-color 150ms ease, background 150ms ease;
+}
+
+.theme-toggle:hover {
+  color: var(--ink);
+  border-color: var(--muted);
+  background: var(--accent-soft);
+}
+
+/* ── End dark mode ────────────────────────────────────────────────────── */
 
 * {
   box-sizing: border-box;
@@ -42,9 +253,7 @@ html {
 }
 
 body {
-  background:
-    radial-gradient(circle at top left, rgba(255, 255, 255, 0.45), transparent 36%),
-    linear-gradient(180deg, #faf7f2 0%, var(--bg) 100%);
+  background: var(--body-bg);
   color: var(--ink);
   font-family: "Inter", system-ui, sans-serif;
   font-feature-settings: "ss01", "cv11";

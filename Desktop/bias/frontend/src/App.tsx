@@ -31,14 +31,17 @@ const DEFAULT_CONFIG: ProviderConfig = {
 };
 
 const SELECTION_KEY = "biasscan.agents";
+const THEME_KEY     = "biasscan.theme";
+
 const PROVIDER_LABELS = {
-  ollama: "Ollama",
-  groq: "Groq",
-  together: "Together AI",
-  nvidia: "NVIDIA NIM",
+  ollama:    "Ollama",
+  groq:      "Groq",
+  together:  "Together AI",
+  nvidia:    "NVIDIA NIM",
   anthropic: "Anthropic",
-  openai: "OpenAI",
-  gemini: "Gemini",
+  openai:    "OpenAI",
+  gemini:    "Gemini",
+  lightning: "Lightning AI",
 } as const;
 
 function loadStoredAgents(): AgentName[] {
@@ -89,6 +92,26 @@ export default function App() {
   const [stream, setStream] = useState<StreamState>(EMPTY_STREAM);
 
   const abortRef = useRef<(() => void) | null>(null);
+
+  // ── Theme ───────────────────────────────────────────────────────────────
+  const [isDark, setIsDark] = useState<boolean>(() => {
+    try {
+      const stored = localStorage.getItem(THEME_KEY);
+      if (stored !== null) return stored === "dark";
+    } catch { /* ignore */ }
+    return window.matchMedia?.("(prefers-color-scheme: dark)").matches ?? false;
+  });
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (isDark) {
+      root.setAttribute("data-theme", "dark");
+    } else {
+      root.removeAttribute("data-theme");
+    }
+    try { localStorage.setItem(THEME_KEY, isDark ? "dark" : "light"); } catch { /* ignore */ }
+  }, [isDark]);
+  // ────────────────────────────────────────────────────────────────────────
 
   const [config, setConfig] = useState<ProviderConfig>(
     () => loadStoredConfig() ?? DEFAULT_CONFIG
@@ -339,6 +362,15 @@ export default function App() {
               Settings
             </button>
           )}
+          <button
+            type="button"
+            className="theme-toggle"
+            title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+            aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+            onClick={() => setIsDark((d) => !d)}
+          >
+            {isDark ? "☀" : "☾"}
+          </button>
         </div>
       </header>
 

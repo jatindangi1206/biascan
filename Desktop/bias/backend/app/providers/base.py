@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import Literal, Protocol, Optional
 from pydantic import BaseModel, Field
 
-ProviderName = Literal["ollama", "groq", "together", "nvidia", "anthropic", "openai", "gemini"]
+ProviderName = Literal["ollama", "groq", "together", "nvidia", "anthropic", "openai", "gemini", "lightning"]
 
 SUPPORTED_PROVIDERS: list[dict] = [
     {
@@ -68,6 +68,15 @@ SUPPORTED_PROVIDERS: list[dict] = [
         "default_model": "gemini-2.0-flash",
         "model_hint": "gemini-2.0-flash · gemini-2.0-flash-lite · gemini-1.5-pro",
     },
+    {
+        "name": "lightning",
+        "label": "Lightning AI (your Gemma deployment)",
+        "needs_key": True,
+        "needs_base_url": False,
+        "default_base_url": "https://lightning.ai",
+        "default_model": "lightning-ai/gemma-4-31B-it",
+        "model_hint": "lightning-ai/gemma-4-31B-it · lightning-ai/gpt-oss-120b",
+    },
 ]
 
 
@@ -114,6 +123,7 @@ def build_provider(config: ProviderConfig) -> LLMProvider:
     from .anthropic import AnthropicProvider
     from .openai_compat import OpenAIProvider
     from .gemini import GeminiProvider
+    from .lightning import LightningProvider
 
     if config.provider == "ollama":
         return OllamaProvider(config)
@@ -129,4 +139,6 @@ def build_provider(config: ProviderConfig) -> LLMProvider:
         return OpenAIProvider(config)
     if config.provider == "gemini":
         return GeminiProvider(config)
+    if config.provider == "lightning":
+        return LightningProvider(config)
     raise LLMError(f"Unknown provider: {config.provider}")
