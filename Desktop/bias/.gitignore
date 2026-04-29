@@ -17,3 +17,8 @@ dist/
 .DS_Store
 .vscode/
 .idea/
+
+# Local tool caches — not part of the project
+.adalflow/
+.claude/
+.codex/

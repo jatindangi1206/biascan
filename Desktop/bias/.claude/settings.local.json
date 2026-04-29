@@ -11,7 +11,21 @@
       "Bash(npm install *)",
       "Bash(npm run *)",
       "Bash(kill %1)",
-      "Bash(pkill -f \"uvicorn app.main\")"
+      "Bash(pkill -f \"uvicorn app.main\")",
+      "mcp__Claude_Preview__preview_start",
+      "Read(//Users/jatindangi/Desktop/**)",
+      "Read(//Users/jatindangi/**)",
+      "Bash(lsof -iTCP -sTCP:LISTEN -n -P)",
+      "Bash(curl -s http://localhost:11434/api/tags)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); [print\\(m['name']\\) for m in d.get\\('models',[]\\)]\")",
+      "Bash(ollama serve *)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); models=[m['name'] for m in d.get\\('models',[]\\)]; print\\('Models:', models\\)\")",
+      "Bash(env)",
+      "Bash(python3 -c \"import os; keys=[k for k in os.environ if 'anthropic' in k.lower\\(\\) or 'ANTHROPIC' in k]; print\\('Found:', keys\\)\")",
+      "Bash(curl -s http://localhost:8000/api/providers)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); [print\\(f\\\\\"  {p['name']:12} {p['label']}\\\\\"\\) for p in d['providers']]\")",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); [print\\(f\\\\\"  {a['name']} → {a['bias_type']}\\\\\"\\) for a in d['agents']]\")",
+      "Bash(python3 -)"
     ]
   }
 }
