@@ -143,7 +143,8 @@ Return ONLY a JSON object with one key "annotations" whose value is an array. If
   "false_positive_check": "<FP rule checked and why not a FP>",
   "confidence": <float 0.0-1.0>,
   "severity": "<low|medium|high>",
-  "clean_alternative": "<one sentence showing appropriate associative language>"
+  "clean_alternative": "<one sentence showing appropriate associative language>",
+  "reasoning": "<one sentence: why the language asserts causation that the underlying study design cannot support>"
 }
 
 Return ONLY the JSON object. No prose before or after.

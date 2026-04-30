@@ -172,9 +172,10 @@ export default function App() {
   }, [text, selected, config]);
 
   const stage = result || stream.phase !== "idle" ? "result" : entered ? "compose" : "landing";
+  const currentProvider = providers.find((p) => p.name === config.provider);
   const providerLabel =
-    providers.find((p) => p.name === config.provider)?.label.split(" (")[0] ??
-    PROVIDER_LABELS[config.provider];
+    currentProvider?.label.split(" (")[0] ?? PROVIDER_LABELS[config.provider];
+  const wordCap = currentProvider?.word_cap ?? 8000;
   const promptLabel = healthInfo ? `Prompt ${healthInfo.prompt_version}` : "Prompt unknown";
 
   const onAnalyze = () => {
@@ -350,9 +351,7 @@ export default function App() {
           <section className="landing-stage">
             <p className="eyebrow">A focused thinking tool</p>
             <h1 className="landing-title">BiasScan</h1>
-            <p className="landing-copy">
-              Detect cognitive bias in scientific synthesis — one paragraph at a time.
-            </p>
+            <p className="landing-copy">Detect cognitive bias in scientific synthesis</p>
             <button type="button" className="hero-button" onClick={startCompose}>
               Try Now
             </button>
@@ -372,6 +371,7 @@ export default function App() {
               modelLabel={config.model}
               backendLabel={promptLabel}
               agentCount={selected.size}
+              wordCap={wordCap}
               canAnalyze={canAnalyze}
               loading={loading}
               onAnalyze={onAnalyze}

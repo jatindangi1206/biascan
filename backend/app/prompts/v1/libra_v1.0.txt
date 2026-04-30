@@ -134,7 +134,8 @@ Return ONLY a JSON object with one key "annotations" whose value is an array. If
   "false_positive_check": "<which FP rule checked and why not a FP>",
   "confidence": <float 0.0-1.0>,
   "severity": "<low|medium|high>",
-  "clean_alternative": "<one sentence showing appropriately hedged language>"
+  "clean_alternative": "<one sentence showing appropriately hedged language>",
+  "reasoning": "<one sentence: which hedge is missing and why the stated certainty exceeds the underlying evidence>"
 }
 
 Return ONLY the JSON object. No prose before or after.

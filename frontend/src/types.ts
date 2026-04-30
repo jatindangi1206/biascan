@@ -18,6 +18,7 @@ export interface ProviderInfo {
   default_base_url: string;
   default_model: string;
   model_hint: string;
+  word_cap: number;
 }
 
 export interface HealthResponse {

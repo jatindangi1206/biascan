@@ -42,8 +42,9 @@ class Orchestrator:
         mode: Mode,
         provider_config: ProviderConfig,
         agents: list[str] | None,
+        extra_warnings: list[str] | None = None,
     ) -> AnalyzeResponse:
-        warnings: list[str] = []
+        warnings: list[str] = list(extra_warnings or [])
 
         try:
             provider = build_provider(provider_config)
@@ -54,7 +55,7 @@ class Orchestrator:
                 overall_bias_score=0.0,
                 annotations=[],
                 agents=[],
-                warnings=[str(e)],
+                warnings=warnings + [str(e)],
                 provider=provider_config.model_dump_safe(),
             )
 
@@ -114,9 +115,10 @@ class Orchestrator:
         mode: Mode,
         provider_config: ProviderConfig,
         agents: list[str] | None,
+        extra_warnings: list[str] | None = None,
     ) -> AsyncIterator[dict]:
         """Async generator — yields SSE-ready dicts as each agent completes."""
-        warnings: list[str] = []
+        warnings: list[str] = list(extra_warnings or [])
 
         try:
             provider = build_provider(provider_config)

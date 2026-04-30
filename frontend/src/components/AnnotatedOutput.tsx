@@ -15,6 +15,36 @@ interface Segment {
   anns: Annotation[];
 }
 
+const REASON_FIELDS = [
+  "reasoning",
+  "linguistic_evidence",
+  "evidenced_scope",
+  "evidence_quality",
+  "alternative_frame",
+  "evidence_design",
+] as const;
+
+const TAG_FIELDS = ["mechanism", "frame_type"] as const;
+
+function pickString(extras: Record<string, unknown>, keys: readonly string[]): string | null {
+  for (const k of keys) {
+    const v = extras[k];
+    if (typeof v === "string" && v.trim()) return v.trim();
+  }
+  return null;
+}
+
+function succinctReason(annotation: Annotation): { tag: string | null; why: string | null } {
+  const tag = pickString(annotation.extras, TAG_FIELDS);
+  let why = pickString(annotation.extras, REASON_FIELDS) ?? annotation.false_positive_check ?? null;
+  if (why) {
+    const firstStop = why.search(/(?<=[.!?])\s/);
+    if (firstStop > 0 && firstStop < 160) why = why.slice(0, firstStop + 1);
+    if (why.length > 180) why = why.slice(0, 177).trimEnd() + "…";
+  }
+  return { tag, why };
+}
+
 function segment(text: string, annotations: Annotation[]): Segment[] {
   if (annotations.length === 0) {
     return [{ start: 0, end: text.length, text, anns: [] }];
@@ -117,22 +147,31 @@ export function AnnotatedOutput({ text, annotations }: Props) {
               {seg.text}
               {active === index && (
                 <span className="annotation-popover">
-                  {seg.anns.map((annotation, rowIndex) => (
-                    <span key={rowIndex} className="annotation-popover-row">
-                      <span className="annotation-popover-title">
-                        {annotation.agent_name} · {BIAS_LABELS[annotation.bias_type]}
-                      </span>
-                      <span className="annotation-popover-meta">
-                        {annotation.severity} ·{" "}
-                        {(annotation.confidence * 100).toFixed(0)}%
-                      </span>
-                      {annotation.clean_alternative && (
-                        <span className="annotation-popover-clean">
-                          {annotation.clean_alternative}
+                  {seg.anns.map((annotation, rowIndex) => {
+                    const { tag, why } = succinctReason(annotation);
+                    return (
+                      <span key={rowIndex} className="annotation-popover-row">
+                        <span className="annotation-popover-title">
+                          {annotation.agent_name} · {BIAS_LABELS[annotation.bias_type]}
                         </span>
-                      )}
-                    </span>
-                  ))}
+                        <span className="annotation-popover-meta">
+                          {annotation.severity} ·{" "}
+                          {(annotation.confidence * 100).toFixed(0)}%
+                          {tag && <span className="annotation-popover-tag">{tag.replace(/_/g, " ")}</span>}
+                        </span>
+                        {why && (
+                          <span className="annotation-popover-why">
+                            <em>Why:</em> {why}
+                          </span>
+                        )}
+                        {annotation.clean_alternative && (
+                          <span className="annotation-popover-clean">
+                            {annotation.clean_alternative}
+                          </span>
+                        )}
+                      </span>
+                    );
+                  })}
                 </span>
               )}
             </span>

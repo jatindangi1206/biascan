@@ -1,8 +1,15 @@
 from __future__ import annotations
+import os
+
 import httpx
 
 from ..config import PROVIDER_TIMEOUT_S
 from .base import LLMError, ProviderConfig
+
+# Ollama's default num_ctx is 2048, which silently truncates our system prompt
+# (~3K tokens) plus any non-trivial synthesis text. Force a larger window so the
+# model actually sees the whole paste.
+OLLAMA_NUM_CTX = int(os.getenv("BIASSCAN_OLLAMA_NUM_CTX", "16384"))
 
 
 class OllamaProvider:
@@ -20,7 +27,11 @@ class OllamaProvider:
             "model": self._model,
             "stream": False,
             "format": "json",
-            "options": {"num_predict": max_tokens, "temperature": 0.2},
+            "options": {
+                "num_ctx": OLLAMA_NUM_CTX,
+                "num_predict": max_tokens,
+                "temperature": 0.2,
+            },
             "messages": [
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_message},

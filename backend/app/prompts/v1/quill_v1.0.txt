@@ -137,7 +137,8 @@ Return ONLY a JSON object with one key "annotations" whose value is an array. If
   "false_positive_check": "<FP rule checked and why not a FP>",
   "confidence": <float 0.0-1.0>,
   "severity": "<low|medium|high>",
-  "clean_alternative": "<one sentence showing symmetrically framed language>"
+  "clean_alternative": "<one sentence showing symmetrically framed language>",
+  "reasoning": "<one sentence: which frame was chosen and what the alternative frame would reveal that this one conceals>"
 }
 
 Return ONLY the JSON object. No prose before or after.

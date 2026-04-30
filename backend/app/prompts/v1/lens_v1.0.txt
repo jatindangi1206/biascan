@@ -130,7 +130,8 @@ Return ONLY a JSON object with one key "annotations" whose value is an array. If
   "false_positive_check": "<FP rule checked and why this is not a FP>",
   "confidence": <float 0.0-1.0>,
   "severity": "<low|medium|high>",
-  "clean_alternative": "<one sentence showing appropriately scoped language>"
+  "clean_alternative": "<one sentence showing appropriately scoped language>",
+  "reasoning": "<one sentence: how the claimed scope outruns what the cited studies actually cover>"
 }
 
 Return ONLY the JSON object. No prose before or after.

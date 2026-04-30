@@ -18,9 +18,16 @@ interface Props {
   modelLabel: string;
   backendLabel: string;
   agentCount: number;
+  wordCap: number;
   canAnalyze: boolean;
   loading: boolean;
   onAnalyze: () => void;
+}
+
+function countWords(s: string): number {
+  const trimmed = s.trim();
+  if (!trimmed) return 0;
+  return trimmed.split(/\s+/).length;
 }
 
 const SAMPLE = `These findings clearly demonstrate that intervention X causes a substantial reduction in anxiety symptoms across all patient populations. The accumulating evidence definitively confirms our hypothesis, with three randomised trials showing significant benefits. While one observational study reported null results, methodological limitations preclude drawing strong conclusions from that work. The intervention reduces risk of relapse by 40%, offering patients a meaningful chance of recovery. Increased adherence leads to improved long-term outcomes — the mechanism is clear.`;
@@ -36,11 +43,14 @@ export function InputPanel({
   modelLabel,
   backendLabel,
   agentCount,
+  wordCap,
   canAnalyze,
   loading,
   onAnalyze,
 }: Props) {
   const [showReferences, setShowReferences] = useState(false);
+  const wordCount = countWords(text);
+  const overCap = wordCount > wordCap;
 
   return (
     <div className="composer">
@@ -65,7 +75,15 @@ export function InputPanel({
             Load sample
           </button>
           <span>{text.length.toLocaleString()} chars</span>
+          <span className={overCap ? "input-words over-limit" : "input-words"}>
+            {wordCount.toLocaleString()} / {wordCap.toLocaleString()} words
+          </span>
         </div>
+        <p className="input-cap-note">
+          {overCap
+            ? `Over the ${providerLabel} cap — only the first ${wordCap.toLocaleString()} words will be analysed.`
+            : `${providerLabel} cap: ${wordCap.toLocaleString()} words. Capped for cost; raise word_cap in providers/base.py if your API limits allow.`}
+        </p>
       </div>
 
       <div className="references-block">

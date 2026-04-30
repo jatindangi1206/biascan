@@ -1,5 +1,6 @@
 from __future__ import annotations
 import json
+import re
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -7,8 +8,20 @@ from fastapi.responses import StreamingResponse
 
 from .agents.orchestrator import Orchestrator
 from .config import PROMPT_VERSION
-from .providers import LLMError, SUPPORTED_PROVIDERS, build_provider
+from .providers import LLMError, SUPPORTED_PROVIDERS, build_provider, get_word_cap
 from .schemas import AnalyzeRequest, AnalyzeResponse, PingRequest
+
+INPUT_CHAR_HARD_LIMIT = 200_000  # sanity ceiling; per-provider word_cap is the real limit
+
+
+def _truncate_to_word_cap(text: str, cap: int) -> tuple[str, int, bool]:
+    """Return (possibly-truncated text, original word count, was_truncated)."""
+    matches = list(re.finditer(r"\S+", text))
+    word_count = len(matches)
+    if word_count <= cap:
+        return text, word_count, False
+    cut = matches[cap].start()
+    return text[:cut].rstrip(), word_count, True
 
 app = FastAPI(
     title="BiasScan",
@@ -92,16 +105,29 @@ async def ping_provider(req: PingRequest) -> dict:
 async def analyze(req: AnalyzeRequest) -> AnalyzeResponse:
     if not req.text or not req.text.strip():
         raise HTTPException(status_code=400, detail="`text` is required and cannot be empty.")
-    if len(req.text) > 50_000:
-        raise HTTPException(status_code=400, detail="`text` exceeds 50,000 character limit.")
+    if len(req.text) > INPUT_CHAR_HARD_LIMIT:
+        raise HTTPException(
+            status_code=400,
+            detail=f"`text` exceeds {INPUT_CHAR_HARD_LIMIT:,} character limit.",
+        )
+
+    cap = get_word_cap(req.provider.provider)
+    text, original_words, truncated = _truncate_to_word_cap(req.text, cap)
+    extra_warnings: list[str] = []
+    if truncated:
+        extra_warnings.append(
+            f"Input was {original_words:,} words; only the first {cap:,} were analysed "
+            f"(per-provider cap for {req.provider.provider}). Raise word_cap in providers/base.py to lift this."
+        )
 
     orch = get_orchestrator()
     return await orch.analyze(
-        text=req.text,
+        text=text,
         references=req.references,
         mode=req.mode,
         provider_config=req.provider,
         agents=req.agents,
+        extra_warnings=extra_warnings,
     )
 
 
@@ -110,18 +136,31 @@ async def analyze_stream(req: AnalyzeRequest) -> StreamingResponse:
     """SSE endpoint — yields one event per agent as it completes, then a final 'complete' event."""
     if not req.text or not req.text.strip():
         raise HTTPException(status_code=400, detail="`text` is required and cannot be empty.")
-    if len(req.text) > 50_000:
-        raise HTTPException(status_code=400, detail="`text` exceeds 50,000 character limit.")
+    if len(req.text) > INPUT_CHAR_HARD_LIMIT:
+        raise HTTPException(
+            status_code=400,
+            detail=f"`text` exceeds {INPUT_CHAR_HARD_LIMIT:,} character limit.",
+        )
+
+    cap = get_word_cap(req.provider.provider)
+    text, original_words, truncated = _truncate_to_word_cap(req.text, cap)
+    extra_warnings: list[str] = []
+    if truncated:
+        extra_warnings.append(
+            f"Input was {original_words:,} words; only the first {cap:,} were analysed "
+            f"(per-provider cap for {req.provider.provider}). Raise word_cap in providers/base.py to lift this."
+        )
 
     orch = get_orchestrator()
 
     async def event_generator():
         async for payload in orch.analyze_stream(
-            text=req.text,
+            text=text,
             references=req.references,
             mode=req.mode,
             provider_config=req.provider,
             agents=req.agents,
+            extra_warnings=extra_warnings,
         ):
             event_type = payload.pop("event")
             yield f"event: {event_type}\ndata: {json.dumps(payload)}\n\n"

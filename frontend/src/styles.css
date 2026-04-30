@@ -378,6 +378,19 @@ button {
   font-size: var(--text-sm);
 }
 
+.input-words.over-limit {
+  color: #a4513a;
+  font-weight: 600;
+}
+
+.input-cap-note {
+  margin: 0;
+  padding: 0 22px 12px;
+  color: var(--muted);
+  font-size: var(--text-xs);
+  font-style: italic;
+}
+
 .inline-action,
 .mini-action {
   color: var(--muted);
@@ -743,10 +756,37 @@ button {
 
 .annotation-popover-meta,
 .annotation-popover-clean,
+.annotation-popover-why,
 .annotation-note,
 .status-copy {
   color: #7d746b;
   font-size: var(--text-base);
+}
+
+.annotation-popover-why {
+  color: var(--ink);
+  line-height: 1.45;
+}
+
+.annotation-popover-why em {
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #7d746b;
+  margin-right: 4px;
+}
+
+.annotation-popover-tag {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: rgba(38, 33, 29, 0.06);
+  border: 1px solid var(--line);
+  font-size: var(--text-xs);
+  letter-spacing: 0.02em;
+  text-transform: lowercase;
+  color: #5a5048;
 }
 
 .annotation-note {

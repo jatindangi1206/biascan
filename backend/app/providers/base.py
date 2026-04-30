@@ -4,6 +4,9 @@ from pydantic import BaseModel, Field
 
 ProviderName = Literal["ollama", "groq", "together", "nvidia", "anthropic", "openai", "gemini", "lightning"]
 
+# word_cap is a deliberately conservative input ceiling per provider, chosen for
+# cost / context-window safety. Inputs longer than this are truncated server-side
+# and a warning is returned. Raise these numbers if you have higher API limits.
 SUPPORTED_PROVIDERS: list[dict] = [
     {
         "name": "ollama",
@@ -13,6 +16,7 @@ SUPPORTED_PROVIDERS: list[dict] = [
         "default_base_url": "http://localhost:11434",
         "default_model": "qwen2.5:7b",
         "model_hint": "qwen2.5:7b · llama3.1:8b · mistral:7b · gemma2:9b · phi3.5:3.8b",
+        "word_cap": 8000,
     },
     {
         "name": "groq",
@@ -22,6 +26,7 @@ SUPPORTED_PROVIDERS: list[dict] = [
         "default_base_url": "https://api.groq.com/openai/v1",
         "default_model": "llama-3.3-70b-versatile",
         "model_hint": "llama-3.3-70b-versatile · llama3-8b-8192 · mixtral-8x7b-32768 · gemma2-9b-it",
+        "word_cap": 12000,
     },
     {
         "name": "together",
@@ -31,6 +36,7 @@ SUPPORTED_PROVIDERS: list[dict] = [
         "default_base_url": "https://api.together.xyz/v1",
         "default_model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
         "model_hint": "meta-llama/Llama-3.3-70B-Instruct-Turbo · mistralai/Mixtral-8x7B-Instruct-v0.1 · Qwen/Qwen2.5-72B-Instruct-Turbo",
+        "word_cap": 12000,
     },
     {
         "name": "nvidia",
@@ -40,6 +46,7 @@ SUPPORTED_PROVIDERS: list[dict] = [
         "default_base_url": "https://integrate.api.nvidia.com/v1",
         "default_model": "meta/llama-3.3-70b-instruct",
         "model_hint": "meta/llama-3.3-70b-instruct · deepseek-ai/deepseek-r1 · mistralai/mixtral-8x7b-instruct-v0.1 · google/gemma-3-27b-it",
+        "word_cap": 12000,
     },
     {
         "name": "anthropic",
@@ -49,6 +56,7 @@ SUPPORTED_PROVIDERS: list[dict] = [
         "default_base_url": "https://api.anthropic.com",
         "default_model": "claude-haiku-4-5-20251001",
         "model_hint": "claude-haiku-4-5-20251001 · claude-sonnet-4-6 · claude-opus-4-7",
+        "word_cap": 15000,
     },
     {
         "name": "openai",
@@ -58,6 +66,7 @@ SUPPORTED_PROVIDERS: list[dict] = [
         "default_base_url": "https://api.openai.com",
         "default_model": "gpt-4o-mini",
         "model_hint": "gpt-4o-mini · gpt-4o · gpt-4.1-mini",
+        "word_cap": 15000,
     },
     {
         "name": "gemini",
@@ -67,6 +76,7 @@ SUPPORTED_PROVIDERS: list[dict] = [
         "default_base_url": "https://generativelanguage.googleapis.com",
         "default_model": "gemini-2.0-flash",
         "model_hint": "gemini-2.0-flash · gemini-2.0-flash-lite · gemini-1.5-pro",
+        "word_cap": 20000,
     },
     {
         "name": "lightning",
@@ -76,8 +86,16 @@ SUPPORTED_PROVIDERS: list[dict] = [
         "default_base_url": "https://lightning.ai/api/v1",
         "default_model": "lightning-ai/gemma-4-31B-it",
         "model_hint": "lightning-ai/gemma-4-31B-it · lightning-ai/gpt-oss-120b",
+        "word_cap": 12000,
     },
 ]
+
+
+def get_word_cap(provider_name: str) -> int:
+    for entry in SUPPORTED_PROVIDERS:
+        if entry["name"] == provider_name:
+            return int(entry["word_cap"])
+    return 8000  # fallback for unknown provider
 
 
 class ProviderConfig(BaseModel):
