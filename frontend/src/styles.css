@@ -12,6 +12,31 @@
   --accent: #c96f45;
   --accent-soft: rgba(201, 111, 69, 0.12);
 
+  /* Semantic surface tokens */
+  --body-grad-top: rgba(255, 255, 255, 0.45);
+  --body-grad-start: #faf7f2;
+  --placeholder: #b1a79d;
+  --input-shell-bg: rgba(255, 255, 255, 0.58);
+  --refs-bg: rgba(255, 255, 255, 0.46);
+  --tabs-bg: rgba(255, 255, 255, 0.4);
+  --tab-hover-bg: rgba(255, 255, 255, 0.6);
+  --btn-bg: #26211d;
+  --btn-fg: #fcfaf7;
+  --btn-hover-bg: #1d1916;
+  --card-bg: rgba(255, 255, 255, 0.5);
+  --popover-bg: rgba(255, 252, 247, 0.96);
+  --drawer-bg: rgba(250, 247, 242, 0.98);
+  --backdrop-bg: rgba(34, 28, 23, 0.14);
+  --meta-card-bg: rgba(255, 255, 255, 0.46);
+  --input-bg: rgba(255, 255, 255, 0.56);
+  --boot-bg: rgba(255, 255, 255, 0.48);
+  --code-bg: rgba(38, 33, 29, 0.92);
+  --code-fg: #f5f1ea;
+  --icon-done-bg: #2a2622;
+  --icon-done-fg: #fcfaf7;
+  --ink-soft: #5e554d;
+  --muted-warm: #7d746b;
+
   /* Typography scale */
   --text-2xs: 10px;
   --text-xs:  11px;
@@ -23,6 +48,43 @@
   --text-xl:   22px;
   --text-2xl:  28px;
   --text-3xl:  36px;
+}
+
+html[data-theme="dark"] {
+  --bg: #1a1714;
+  --bg-soft: #1f1c19;
+  --paper: rgba(30, 27, 24, 0.92);
+  --paper-strong: #252118;
+  --ink: #ede9e0;
+  --muted: #7a7570;
+  --line: rgba(255, 240, 220, 0.09);
+  --line-strong: rgba(255, 240, 220, 0.16);
+  --accent: #d4845a;
+  --accent-soft: rgba(212, 132, 90, 0.15);
+
+  --body-grad-top: rgba(40, 35, 30, 0.5);
+  --body-grad-start: #1f1c18;
+  --placeholder: #4a4540;
+  --input-shell-bg: rgba(35, 31, 27, 0.7);
+  --refs-bg: rgba(35, 31, 27, 0.6);
+  --tabs-bg: rgba(35, 31, 27, 0.5);
+  --tab-hover-bg: rgba(50, 45, 40, 0.7);
+  --btn-bg: #ede9e0;
+  --btn-fg: #1a1714;
+  --btn-hover-bg: #d8d3c8;
+  --card-bg: rgba(38, 34, 30, 0.7);
+  --popover-bg: rgba(28, 25, 22, 0.97);
+  --drawer-bg: rgba(22, 19, 16, 0.98);
+  --backdrop-bg: rgba(0, 0, 0, 0.45);
+  --meta-card-bg: rgba(38, 34, 30, 0.6);
+  --input-bg: rgba(38, 34, 30, 0.7);
+  --boot-bg: rgba(38, 34, 30, 0.6);
+  --code-bg: rgba(12, 10, 8, 0.95);
+  --code-fg: #ede9e0;
+  --icon-done-bg: #ede9e0;
+  --icon-done-fg: #1a1714;
+  --ink-soft: #a09890;
+  --muted-warm: #8a8078;
 }
 
 * {
@@ -43,8 +105,8 @@ html {
 
 body {
   background:
-    radial-gradient(circle at top left, rgba(255, 255, 255, 0.45), transparent 36%),
-    linear-gradient(180deg, #faf7f2 0%, var(--bg) 100%);
+    radial-gradient(circle at top left, var(--body-grad-top), transparent 36%),
+    linear-gradient(180deg, var(--body-grad-start) 0%, var(--bg) 100%);
   color: var(--ink);
   font-family: "Inter", system-ui, sans-serif;
   font-feature-settings: "ss01", "cv11";
@@ -217,7 +279,7 @@ button {
 /* Landing body copy */
 .landing-copy {
   max-width: 560px;
-  color: #7f766d;
+  color: var(--muted);
   font-size: clamp(1rem, 1.5vw, 1.2rem);
   font-weight: 300;
   line-height: 1.65;
@@ -229,8 +291,8 @@ button {
 .run-button {
   min-width: 148px;
   border-radius: 999px;
-  background: #26211d;
-  color: #fcfaf7;
+  background: var(--btn-bg);
+  color: var(--btn-fg);
   cursor: pointer;
   transition:
     transform 160ms ease,
@@ -241,7 +303,7 @@ button {
 .hero-button:hover,
 .run-button:hover:not(:disabled) {
   transform: translateY(-1px);
-  background: #1d1916;
+  background: var(--btn-hover-bg);
 }
 
 .hero-button {
@@ -275,7 +337,7 @@ button {
 
 .input-shell {
   width: min(100%, 860px);
-  background: rgba(255, 255, 255, 0.58);
+  background: var(--input-shell-bg);
   border: 1px solid var(--line);
   border-radius: 20px;
   overflow: hidden;
@@ -302,7 +364,7 @@ button {
 .composer-textarea::placeholder,
 .references-textarea::placeholder,
 .drawer-input::placeholder {
-  color: #b1a79d;
+  color: var(--placeholder);
 }
 
 .input-meta {
@@ -312,13 +374,13 @@ button {
   gap: 10px;
   padding: 11px 22px 13px;
   border-top: 1px solid var(--line);
-  color: #9d948b;
+  color: var(--muted);
   font-size: var(--text-sm);
 }
 
 .inline-action,
 .mini-action {
-  color: #7e746b;
+  color: var(--muted);
   cursor: pointer;
   transition: color 140ms ease, background 140ms ease;
 }
@@ -339,7 +401,7 @@ button {
 }
 
 .collapse-toggle {
-  color: #82796f;
+  color: var(--muted);
   cursor: pointer;
   font-size: 0.875rem;
   padding: 2px 0;
