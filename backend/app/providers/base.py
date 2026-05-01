@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import Literal, Protocol, Optional
 from pydantic import BaseModel, Field
 
-ProviderName = Literal["ollama", "groq", "together", "nvidia", "anthropic", "openai", "gemini", "lightning"]
+ProviderName = Literal["ollama", "groq", "together", "nvidia", "anthropic", "openai", "gemini", "lightning", "mistral"]
 
 # word_cap is a deliberately conservative input ceiling per provider, chosen for
 # cost / context-window safety. Inputs longer than this are truncated server-side
@@ -88,6 +88,16 @@ SUPPORTED_PROVIDERS: list[dict] = [
         "model_hint": "lightning-ai/gemma-4-31B-it · lightning-ai/gpt-oss-120b",
         "word_cap": 12000,
     },
+    {
+        "name": "mistral",
+        "label": "Mistral (La Plateforme)",
+        "needs_key": True,
+        "needs_base_url": False,
+        "default_base_url": "https://api.mistral.ai/v1",
+        "default_model": "mistral-large-latest",
+        "model_hint": "mistral-large-latest · mistral-medium-latest · mistral-small-latest · open-mixtral-8x22b · open-mistral-nemo",
+        "word_cap": 15000,
+    },
 ]
 
 
@@ -142,6 +152,7 @@ def build_provider(config: ProviderConfig) -> LLMProvider:
     from .openai_compat import OpenAIProvider
     from .gemini import GeminiProvider
     from .lightning import LightningProvider
+    from .mistral import MistralProvider
 
     if config.provider == "ollama":
         return OllamaProvider(config)
@@ -159,4 +170,6 @@ def build_provider(config: ProviderConfig) -> LLMProvider:
         return GeminiProvider(config)
     if config.provider == "lightning":
         return LightningProvider(config)
+    if config.provider == "mistral":
+        return MistralProvider(config)
     raise LLMError(f"Unknown provider: {config.provider}")

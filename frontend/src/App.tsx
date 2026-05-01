@@ -39,6 +39,8 @@ const PROVIDER_LABELS = {
   anthropic: "Anthropic",
   openai: "OpenAI",
   gemini: "Gemini",
+  lightning: "Lightning AI",
+  mistral: "Mistral",
 } as const;
 
 function loadStoredAgents(): AgentName[] {
