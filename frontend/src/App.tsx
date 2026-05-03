@@ -89,6 +89,8 @@ export default function App() {
   const [agents, setAgents] = useState<AgentInfo[]>([]);
   const [bootWarning, setBootWarning] = useState<string | null>(null);
   const [stream, setStream] = useState<StreamState>(EMPTY_STREAM);
+  const [lastAnalyzedText, setLastAnalyzedText] = useState("");
+  const [isEditingOriginal, setIsEditingOriginal] = useState(false);
 
   const abortRef = useRef<(() => void) | null>(null);
 
@@ -186,6 +188,7 @@ export default function App() {
     setResult(null);
     setEntered(true);
     setSettingsOpen(false);
+    setLastAnalyzedText(text);
 
     // Initialise stream state — all agents shown as "waiting"
     const agentList = Array.from(selected);
@@ -274,6 +277,8 @@ export default function App() {
     setStream(EMPTY_STREAM);
     setText("");
     setReferences("");
+    setLastAnalyzedText("");
+    setIsEditingOriginal(false);
   };
 
   // Decide what to show in the analysis column
@@ -281,6 +286,8 @@ export default function App() {
   const displayAnnotations =
     result?.annotations ?? stream.partialAnnotations;
   const displayResult = result;
+  const hasEditedText = text.trim() !== lastAnalyzedText.trim();
+  const canRunAgain = canAnalyze && hasEditedText && !loading;
 
   return (
     <div className={`app-shell stage-${stage}`}>
@@ -316,7 +323,7 @@ export default function App() {
                 type="button"
                 className="nav-link nav-link-primary"
                 onClick={onAnalyze}
-                disabled={loading || !canAnalyze}
+                disabled={!canRunAgain}
               >
                 {loading ? "Running…" : "Run again"}
               </button>
@@ -385,8 +392,26 @@ export default function App() {
           <section className="result-stage">
             <div className="result-grid">
               <article className="reading-column">
-                <p className="section-label">Original</p>
-                <div className="reading-surface">{text}</div>
+                <div className="reading-head">
+                  <p className="section-label">Original</p>
+                  <button
+                    type="button"
+                    className="mini-action"
+                    onClick={() => setIsEditingOriginal((prev) => !prev)}
+                  >
+                    {isEditingOriginal ? "Done" : "Edit text"}
+                  </button>
+                </div>
+                {isEditingOriginal ? (
+                  <textarea
+                    className="reading-editor"
+                    value={text}
+                    onChange={(e) => setText(e.target.value)}
+                    rows={16}
+                  />
+                ) : (
+                  <div className="reading-surface">{text}</div>
+                )}
               </article>
 
               <article className="analysis-column">

@@ -554,6 +554,14 @@ button {
   padding: 40px 28px 40px 8px;
 }
 
+.reading-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
 .analysis-column {
   border-left: 1px solid var(--line);
   padding-left: 40px;
@@ -571,7 +579,28 @@ button {
 }
 
 .reading-surface {
-  max-width: 44ch;
+  width: 100%;
+  max-width: 100%;
+}
+
+.reading-editor {
+  width: 100%;
+  min-height: 420px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.46);
+  color: var(--ink);
+  font-family: "Source Serif 4", serif;
+  font-size: clamp(0.875rem, 1.1vw, 1rem);
+  line-height: 1.7;
+  letter-spacing: -0.008em;
+  resize: vertical;
+  outline: none;
+}
+
+.reading-editor:focus {
+  border-color: var(--line-strong);
 }
 
 /* ── Results panel ── */
@@ -727,9 +756,10 @@ button {
 
 .annotation-popover {
   position: absolute;
-  left: 0;
+  right: 0;
+  left: auto;
   bottom: calc(100% + 10px);
-  width: min(320px, 80vw);
+  width: min(320px, calc(100vw - 40px));
   display: grid;
   gap: 8px;
   padding: 12px 14px;
@@ -1057,6 +1087,10 @@ button {
   font-size: var(--text-xs);
 }
 
+.flag-card-extra {
+  max-width: 100%;
+}
+
 .flag-card-extra pre {
   margin-top: 8px;
   padding: 10px 12px;
@@ -1065,6 +1099,10 @@ button {
   color: #f5f1ea;
   font-size: var(--text-2xs);
   overflow-x: auto;
+  max-width: 100%;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 /* ── Progress panel (streaming) ── */

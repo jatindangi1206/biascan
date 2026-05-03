@@ -14,9 +14,13 @@ const BIAS_ORDER: BiasType[] = [
 ];
 
 export function ResultsPanel({ result }: Props) {
-  const score = Math.round(result.overall_bias_score * 100);
+  const scoreValue = result.overall_bias_score * 10;
   const scoreLabel =
-    score >= 66 ? "High concern" : score >= 33 ? "Moderate concern" : "Low concern";
+    scoreValue >= 6.6
+      ? "High concern"
+      : scoreValue >= 3.3
+        ? "Moderate concern"
+        : "Low concern";
 
   const counts = BIAS_ORDER.map((biasType) => ({
     biasType,
@@ -30,8 +34,8 @@ export function ResultsPanel({ result }: Props) {
         <div className="metric-block">
           <p className="section-label">Bias score</p>
           <div className="score-line">
-            <span className="score-value">{score}</span>
-            <span className="score-context">/100 · {scoreLabel}</span>
+            <span className="score-value">{scoreValue.toFixed(1)}</span>
+            <span className="score-context">/10 · {scoreLabel}</span>
           </div>
         </div>
 
