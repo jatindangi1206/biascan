@@ -45,12 +45,20 @@ class BaseAgent:
         self,
         *,
         text: str,
+        source_text: str | None = None,
         references: str | None,
         mode: str,
         provider: LLMProvider,
         max_tokens: int = DEFAULT_MAX_TOKENS,
     ) -> tuple[list[Annotation], str | None]:
-        """Returns (annotations, error_message). error is None on success."""
+        """Returns (annotations, error_message). error is None on success.
+
+        Args:
+            text: The text sent to the LLM (may be RAG-retrieved chunks).
+            source_text: The original full document for re-anchoring spans.
+                         If None, defaults to ``text`` (no RAG path).
+        """
+        anchor = source_text if source_text is not None else text
         try:
             raw = await provider.complete(
                 system_prompt=self.load_prompt(),
@@ -61,7 +69,7 @@ class BaseAgent:
             return [], str(e)
         except Exception as e:  # defensive
             return [], f"{type(e).__name__}: {e}"
-        return self._parse(raw, text), None
+        return self._parse(raw, anchor), None
 
     def _parse(self, raw: str, source_text: str) -> list[Annotation]:
         data = _extract_json(raw)

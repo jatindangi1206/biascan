@@ -1,0 +1,30 @@
+{
+  "agent": "lens",
+  "model_name": "groq/gemma2-9b-it",
+  "provider": "groq",
+  "model_id": "gemma2-9b-it",
+  "dataset_scores": [
+    {
+      "dataset_id": "LENS_scicite",
+      "dataset_name": "SciCite (LENS)",
+      "bias_type": "B01",
+      "total": 4,
+      "true_positives": 0,
+      "true_negatives": 2,
+      "false_positives": 0,
+      "false_negatives": 2,
+      "mean_composite_biased": 0.0,
+      "mean_composite_control": 0.0,
+      "errors": 0
+    }
+  ],
+  "collated_accuracy": 0.5,
+  "collated_precision": 0.0,
+  "collated_recall": 0.0,
+  "collated_f1": 0.0,
+  "collated_separation": 0.0,
+  "total_samples": 4,
+  "total_errors": 0,
+  "mean_latency": 0.01926398277282715,
+  "timestamp": "2026-05-05 17:50:46"
+}

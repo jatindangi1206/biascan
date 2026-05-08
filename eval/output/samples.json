@@ -1,0 +1,1643 @@
+{
+  "B01_scifact": {
+    "spec": {
+      "dataset_id": "B01_scifact",
+      "bias_type": "B01",
+      "dataset_name": "SciFact",
+      "agent": "argus",
+      "how_to_use": "Construct biased inputs by selecting SUPPORTS-only evidence and removing REFUTES."
+    },
+    "biased": [
+      {
+        "id": "B01_scifact_synth_0",
+        "dataset_id": "B01_scifact",
+        "bias_type": "B01",
+        "agent": "argus",
+        "input_text": "Evidence synthesis: Vitamin D supplementation reduces MS relapse rates. One trial reported reduced relapses with vitamin D. The evidence strongly supports this conclusion.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "claim": "Vitamin D supplementation reduces MS relapse rates",
+          "omitted_refuting": "However, three larger RCTs found no significant benefit.",
+          "synthetic": true
+        },
+        "transform_description": "Synthetic: refuting evidence omitted to simulate cherry-picking."
+      },
+      {
+        "id": "B01_scifact_synth_1",
+        "dataset_id": "B01_scifact",
+        "bias_type": "B01",
+        "agent": "argus",
+        "input_text": "Evidence synthesis: High-dose statins prevent Alzheimer's disease. An observational study linked statin use to lower dementia risk. The evidence strongly supports this conclusion.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "claim": "High-dose statins prevent Alzheimer's disease",
+          "omitted_refuting": "Randomized trials showed no cognitive benefit from statins.",
+          "synthetic": true
+        },
+        "transform_description": "Synthetic: refuting evidence omitted to simulate cherry-picking."
+      },
+      {
+        "id": "B01_scifact_synth_2",
+        "dataset_id": "B01_scifact",
+        "bias_type": "B01",
+        "agent": "argus",
+        "input_text": "Evidence synthesis: Probiotics cure irritable bowel syndrome. Several small studies report symptom improvement with probiotics. The evidence strongly supports this conclusion.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "claim": "Probiotics cure irritable bowel syndrome",
+          "omitted_refuting": "Meta-analyses show inconsistent effects with high heterogeneity.",
+          "synthetic": true
+        },
+        "transform_description": "Synthetic: refuting evidence omitted to simulate cherry-picking."
+      }
+    ],
+    "control": [
+      {
+        "id": "B01_scifact_synth_ctrl_0",
+        "dataset_id": "B01_scifact",
+        "bias_type": "B01",
+        "agent": "argus",
+        "input_text": "Evidence synthesis: Regular exercise improves cardiovascular health. Multiple RCTs demonstrate reduced cardiovascular events with exercise.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "claim": "Regular exercise improves cardiovascular health",
+          "synthetic": true
+        },
+        "transform_description": "Synthetic: claim genuinely supported, no evidence omitted."
+      },
+      {
+        "id": "B01_scifact_synth_ctrl_1",
+        "dataset_id": "B01_scifact",
+        "bias_type": "B01",
+        "agent": "argus",
+        "input_text": "Evidence synthesis: Smoking increases lung cancer risk. Decades of epidemiological evidence consistently show elevated risk.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "claim": "Smoking increases lung cancer risk",
+          "synthetic": true
+        },
+        "transform_description": "Synthetic: claim genuinely supported, no evidence omitted."
+      },
+      {
+        "id": "B01_scifact_synth_ctrl_2",
+        "dataset_id": "B01_scifact",
+        "bias_type": "B01",
+        "agent": "argus",
+        "input_text": "Evidence synthesis: Hand hygiene reduces hospital-acquired infections. Intervention studies show 20-40% reduction in HAI rates.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "claim": "Hand hygiene reduces hospital-acquired infections",
+          "synthetic": true
+        },
+        "transform_description": "Synthetic: claim genuinely supported, no evidence omitted."
+      }
+    ]
+  },
+  "B01_ibm_claim": {
+    "spec": {
+      "dataset_id": "B01_ibm_claim",
+      "bias_type": "B01",
+      "dataset_name": "IBM Claim Stance",
+      "agent": "argus",
+      "how_to_use": "Construct one-sided passages using only Pro claims \u2014 tests if ARGUS catches missing counter-evidence."
+    },
+    "biased": [
+      {
+        "id": "B01_ibm_0",
+        "dataset_id": "B01_ibm_claim",
+        "bias_type": "B01",
+        "agent": "argus",
+        "input_text": "Comprehensive evidence review on: This house would enforce term limits on the legislative branch of government\n\nThe evidence consistently supports this position. term limits are a way to restore popular control over government The longer politicians are in office, the more likely they are to rip us off for their own benefit term limits force politicians \"to represent the people instead of advancing their own careers voters \"overwhelmingly support term limits \nOverall, the weight of evidence strongly favors this conclusion.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "topic": "This house would enforce term limits on the legislative branch of government",
+          "pro_count": 11,
+          "con_count": 5,
+          "omitted_con_claims": [
+            "Voters can already remove politicians through regular elections or by recall",
+            "Term limits don't distinguish between good and bad legislators"
+          ]
+        },
+        "transform_description": "One-sided: 4 PRO claims included, 4 CON claims deliberately omitted."
+      },
+      {
+        "id": "B01_ibm_2",
+        "dataset_id": "B01_ibm_claim",
+        "bias_type": "B01",
+        "agent": "argus",
+        "input_text": "Comprehensive evidence review on: This house would criminalize blasphemy\n\nThe evidence consistently supports this position. The law against blasphemy complements laws against racial discrimination and incitement to violence Freedom of expression does not give anyone the licence to insult another's religion or race humiliation of the values that are held in high esteem by people cannot be justified by the freedom of speech freedom of speech and disseminating ideas do not amount to the right to insult \nOverall, the weight of evidence strongly favors this conclusion.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "topic": "This house would criminalize blasphemy",
+          "pro_count": 12,
+          "con_count": 15,
+          "omitted_con_claims": [
+            "it is neither necessary nor desirable to create an offence of religious insult",
+            "the state has no legitimate interest in protecting any or all religions from views distasteful to them"
+          ]
+        },
+        "transform_description": "One-sided: 4 PRO claims included, 4 CON claims deliberately omitted."
+      },
+      {
+        "id": "B01_ibm_4",
+        "dataset_id": "B01_ibm_claim",
+        "bias_type": "B01",
+        "agent": "argus",
+        "input_text": "Comprehensive evidence review on: This house believes all nations have a right to nuclear weapons\n\nThe evidence consistently supports this position. the deployment, and implicit menace of use, of strong weapons is essential to threaten the enemy in order to prevent the use by said-enemy of the same weapons nuclear forces continue to play an essential role in war prevention nuclear weapons can induce stability Nuclear weapons decrease the chances of crisis escalation \nOverall, the weight of evidence strongly favors this conclusion.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "topic": "This house believes all nations have a right to nuclear weapons",
+          "pro_count": 23,
+          "con_count": 21,
+          "omitted_con_claims": [
+            "a nuclear nation might be hijacked by a despot or other person or persons who might use nuclear weapons without sane regard for the consequences",
+            "Having more nuclear nuclear-weapon states will reduce security for all"
+          ]
+        },
+        "transform_description": "One-sided: 4 PRO claims included, 4 CON claims deliberately omitted."
+      }
+    ],
+    "control": [
+      {
+        "id": "B01_ibm_1",
+        "dataset_id": "B01_ibm_claim",
+        "bias_type": "B01",
+        "agent": "argus",
+        "input_text": "Evidence review on: This house would enforce term limits on the legislative branch of government\n\nSupporting arguments: term limits are a way to restore popular control over government The longer politicians are in office, the more likely they are to rip us off for their own benefit \nOpposing arguments: Voters can already remove politicians through regular elections or by recall Term limits don't distinguish between good and bad legislators \nThe evidence presents a mixed picture.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "topic": "This house would enforce term limits on the legislative branch of government",
+          "pro_included": [
+            "term limits are a way to restore popular control over government",
+            "The longer politicians are in office, the more likely they are to rip us off for their own benefit"
+          ],
+          "con_included": [
+            "Voters can already remove politicians through regular elections or by recall",
+            "Term limits don't distinguish between good and bad legislators"
+          ]
+        },
+        "transform_description": "Balanced: both PRO and CON claims included."
+      },
+      {
+        "id": "B01_ibm_3",
+        "dataset_id": "B01_ibm_claim",
+        "bias_type": "B01",
+        "agent": "argus",
+        "input_text": "Evidence review on: This house would criminalize blasphemy\n\nSupporting arguments: The law against blasphemy complements laws against racial discrimination and incitement to violence Freedom of expression does not give anyone the licence to insult another's religion or race \nOpposing arguments: it is neither necessary nor desirable to create an offence of religious insult the state has no legitimate interest in protecting any or all religions from views distasteful to them \nThe evidence presents a mixed picture.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "topic": "This house would criminalize blasphemy",
+          "pro_included": [
+            "The law against blasphemy complements laws against racial discrimination and incitement to violence",
+            "Freedom of expression does not give anyone the licence to insult another's religion or race"
+          ],
+          "con_included": [
+            "it is neither necessary nor desirable to create an offence of religious insult",
+            "the state has no legitimate interest in protecting any or all religions from views distasteful to them"
+          ]
+        },
+        "transform_description": "Balanced: both PRO and CON claims included."
+      },
+      {
+        "id": "B01_ibm_5",
+        "dataset_id": "B01_ibm_claim",
+        "bias_type": "B01",
+        "agent": "argus",
+        "input_text": "Evidence review on: This house believes all nations have a right to nuclear weapons\n\nSupporting arguments: the deployment, and implicit menace of use, of strong weapons is essential to threaten the enemy in order to prevent the use by said-enemy of the same weapons nuclear forces continue to play an essential role in war prevention \nOpposing arguments: a nuclear nation might be hijacked by a despot or other person or persons who might use nuclear weapons without sane regard for the consequences Having more nuclear nuclear-weapon states will reduce security for all \nThe evidence presents a mixed picture.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "topic": "This house believes all nations have a right to nuclear weapons",
+          "pro_included": [
+            "the deployment, and implicit menace of use, of strong weapons is essential to threaten the enemy in order to prevent the use by said-enemy of the same weapons",
+            "nuclear forces continue to play an essential role in war prevention"
+          ],
+          "con_included": [
+            "a nuclear nation might be hijacked by a despot or other person or persons who might use nuclear weapons without sane regard for the consequences",
+            "Having more nuclear nuclear-weapon states will reduce security for all"
+          ]
+        },
+        "transform_description": "Balanced: both PRO and CON claims included."
+      }
+    ]
+  },
+  "B03_sci_exaggeration": {
+    "spec": {
+      "dataset_id": "B03_sci_exaggeration",
+      "bias_type": "B03",
+      "dataset_name": "Scientific Exaggeration Detection",
+      "agent": "argus",
+      "how_to_use": "Pairs labeled SAME/EXAGGERATES/DOWNPLAYS. 'Exaggerates' class tests certainty inflation."
+    },
+    "biased": [
+      {
+        "id": "B03_sciexag_1",
+        "dataset_id": "B03_sci_exaggeration",
+        "bias_type": "B03",
+        "agent": "argus",
+        "input_text": "Research summary: Happy children make happy adults This conclusion is firmly established by the study findings. The evidence definitively demonstrates this effect.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "abstract_conclusion": "From this longitudinal study, we conclude that childhood well-being predicts positive adult wellbeing, and not merely the absence of mental ill-health.",
+          "press_conclusion": "Happy children make happy adults",
+          "abstract_strength": 1,
+          "press_strength": 3,
+          "exaggeration_label": "exaggerates"
+        },
+        "transform_description": "Press release EXAGGERATES abstract finding. Abstract strength: 1, Press strength: 3."
+      },
+      {
+        "id": "B03_sciexag_2",
+        "dataset_id": "B03_sci_exaggeration",
+        "bias_type": "B03",
+        "agent": "argus",
+        "input_text": "Research summary: Scientists from the University of Warwick have discovered why a newly found form of cholesterol seems to be \u2018ultra-bad\u2019, leading to increased risk of heart disease. This conclusion is firmly established by the study findings. The evidence definitively demonstrates this effect.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "abstract_conclusion": "MG modification of LDL forms small, dense LDL with increased atherogenicity that provides a new route to atherogenic LDL and may explain the escalation of cardiovascular risk in diabetes and the cardioprotective effect of metformin.",
+          "press_conclusion": "Scientists from the University of Warwick have discovered why a newly found form of cholesterol seems to be \u2018ultra-bad\u2019, leading to increased risk of heart disease.",
+          "abstract_strength": 2,
+          "press_strength": 3,
+          "exaggeration_label": "exaggerates"
+        },
+        "transform_description": "Press release EXAGGERATES abstract finding. Abstract strength: 2, Press strength: 3."
+      },
+      {
+        "id": "B03_sciexag_5",
+        "dataset_id": "B03_sci_exaggeration",
+        "bias_type": "B03",
+        "agent": "argus",
+        "input_text": "Research summary: An international study suggests that giving vitamin A supplements to children in low and middle income countries could significantly cut rates of mortality, illnesses and blindness amongst those below the age of five. This conclusion is firmly established by the study findings. The evidence definitively demonstrates this effect.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "abstract_conclusion": "Vitamin A supplementation is associated with large reductions in mortality",
+          "press_conclusion": "An international study suggests that giving vitamin A supplements to children in low and middle income countries could significantly cut rates of mortality, illnesses and blindness amongst those below the age of five.",
+          "abstract_strength": 1,
+          "press_strength": 2,
+          "exaggeration_label": "exaggerates"
+        },
+        "transform_description": "Press release EXAGGERATES abstract finding. Abstract strength: 1, Press strength: 2."
+      }
+    ],
+    "control": [
+      {
+        "id": "B03_sciexag_0",
+        "dataset_id": "B03_sci_exaggeration",
+        "bias_type": "B03",
+        "agent": "argus",
+        "input_text": "Research summary: Self-control predicts health and wealth Original study conclusion: Following a cohort of 1,000 children from birth to the age of 32 y, we show that childhood self-control predicts physical health, substance dependence, personal finances, and criminal offending outcomes, following a gradient of self-control.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "abstract_conclusion": "Following a cohort of 1,000 children from birth to the age of 32 y, we show that childhood self-control predicts physical health, substance dependence, personal finances, and criminal offending outcomes, following a gradient of self-control.",
+          "press_conclusion": "Self-control predicts health and wealth",
+          "exaggeration_label": "same"
+        },
+        "transform_description": "Press release faithfully represents abstract (SAME label)."
+      },
+      {
+        "id": "B03_sciexag_3",
+        "dataset_id": "B03_sci_exaggeration",
+        "bias_type": "B03",
+        "agent": "argus",
+        "input_text": "Research summary: A new study has found that protein and not sugar activates the cells responsible for keeping us awake and burning calories. Original study conclusion: Physiological mixtures of AAs electrically excited orx/hcrt cells through a dual mechanism involving inhibition of K(ATP) channels and activation of system-A amino acid transporters.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "abstract_conclusion": "Physiological mixtures of AAs electrically excited orx/hcrt cells through a dual mechanism involving inhibition of K(ATP) channels and activation of system-A amino acid transporters.",
+          "press_conclusion": "A new study has found that protein and not sugar activates the cells responsible for keeping us awake and burning calories.",
+          "exaggeration_label": "same"
+        },
+        "transform_description": "Press release faithfully represents abstract (SAME label)."
+      },
+      {
+        "id": "B03_sciexag_4",
+        "dataset_id": "B03_sci_exaggeration",
+        "bias_type": "B03",
+        "agent": "argus",
+        "input_text": "Research summary: Pay for performance targets set for GPs in the UK are failing to improve the health of patients with high blood pressure. Original study conclusion: Pay for performance had no discernible effects on processes of care or on hypertension related clinical outcomes.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "abstract_conclusion": "Pay for performance had no discernible effects on processes of care or on hypertension related clinical outcomes.",
+          "press_conclusion": "Pay for performance targets set for GPs in the UK are failing to improve the health of patients with high blood pressure.",
+          "exaggeration_label": "same"
+        },
+        "transform_description": "Press release faithfully represents abstract (SAME label)."
+      }
+    ]
+  },
+  "B03_bioscope": {
+    "spec": {
+      "dataset_id": "B03_bioscope",
+      "bias_type": "B03",
+      "dataset_name": "BioScope Corpus",
+      "agent": "argus",
+      "how_to_use": "Strip hedge cues from speculative sentences to create certainty-inflated text."
+    },
+    "biased": [
+      {
+        "id": "B03_bioscope_0",
+        "dataset_id": "B03_bioscope",
+        "bias_type": "B03",
+        "agent": "argus",
+        "input_text": "Evidence synthesis: The preliminary findings suggest a confirmed role for the receptor in pathogenesis.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "original_speculative": "The preliminary findings suggest a potential role for the receptor in pathogenesis.",
+          "certainty_inflated": "The preliminary findings suggest a confirmed role for the receptor in pathogenesis.",
+          "synthetic": true
+        },
+        "transform_description": "Speculative sentence with hedge cues stripped to simulate certainty inflation."
+      },
+      {
+        "id": "B03_bioscope_1",
+        "dataset_id": "B03_bioscope",
+        "bias_type": "B03",
+        "agent": "argus",
+        "input_text": "Evidence synthesis: The biomarker does potentially serve as an early diagnostic indicator.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "original_speculative": "The biomarker could potentially serve as an early diagnostic indicator.",
+          "certainty_inflated": "The biomarker does potentially serve as an early diagnostic indicator.",
+          "synthetic": true
+        },
+        "transform_description": "Speculative sentence with hedge cues stripped to simulate certainty inflation."
+      },
+      {
+        "id": "B03_bioscope_2",
+        "dataset_id": "B03_bioscope",
+        "bias_type": "B03",
+        "agent": "argus",
+        "input_text": "Evidence synthesis: The observed effects will be attributable to changes in protein expression levels.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "original_speculative": "The observed effects may be attributable to changes in protein expression levels.",
+          "certainty_inflated": "The observed effects will be attributable to changes in protein expression levels.",
+          "synthetic": true
+        },
+        "transform_description": "Speculative sentence with hedge cues stripped to simulate certainty inflation."
+      }
+    ],
+    "control": [
+      {
+        "id": "B03_bioscope_4",
+        "dataset_id": "B03_bioscope",
+        "bias_type": "B03",
+        "agent": "argus",
+        "input_text": "Evidence synthesis: The BRCA1 mutation increases breast cancer risk significantly.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "certain_sentence": "The BRCA1 mutation increases breast cancer risk significantly.",
+          "synthetic": true
+        },
+        "transform_description": "Genuinely certain biomedical statement (no hedge stripping needed)."
+      },
+      {
+        "id": "B03_bioscope_3",
+        "dataset_id": "B03_bioscope",
+        "bias_type": "B03",
+        "agent": "argus",
+        "input_text": "Evidence synthesis: Antibiotics targeting the cell wall are effective against gram-positive bacteria.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "certain_sentence": "Antibiotics targeting the cell wall are effective against gram-positive bacteria.",
+          "synthetic": true
+        },
+        "transform_description": "Genuinely certain biomedical statement (no hedge stripping needed)."
+      },
+      {
+        "id": "B03_bioscope_5",
+        "dataset_id": "B03_bioscope",
+        "bias_type": "B03",
+        "agent": "argus",
+        "input_text": "Evidence synthesis: Regular physical exercise reduces cardiovascular mortality in adults over 50.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "certain_sentence": "Regular physical exercise reduces cardiovascular mortality in adults over 50.",
+          "synthetic": true
+        },
+        "transform_description": "Genuinely certain biomedical statement (no hedge stripping needed)."
+      }
+    ]
+  },
+  "B03_conll2010": {
+    "spec": {
+      "dataset_id": "B03_conll2010",
+      "bias_type": "B03",
+      "dataset_name": "CoNLL-2010 Shared Task",
+      "agent": "argus",
+      "how_to_use": "Strip hedge cues from uncertain sentences \u2192 certainty-inflated text."
+    },
+    "biased": [
+      {
+        "id": "B03_conll_2",
+        "dataset_id": "B03_conll2010",
+        "bias_type": "B03",
+        "agent": "argus",
+        "input_text": "Evidence synthesis: Preliminary screening demonstrates that the inhibitor will be effective at low concentrations.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "original_uncertain": "Preliminary screening suggests that the inhibitor might be effective at low concentrations.",
+          "certainty_inflated": "Preliminary screening demonstrates that the inhibitor will be effective at low concentrations.",
+          "synthetic": true
+        },
+        "transform_description": "Uncertain sentence with hedge cues stripped (certainty inflation)."
+      },
+      {
+        "id": "B03_conll_1",
+        "dataset_id": "B03_conll2010",
+        "bias_type": "B03",
+        "agent": "argus",
+        "input_text": "Evidence synthesis: The therapeutic confirmed of this approach remains to be established.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "original_uncertain": "The therapeutic potential of this approach remains to be established.",
+          "certainty_inflated": "The therapeutic confirmed of this approach remains to be established.",
+          "synthetic": true
+        },
+        "transform_description": "Uncertain sentence with hedge cues stripped (certainty inflation)."
+      },
+      {
+        "id": "B03_conll_0",
+        "dataset_id": "B03_conll2010",
+        "bias_type": "B03",
+        "agent": "argus",
+        "input_text": "Evidence synthesis: The authors hypothesize that oxidative stress will contribute to neurodegeneration.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "original_uncertain": "The authors hypothesize that oxidative stress may contribute to neurodegeneration.",
+          "certainty_inflated": "The authors hypothesize that oxidative stress will contribute to neurodegeneration.",
+          "synthetic": true
+        },
+        "transform_description": "Uncertain sentence with hedge cues stripped (certainty inflation)."
+      }
+    ],
+    "control": [
+      {
+        "id": "B03_conll_3",
+        "dataset_id": "B03_conll2010",
+        "bias_type": "B03",
+        "agent": "argus",
+        "input_text": "Evidence synthesis: Transfer RNA molecules deliver amino acids to the ribosome during translation.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "certain_sentence": "Transfer RNA molecules deliver amino acids to the ribosome during translation.",
+          "synthetic": true
+        },
+        "transform_description": "Genuinely certain biological statement."
+      },
+      {
+        "id": "B03_conll_4",
+        "dataset_id": "B03_conll2010",
+        "bias_type": "B03",
+        "agent": "argus",
+        "input_text": "Evidence synthesis: The sodium-potassium pump actively transports ions against their concentration gradients.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "certain_sentence": "The sodium-potassium pump actively transports ions against their concentration gradients.",
+          "synthetic": true
+        },
+        "transform_description": "Genuinely certain biological statement."
+      },
+      {
+        "id": "B03_conll_5",
+        "dataset_id": "B03_conll2010",
+        "bias_type": "B03",
+        "agent": "argus",
+        "input_text": "Evidence synthesis: Mitochondria are the primary site of oxidative phosphorylation in eukaryotic cells.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "certain_sentence": "Mitochondria are the primary site of oxidative phosphorylation in eukaryotic cells.",
+          "synthetic": true
+        },
+        "transform_description": "Genuinely certain biological statement."
+      }
+    ]
+  },
+  "B04_pubhealth": {
+    "spec": {
+      "dataset_id": "B04_pubhealth",
+      "bias_type": "B04",
+      "dataset_name": "PubHealth",
+      "agent": "argus",
+      "how_to_use": "FALSE/MIXTURE claims contain overgeneralizations. TRUE claims are controls."
+    },
+    "biased": [
+      {
+        "id": "B04_pubhealth_synth_0",
+        "dataset_id": "B04_pubhealth",
+        "bias_type": "B04",
+        "agent": "argus",
+        "input_text": "Health evidence synthesis: 5G towers cause cancer. This has been consistently replicated across studies.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "claim": "5G towers cause cancer",
+          "explanation": "No credible scientific evidence links 5G radiation to cancer.",
+          "synthetic": true
+        },
+        "transform_description": "Synthetic: FALSE health claim presented as established evidence."
+      },
+      {
+        "id": "B04_pubhealth_synth_1",
+        "dataset_id": "B04_pubhealth",
+        "bias_type": "B04",
+        "agent": "argus",
+        "input_text": "Health evidence synthesis: Vaccines cause autism in all children. This has been consistently replicated across studies.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "claim": "Vaccines cause autism in all children",
+          "explanation": "Multiple large-scale studies have found no link between vaccines and autism.",
+          "synthetic": true
+        },
+        "transform_description": "Synthetic: FALSE health claim presented as established evidence."
+      },
+      {
+        "id": "B04_pubhealth_synth_2",
+        "dataset_id": "B04_pubhealth",
+        "bias_type": "B04",
+        "agent": "argus",
+        "input_text": "Health evidence synthesis: Eating raw garlic eliminates all infections. This has been consistently replicated across studies.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "claim": "Eating raw garlic eliminates all infections",
+          "explanation": "Garlic has some antimicrobial properties but cannot eliminate all infections.",
+          "synthetic": true
+        },
+        "transform_description": "Synthetic: FALSE health claim presented as established evidence."
+      }
+    ],
+    "control": [
+      {
+        "id": "B04_pubhealth_synth_ctrl_0",
+        "dataset_id": "B04_pubhealth",
+        "bias_type": "B04",
+        "agent": "argus",
+        "input_text": "Health evidence synthesis: Handwashing reduces transmission of respiratory infections. Intervention studies show 20-40% reduction in transmission rates.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "claim": "Handwashing reduces transmission of respiratory infections",
+          "explanation": "Intervention studies show 20-40% reduction in transmission rates.",
+          "synthetic": true
+        },
+        "transform_description": "Synthetic: TRUE health claim with supporting evidence."
+      },
+      {
+        "id": "B04_pubhealth_synth_ctrl_1",
+        "dataset_id": "B04_pubhealth",
+        "bias_type": "B04",
+        "agent": "argus",
+        "input_text": "Health evidence synthesis: Fluoride in water is safe at recommended levels. Decades of epidemiological data support safety at 0.7 mg/L.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "claim": "Fluoride in water is safe at recommended levels",
+          "explanation": "Decades of epidemiological data support safety at 0.7 mg/L.",
+          "synthetic": true
+        },
+        "transform_description": "Synthetic: TRUE health claim with supporting evidence."
+      },
+      {
+        "id": "B04_pubhealth_synth_ctrl_2",
+        "dataset_id": "B04_pubhealth",
+        "bias_type": "B04",
+        "agent": "argus",
+        "input_text": "Health evidence synthesis: Regular exercise reduces cardiovascular disease risk. Meta-analyses consistently show exercise reduces CVD events by 20-35%.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "claim": "Regular exercise reduces cardiovascular disease risk",
+          "explanation": "Meta-analyses consistently show exercise reduces CVD events by 20-35%.",
+          "synthetic": true
+        },
+        "transform_description": "Synthetic: TRUE health claim with supporting evidence."
+      }
+    ]
+  },
+  "B04_claimbuster": {
+    "spec": {
+      "dataset_id": "B04_claimbuster",
+      "bias_type": "B04",
+      "dataset_name": "ClaimBuster",
+      "agent": "argus",
+      "how_to_use": "Check-worthy factual statements with broad claims test scope detection."
+    },
+    "biased": [
+      {
+        "id": "B04_claimbuster_2",
+        "dataset_id": "B04_claimbuster",
+        "bias_type": "B04",
+        "agent": "argus",
+        "input_text": "Evidence synthesis: The entire scientific community supports this conclusion without exception.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "claim": "The entire scientific community supports this conclusion without exception.",
+          "synthetic": true
+        },
+        "transform_description": "Overgeneralized check-worthy claim (synthetic CFS pattern)."
+      },
+      {
+        "id": "B04_claimbuster_1",
+        "dataset_id": "B04_claimbuster",
+        "bias_type": "B04",
+        "agent": "argus",
+        "input_text": "Evidence synthesis: The cure rate is 100% across all age groups and severity levels.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "claim": "The cure rate is 100% across all age groups and severity levels.",
+          "synthetic": true
+        },
+        "transform_description": "Overgeneralized check-worthy claim (synthetic CFS pattern)."
+      },
+      {
+        "id": "B04_claimbuster_0",
+        "dataset_id": "B04_claimbuster",
+        "bias_type": "B04",
+        "agent": "argus",
+        "input_text": "Evidence synthesis: In every case studied, the treatment eliminated the disease entirely.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "claim": "In every case studied, the treatment eliminated the disease entirely.",
+          "synthetic": true
+        },
+        "transform_description": "Overgeneralized check-worthy claim (synthetic CFS pattern)."
+      }
+    ],
+    "control": [
+      {
+        "id": "B04_claimbuster_3",
+        "dataset_id": "B04_claimbuster",
+        "bias_type": "B04",
+        "agent": "argus",
+        "input_text": "Evidence synthesis: The meta-analysis found moderate heterogeneity (I\u00b2 = 55%) across included studies.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "claim": "The meta-analysis found moderate heterogeneity (I\u00b2 = 55%) across included studies.",
+          "synthetic": true
+        },
+        "transform_description": "Properly scoped factual statement."
+      },
+      {
+        "id": "B04_claimbuster_4",
+        "dataset_id": "B04_claimbuster",
+        "bias_type": "B04",
+        "agent": "argus",
+        "input_text": "Evidence synthesis: The intervention reduced symptoms in 45% of participants in the treatment group.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "claim": "The intervention reduced symptoms in 45% of participants in the treatment group.",
+          "synthetic": true
+        },
+        "transform_description": "Properly scoped factual statement."
+      },
+      {
+        "id": "B04_claimbuster_5",
+        "dataset_id": "B04_claimbuster",
+        "bias_type": "B04",
+        "agent": "argus",
+        "input_text": "Evidence synthesis: Among the 12 studies reviewed, results were mixed, with 7 showing benefit and 5 showing no effect.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "claim": "Among the 12 studies reviewed, results were mixed, with 7 showing benefit and 5 showing no effect.",
+          "synthetic": true
+        },
+        "transform_description": "Properly scoped factual statement."
+      }
+    ]
+  },
+  "B04_sci_exag_scope": {
+    "spec": {
+      "dataset_id": "B04_sci_exag_scope",
+      "bias_type": "B04",
+      "dataset_name": "Scientific Exaggeration (Scope)",
+      "agent": "argus",
+      "how_to_use": "'Exaggerates' label captures scope overclaiming (mice\u2192humans)."
+    },
+    "biased": [
+      {
+        "id": "B04_sciexag_scope_1",
+        "dataset_id": "B04_sci_exag_scope",
+        "bias_type": "B04",
+        "agent": "argus",
+        "input_text": "Study findings: The research demonstrates that Happy children make happy adults These results are broadly applicable across patient populations.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "abstract_conclusion": "From this longitudinal study, we conclude that childhood well-being predicts positive adult wellbeing, and not merely the absence of mental ill-health.",
+          "press_conclusion": "Happy children make happy adults",
+          "exaggeration_label": "exaggerates"
+        },
+        "transform_description": "Press release overclaims scope vs abstract. Broad applicability asserted without evidence support."
+      },
+      {
+        "id": "B04_sciexag_scope_2",
+        "dataset_id": "B04_sci_exag_scope",
+        "bias_type": "B04",
+        "agent": "argus",
+        "input_text": "Study findings: The research demonstrates that Scientists from the University of Warwick have discovered why a newly found form of cholesterol seems to be \u2018ultra-bad\u2019, leading to increased risk of heart disease. These results are broadly applicable across patient populations.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "abstract_conclusion": "MG modification of LDL forms small, dense LDL with increased atherogenicity that provides a new route to atherogenic LDL and may explain the escalation of cardiovascular risk in diabetes and the cardioprotective effect of metformin.",
+          "press_conclusion": "Scientists from the University of Warwick have discovered why a newly found form of cholesterol seems to be \u2018ultra-bad\u2019, leading to increased risk of heart disease.",
+          "exaggeration_label": "exaggerates"
+        },
+        "transform_description": "Press release overclaims scope vs abstract. Broad applicability asserted without evidence support."
+      },
+      {
+        "id": "B04_sciexag_scope_5",
+        "dataset_id": "B04_sci_exag_scope",
+        "bias_type": "B04",
+        "agent": "argus",
+        "input_text": "Study findings: The research demonstrates that An international study suggests that giving vitamin A supplements to children in low and middle income countries could significantly cut rates of mortality, illnesses and blindness amongst those below the age of five. These results are broadly applicable across patient populations.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "abstract_conclusion": "Vitamin A supplementation is associated with large reductions in mortality",
+          "press_conclusion": "An international study suggests that giving vitamin A supplements to children in low and middle income countries could significantly cut rates of mortality, illnesses and blindness amongst those below the age of five.",
+          "exaggeration_label": "exaggerates"
+        },
+        "transform_description": "Press release overclaims scope vs abstract. Broad applicability asserted without evidence support."
+      }
+    ],
+    "control": [
+      {
+        "id": "B04_sciexag_scope_0",
+        "dataset_id": "B04_sci_exag_scope",
+        "bias_type": "B04",
+        "agent": "argus",
+        "input_text": "Study findings: Self-control predicts health and wealth Original abstract conclusion: Following a cohort of 1,000 children from birth to the age of 32 y, we show that childhood self-control predicts physical health, substance dependence, personal finances, and criminal offending outcomes, following a gradient of self-control.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "abstract_conclusion": "Following a cohort of 1,000 children from birth to the age of 32 y, we show that childhood self-control predicts physical health, substance dependence, personal finances, and criminal offending outcomes, following a gradient of self-control.",
+          "press_conclusion": "Self-control predicts health and wealth",
+          "exaggeration_label": "same"
+        },
+        "transform_description": "Scope faithfully represented (SAME label)."
+      },
+      {
+        "id": "B04_sciexag_scope_3",
+        "dataset_id": "B04_sci_exag_scope",
+        "bias_type": "B04",
+        "agent": "argus",
+        "input_text": "Study findings: A new study has found that protein and not sugar activates the cells responsible for keeping us awake and burning calories. Original abstract conclusion: Physiological mixtures of AAs electrically excited orx/hcrt cells through a dual mechanism involving inhibition of K(ATP) channels and activation of system-A amino acid transporters.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "abstract_conclusion": "Physiological mixtures of AAs electrically excited orx/hcrt cells through a dual mechanism involving inhibition of K(ATP) channels and activation of system-A amino acid transporters.",
+          "press_conclusion": "A new study has found that protein and not sugar activates the cells responsible for keeping us awake and burning calories.",
+          "exaggeration_label": "same"
+        },
+        "transform_description": "Scope faithfully represented (SAME label)."
+      },
+      {
+        "id": "B04_sciexag_scope_4",
+        "dataset_id": "B04_sci_exag_scope",
+        "bias_type": "B04",
+        "agent": "argus",
+        "input_text": "Study findings: Pay for performance targets set for GPs in the UK are failing to improve the health of patients with high blood pressure. Original abstract conclusion: Pay for performance had no discernible effects on processes of care or on hypertension related clinical outcomes.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "abstract_conclusion": "Pay for performance had no discernible effects on processes of care or on hypertension related clinical outcomes.",
+          "press_conclusion": "Pay for performance targets set for GPs in the UK are failing to improve the health of patients with high blood pressure.",
+          "exaggeration_label": "same"
+        },
+        "transform_description": "Scope faithfully represented (SAME label)."
+      }
+    ]
+  },
+  "B05_media_frames": {
+    "spec": {
+      "dataset_id": "B05_media_frames",
+      "bias_type": "B05",
+      "dataset_name": "Media Frames Corpus",
+      "agent": "argus",
+      "how_to_use": "Test one-sided framing when text only uses one of 15 framing dimensions."
+    },
+    "biased": [
+      {
+        "id": "B05_mfc_0",
+        "dataset_id": "B05_media_frames",
+        "bias_type": "B05",
+        "agent": "argus",
+        "input_text": "Gun violence is primarily a law enforcement issue. Crime statistics show that areas with stricter gun laws do not necessarily have lower crime rates. Criminals obtain weapons regardless of legislation. The solution lies in better enforcement of existing laws and harsher penalties for gun crimes.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "topic": "gun control",
+          "dominant_frame": "crime_and_punishment",
+          "missing_frames": [
+            "health_and_safety",
+            "legality_constitutionality",
+            "public_opinion"
+          ],
+          "synthetic": true
+        },
+        "transform_description": "One-sided framing: only 'crime_and_punishment' frame used. Missing: health_and_safety, legality_constitutionality, public_opinion."
+      },
+      {
+        "id": "B05_mfc_2",
+        "dataset_id": "B05_media_frames",
+        "bias_type": "B05",
+        "agent": "argus",
+        "input_text": "Healthcare reform: Every person deserves access to medical care as a basic human right. It is morally unacceptable that millions lack coverage. The ethical imperative demands universal access. Denying care based on ability to pay violates fundamental principles of human dignity and compassion.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "topic": "healthcare reform",
+          "dominant_frame": "morality",
+          "missing_frames": [
+            "economic",
+            "policy_prescription",
+            "quality_of_life"
+          ],
+          "synthetic": true
+        },
+        "transform_description": "One-sided framing: only 'morality' frame used. Missing: economic, policy_prescription, quality_of_life."
+      },
+      {
+        "id": "B05_mfc_4",
+        "dataset_id": "B05_media_frames",
+        "bias_type": "B05",
+        "agent": "argus",
+        "input_text": "Climate change represents the greatest security threat of our generation. Pentagon analyses identify climate-driven instability as a major risk. Resource conflicts will intensify. National security requires immediate climate action. Military installations face direct climate threats.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "topic": "climate change policy",
+          "dominant_frame": "security_and_defense",
+          "missing_frames": [
+            "economic",
+            "health_and_safety",
+            "policy_prescription"
+          ],
+          "synthetic": true
+        },
+        "transform_description": "One-sided framing: only 'security_and_defense' frame used. Missing: economic, health_and_safety, policy_prescription."
+      }
+    ],
+    "control": [
+      {
+        "id": "B05_mfc_1",
+        "dataset_id": "B05_media_frames",
+        "bias_type": "B05",
+        "agent": "argus",
+        "input_text": "Gun policy debates span multiple domains: crime data shows complex relationships between regulation and violence rates. Public health research treats gun deaths as an epidemic. Constitutional scholars debate Second Amendment scope. Public opinion polls show majority support for some measures while opposing others.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "topic": "gun control",
+          "frames_included": [
+            "crime_and_punishment",
+            "health_and_safety",
+            "legality_constitutionality",
+            "public_opinion"
+          ],
+          "synthetic": true
+        },
+        "transform_description": "Balanced framing: 4 frames included."
+      },
+      {
+        "id": "B05_mfc_3",
+        "dataset_id": "B05_media_frames",
+        "bias_type": "B05",
+        "agent": "argus",
+        "input_text": "Healthcare reform: While moral arguments support universal access, economic constraints shape feasible policy options. Quality-of-life data shows coverage gaps affect health outcomes. Various policy approaches \u2014 single-payer, public option, market-based \u2014 each present trade-offs between cost, access, and quality. Implementation complexity varies across proposals.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "topic": "healthcare reform",
+          "frames_included": [
+            "morality",
+            "economic",
+            "policy_prescription",
+            "quality_of_life"
+          ],
+          "synthetic": true
+        },
+        "transform_description": "Balanced framing: 4 frames included."
+      },
+      {
+        "id": "B05_mfc_5",
+        "dataset_id": "B05_media_frames",
+        "bias_type": "B05",
+        "agent": "argus",
+        "input_text": "Climate policy intersects multiple dimensions: security analyses identify geopolitical risks from climate disruption. Economic assessments weigh transition costs against projected damages. Public health data shows differential impacts across populations. Policy options range from carbon pricing to regulation, each with distinct implementation trade-offs.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "topic": "climate change policy",
+          "frames_included": [
+            "security_and_defense",
+            "economic",
+            "health_and_safety",
+            "policy_prescription"
+          ],
+          "synthetic": true
+        },
+        "transform_description": "Balanced framing: 4 frames included."
+      }
+    ]
+  },
+  "B05_mbic": {
+    "spec": {
+      "dataset_id": "B05_mbic",
+      "bias_type": "B05",
+      "dataset_name": "MBIC (Media Bias Annotation)",
+      "agent": "argus",
+      "how_to_use": "Word-level and sentence-level bias annotations test framing bias detection."
+    },
+    "biased": [
+      {
+        "id": "B05_mbic_2",
+        "dataset_id": "B05_mbic",
+        "bias_type": "B05",
+        "agent": "argus",
+        "input_text": "Analysis: The controversial leader pushed through the extreme agenda.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "sentence": "The controversial leader pushed through the extreme agenda.",
+          "bias_words": [
+            "controversial",
+            "pushed through",
+            "extreme"
+          ],
+          "synthetic": true
+        },
+        "transform_description": "Sentence with biased language: controversial, pushed through, extreme."
+      },
+      {
+        "id": "B05_mbic_1",
+        "dataset_id": "B05_mbic",
+        "bias_type": "B05",
+        "agent": "argus",
+        "input_text": "Analysis: The so-called experts have once again been proven wrong.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "sentence": "The so-called experts have once again been proven wrong.",
+          "bias_words": [
+            "so-called",
+            "once again"
+          ],
+          "synthetic": true
+        },
+        "transform_description": "Sentence with biased language: so-called, once again."
+      },
+      {
+        "id": "B05_mbic_0",
+        "dataset_id": "B05_mbic",
+        "bias_type": "B05",
+        "agent": "argus",
+        "input_text": "Analysis: The extremist group continues to undermine democratic institutions.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "sentence": "The extremist group continues to undermine democratic institutions.",
+          "bias_words": [
+            "extremist",
+            "undermine"
+          ],
+          "synthetic": true
+        },
+        "transform_description": "Sentence with biased language: extremist, undermine."
+      }
+    ],
+    "control": [
+      {
+        "id": "B05_mbic_3",
+        "dataset_id": "B05_mbic",
+        "bias_type": "B05",
+        "agent": "argus",
+        "input_text": "Analysis: The committee heard testimony from stakeholders on both sides of the issue.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "sentence": "The committee heard testimony from stakeholders on both sides of the issue.",
+          "synthetic": true
+        },
+        "transform_description": "Neutral, factual statement without framing bias."
+      },
+      {
+        "id": "B05_mbic_4",
+        "dataset_id": "B05_mbic",
+        "bias_type": "B05",
+        "agent": "argus",
+        "input_text": "Analysis: The budget allocates $4.2 billion to infrastructure projects over five years.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "sentence": "The budget allocates $4.2 billion to infrastructure projects over five years.",
+          "synthetic": true
+        },
+        "transform_description": "Neutral, factual statement without framing bias."
+      },
+      {
+        "id": "B05_mbic_5",
+        "dataset_id": "B05_mbic",
+        "bias_type": "B05",
+        "agent": "argus",
+        "input_text": "Analysis: Representatives from both parties expressed concerns about the timeline.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "sentence": "Representatives from both parties expressed concerns about the timeline.",
+          "synthetic": true
+        },
+        "transform_description": "Neutral, factual statement without framing bias."
+      }
+    ]
+  },
+  "B05_semeval2023": {
+    "spec": {
+      "dataset_id": "B05_semeval2023",
+      "bias_type": "B05",
+      "dataset_name": "SemEval-2023 Task 3",
+      "agent": "argus",
+      "how_to_use": "Span-level persuasion technique labels map to framing bias subtypes."
+    },
+    "biased": [
+      {
+        "id": "B05_semeval_1",
+        "dataset_id": "B05_semeval2023",
+        "bias_type": "B05",
+        "agent": "argus",
+        "input_text": "The corrupt elites want to silence ordinary people. This is about freedom versus tyranny \u2014 there is no middle ground.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "techniques": [
+            "loaded_language",
+            "name_calling",
+            "black_and_white_fallacy"
+          ],
+          "synthetic": true
+        },
+        "transform_description": "Contains persuasion techniques: loaded_language, name_calling, black_and_white_fallacy."
+      },
+      {
+        "id": "B05_semeval_2",
+        "dataset_id": "B05_semeval2023",
+        "bias_type": "B05",
+        "agent": "argus",
+        "input_text": "Opponents claim this helps the economy, but they really just want to enrich their corporate donors at the expense of hardworking families.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "techniques": [
+            "straw_man",
+            "loaded_language",
+            "appeal_to_fear"
+          ],
+          "synthetic": true
+        },
+        "transform_description": "Contains persuasion techniques: straw_man, loaded_language, appeal_to_fear."
+      },
+      {
+        "id": "B05_semeval_0",
+        "dataset_id": "B05_semeval2023",
+        "bias_type": "B05",
+        "agent": "argus",
+        "input_text": "Critics point to problems elsewhere, but what about the far worse failures of the opposing side? Their track record speaks for itself.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "techniques": [
+            "whataboutism",
+            "doubt"
+          ],
+          "synthetic": true
+        },
+        "transform_description": "Contains persuasion techniques: whataboutism, doubt."
+      }
+    ],
+    "control": [
+      {
+        "id": "B05_semeval_3",
+        "dataset_id": "B05_semeval2023",
+        "bias_type": "B05",
+        "agent": "argus",
+        "input_text": "Research published in the journal found a correlation between the variables, though the authors noted several limitations in their methodology.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "techniques": [],
+          "synthetic": true
+        },
+        "transform_description": "Neutral informative text without persuasion techniques."
+      },
+      {
+        "id": "B05_semeval_4",
+        "dataset_id": "B05_semeval2023",
+        "bias_type": "B05",
+        "agent": "argus",
+        "input_text": "According to the Bureau of Statistics, the unemployment rate decreased by 0.3 percentage points to 4.2% in the most recent quarter.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "techniques": [],
+          "synthetic": true
+        },
+        "transform_description": "Neutral informative text without persuasion techniques."
+      },
+      {
+        "id": "B05_semeval_5",
+        "dataset_id": "B05_semeval2023",
+        "bias_type": "B05",
+        "agent": "argus",
+        "input_text": "The committee report outlined advantages and disadvantages of each approach, noting that implementation costs would vary by region.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "techniques": [],
+          "synthetic": true
+        },
+        "transform_description": "Neutral informative text without persuasion techniques."
+      }
+    ]
+  },
+  "B08_corr2cause": {
+    "spec": {
+      "dataset_id": "B08_corr2cause",
+      "bias_type": "B08",
+      "dataset_name": "Corr2Cause",
+      "agent": "argus",
+      "how_to_use": "Correlational statements with valid/invalid causal inferences. Gold standard for B08."
+    },
+    "biased": [
+      {
+        "id": "B08_corr2cause_0",
+        "dataset_id": "B08_corr2cause",
+        "bias_type": "B08",
+        "agent": "argus",
+        "input_text": "Evidence synthesis: Premise: Suppose there is a closed system of 5 variables, A, B, C, D and E. All the statistical relations among these 5 variables are as follows: A correlates with B. A correlates with D. A correlates with E. B correlates with D. B correlates with E. C correlates with D. C correlates with E. D correlates with E. However, A is independent of C. A and C are independent given B. B is independent of C. B and C are independent given A. D and E are independent given A, B and C.\nHypothesis: There exists at least one collider (i.e., common effect) of A and E. Based on this evidence, the causal relationship appears well-established and supports targeted intervention.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "premise": "Premise: Suppose there is a closed system of 5 variables, A, B, C, D and E. All the statistical relations among these 5 variables are as follows: A correlates with B. A correlates with D. A correlates with E. B correlates with D. B correlates with E. C correlates with D. C correlates with E. D correlates with E. However, A is independent of C. A and C are independent given B. B is independent of C. B and C are independent given A. D and E are independent given A, B and C.\nHypothesis: There exists at least one collider (i.e., common effect) of A and E.",
+          "label": 0,
+          "num_variables": 5,
+          "template": "has_collider"
+        },
+        "transform_description": "Invalid causal inference: correlational evidence presented as established causation."
+      },
+      {
+        "id": "B08_corr2cause_1",
+        "dataset_id": "B08_corr2cause",
+        "bias_type": "B08",
+        "agent": "argus",
+        "input_text": "Evidence synthesis: Premise: Suppose there is a closed system of 4 variables, A, B, C and D. All the statistical relations among these 4 variables are as follows: A correlates with B. A correlates with C. B correlates with C. However, A is independent of D. A and D are independent given B. A and D are independent given B and C. A and D are independent given C. B is independent of D. B and D are independent given A. B and D are independent given A and C. B and D are independent given C. C is independent of D. C and D are independent given A. C and D are independent given A and B. C and D are independent given B.\nHypothesis: B directly causes A. Based on this evidence, the causal relationship appears well-established and supports targeted intervention.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "premise": "Premise: Suppose there is a closed system of 4 variables, A, B, C and D. All the statistical relations among these 4 variables are as follows: A correlates with B. A correlates with C. B correlates with C. However, A is independent of D. A and D are independent given B. A and D are independent given B and C. A and D are independent given C. B is independent of D. B and D are independent given A. B and D are independent given A and C. B and D are independent given C. C is independent of D. C and D are independent given A. C and D are independent given A and B. C and D are independent given B.\nHypothesis: B directly causes A.",
+          "label": 0,
+          "num_variables": 4,
+          "template": "child"
+        },
+        "transform_description": "Invalid causal inference: correlational evidence presented as established causation."
+      },
+      {
+        "id": "B08_corr2cause_2",
+        "dataset_id": "B08_corr2cause",
+        "bias_type": "B08",
+        "agent": "argus",
+        "input_text": "Evidence synthesis: Premise: Suppose there is a closed system of 5 variables, A, B, C, D and E. All the statistical relations among these 5 variables are as follows: A correlates with B. A correlates with D. A correlates with E. B correlates with D. B correlates with E. C correlates with D. C correlates with E. D correlates with E. However, A is independent of C. A and C are independent given B. B is independent of C. B and C are independent given A. D and E are independent given A, B and C.\nHypothesis: B causes something else which causes E. Based on this evidence, the causal relationship appears well-established and supports targeted intervention.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "premise": "Premise: Suppose there is a closed system of 5 variables, A, B, C, D and E. All the statistical relations among these 5 variables are as follows: A correlates with B. A correlates with D. A correlates with E. B correlates with D. B correlates with E. C correlates with D. C correlates with E. D correlates with E. However, A is independent of C. A and C are independent given B. B is independent of C. B and C are independent given A. D and E are independent given A, B and C.\nHypothesis: B causes something else which causes E.",
+          "label": 0,
+          "num_variables": 5,
+          "template": "non-parent ancestor"
+        },
+        "transform_description": "Invalid causal inference: correlational evidence presented as established causation."
+      }
+    ],
+    "control": [
+      {
+        "id": "B08_corr2cause_3",
+        "dataset_id": "B08_corr2cause",
+        "bias_type": "B08",
+        "agent": "argus",
+        "input_text": "Evidence synthesis: Premise: Suppose there is a closed system of 6 variables, A, B, C, D, E and F. All the statistical relations among these 6 variables are as follows: A correlates with B. A correlates with C. A correlates with D. A correlates with E. A correlates with F. B correlates with C. B correlates with D. B correlates with E. B correlates with F. C correlates with D. C correlates with E. C correlates with F. D correlates with E. D correlates with F. E correlates with F. However, A and C are independent given B. B and F are independent given A, C and D. B and F are independent given A, C, D and E. E and F are independent given A, B, C and D. E and F are independent given A, C and D.\nHypothesis: There exists at least one collider (i.e., common effect) of A and D. The causal direction is supported by the study design.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "premise": "Premise: Suppose there is a closed system of 6 variables, A, B, C, D, E and F. All the statistical relations among these 6 variables are as follows: A correlates with B. A correlates with C. A correlates with D. A correlates with E. A correlates with F. B correlates with C. B correlates with D. B correlates with E. B correlates with F. C correlates with D. C correlates with E. C correlates with F. D correlates with E. D correlates with F. E correlates with F. However, A and C are independent given B. B and F are independent given A, C and D. B and F are independent given A, C, D and E. E and F are independent given A, B, C and D. E and F are independent given A, C and D.\nHypothesis: There exists at least one collider (i.e., common effect) of A and D.",
+          "label": 1,
+          "num_variables": 6,
+          "template": "has_collider"
+        },
+        "transform_description": "Valid causal inference supported by study design."
+      },
+      {
+        "id": "B08_corr2cause_4",
+        "dataset_id": "B08_corr2cause",
+        "bias_type": "B08",
+        "agent": "argus",
+        "input_text": "Evidence synthesis: Premise: Suppose there is a closed system of 6 variables, A, B, C, D, E and F. All the statistical relations among these 6 variables are as follows: A correlates with D. A correlates with E. A correlates with F. B correlates with C. B correlates with D. B correlates with F. C correlates with D. C correlates with F. D correlates with E. D correlates with F. E correlates with F. However, A is independent of B. A and B are independent given C. A and B are independent given C and E. A and B are independent given E. A is independent of C. A and C are independent given B. A and C are independent given B and E. A and C are independent given E. B is independent of E. B and E are independent given A. B and E are independent given A and C. B and E are independent given A, C and D. B and E are independent given A and D. B and E are independent given C. C is independent of E. C and E are independent given A. C and E are independent given A and B. C and E are independent given A, B and D. C and E are independent given A and D. C and E are independent given B. D and E are independent given A. D and E are independent given A and B. D and E are independent given A, B and C. D and E are independent given A and C.\nHypothesis: B causes something else which causes F. The causal direction is supported by the study design.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "premise": "Premise: Suppose there is a closed system of 6 variables, A, B, C, D, E and F. All the statistical relations among these 6 variables are as follows: A correlates with D. A correlates with E. A correlates with F. B correlates with C. B correlates with D. B correlates with F. C correlates with D. C correlates with F. D correlates with E. D correlates with F. E correlates with F. However, A is independent of B. A and B are independent given C. A and B are independent given C and E. A and B are independent given E. A is independent of C. A and C are independent given B. A and C are independent given B and E. A and C are independent given E. B is independent of E. B and E are independent given A. B and E are independent given A and C. B and E are independent given A, C and D. B and E are independent given A and D. B and E are independent given C. C is independent of E. C and E are independent given A. C and E are independent given A and B. C and E are independent given A, B and D. C and E are independent given A and D. C and E are independent given B. D and E are independent given A. D and E are independent given A and B. D and E are independent given A, B and C. D and E are independent given A and C.\nHypothesis: B causes something else which causes F.",
+          "label": 1,
+          "num_variables": 6,
+          "template": "non-parent ancestor"
+        },
+        "transform_description": "Valid causal inference supported by study design."
+      },
+      {
+        "id": "B08_corr2cause_5",
+        "dataset_id": "B08_corr2cause",
+        "bias_type": "B08",
+        "agent": "argus",
+        "input_text": "Evidence synthesis: Premise: Suppose there is a closed system of 6 variables, A, B, C, D, E and F. All the statistical relations among these 6 variables are as follows: A correlates with D. A correlates with E. A correlates with F. B correlates with E. B correlates with F. C correlates with E. C correlates with F. D correlates with E. D correlates with F. E correlates with F. However, A is independent of B. A and B are independent given C. A and B are independent given C and D. A and B are independent given D. A is independent of C. A and C are independent given B. A and C are independent given B and D. A and C are independent given D. B is independent of C. B and C are independent given A. B and C are independent given A and D. B and C are independent given D. B is independent of D. B and D are independent given A. B and D are independent given A and C. B and D are independent given C. C is independent of D. C and D are independent given A. C and D are independent given A and B. C and D are independent given B. D and F are independent given A, B, C and E.\nHypothesis: B is a cause for F, but not a direct one. The causal direction is supported by the study design.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "premise": "Premise: Suppose there is a closed system of 6 variables, A, B, C, D, E and F. All the statistical relations among these 6 variables are as follows: A correlates with D. A correlates with E. A correlates with F. B correlates with E. B correlates with F. C correlates with E. C correlates with F. D correlates with E. D correlates with F. E correlates with F. However, A is independent of B. A and B are independent given C. A and B are independent given C and D. A and B are independent given D. A is independent of C. A and C are independent given B. A and C are independent given B and D. A and C are independent given D. B is independent of C. B and C are independent given A. B and C are independent given A and D. B and C are independent given D. B is independent of D. B and D are independent given A. B and D are independent given A and C. B and D are independent given C. C is independent of D. C and D are independent given A. C and D are independent given A and B. C and D are independent given B. D and F are independent given A, B, C and E.\nHypothesis: B is a cause for F, but not a direct one.",
+          "label": 1,
+          "num_variables": 6,
+          "template": "non-child descendant"
+        },
+        "transform_description": "Valid causal inference supported by study design."
+      }
+    ]
+  },
+  "LIBRA_bioscope": {
+    "spec": {
+      "dataset_id": "LIBRA_bioscope",
+      "bias_type": "B03",
+      "dataset_name": "BioScope (LIBRA)",
+      "agent": "libra",
+      "how_to_use": "Compare LIBRA's Hyland-based hedge counts against BioScope annotations."
+    },
+    "biased": [
+      {
+        "id": "LIBRA_bioscope_1",
+        "dataset_id": "LIBRA_bioscope",
+        "bias_type": "B03",
+        "agent": "libra",
+        "input_text": "Research finding: Neuroinflammation drives cognitive decline in Alzheimer's disease.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "without_hedging": "Neuroinflammation drives cognitive decline in Alzheimer's disease.",
+          "with_hedging": "Neuroinflammation is thought to contribute to cognitive decline in Alzheimer's disease.",
+          "expected_hedge_cues": [
+            "is thought to",
+            "contribute to"
+          ],
+          "synthetic": true
+        },
+        "transform_description": "Speculative claim stated without hedging. Missing cues: is thought to, contribute to."
+      },
+      {
+        "id": "LIBRA_bioscope_2",
+        "dataset_id": "LIBRA_bioscope",
+        "bias_type": "B03",
+        "agent": "libra",
+        "input_text": "Research finding: The drug inhibits tumor growth by blocking angiogenesis.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "without_hedging": "The drug inhibits tumor growth by blocking angiogenesis.",
+          "with_hedging": "The drug might inhibit tumor growth, potentially by blocking angiogenesis.",
+          "expected_hedge_cues": [
+            "might",
+            "potentially"
+          ],
+          "synthetic": true
+        },
+        "transform_description": "Speculative claim stated without hedging. Missing cues: might, potentially."
+      },
+      {
+        "id": "LIBRA_bioscope_0",
+        "dataset_id": "LIBRA_bioscope",
+        "bias_type": "B03",
+        "agent": "libra",
+        "input_text": "Research finding: The biomarker indicates disease progression with 95% accuracy.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "without_hedging": "The biomarker indicates disease progression with 95% accuracy.",
+          "with_hedging": "The biomarker suggests disease progression, though its accuracy requires further validation.",
+          "expected_hedge_cues": [
+            "suggests",
+            "requires further validation"
+          ],
+          "synthetic": true
+        },
+        "transform_description": "Speculative claim stated without hedging. Missing cues: suggests, requires further validation."
+      }
+    ],
+    "control": [
+      {
+        "id": "LIBRA_bioscope_3",
+        "dataset_id": "LIBRA_bioscope",
+        "bias_type": "B03",
+        "agent": "libra",
+        "input_text": "Research finding: The biomarker suggests disease progression, though its accuracy requires further validation.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "with_hedging": "The biomarker suggests disease progression, though its accuracy requires further validation.",
+          "hedge_cues_present": [
+            "suggests",
+            "requires further validation"
+          ],
+          "synthetic": true
+        },
+        "transform_description": "Appropriate hedging present: suggests, requires further validation."
+      },
+      {
+        "id": "LIBRA_bioscope_4",
+        "dataset_id": "LIBRA_bioscope",
+        "bias_type": "B03",
+        "agent": "libra",
+        "input_text": "Research finding: Neuroinflammation is thought to contribute to cognitive decline in Alzheimer's disease.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "with_hedging": "Neuroinflammation is thought to contribute to cognitive decline in Alzheimer's disease.",
+          "hedge_cues_present": [
+            "is thought to",
+            "contribute to"
+          ],
+          "synthetic": true
+        },
+        "transform_description": "Appropriate hedging present: is thought to, contribute to."
+      },
+      {
+        "id": "LIBRA_bioscope_5",
+        "dataset_id": "LIBRA_bioscope",
+        "bias_type": "B03",
+        "agent": "libra",
+        "input_text": "Research finding: The drug might inhibit tumor growth, potentially by blocking angiogenesis.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "with_hedging": "The drug might inhibit tumor growth, potentially by blocking angiogenesis.",
+          "hedge_cues_present": [
+            "might",
+            "potentially"
+          ],
+          "synthetic": true
+        },
+        "transform_description": "Appropriate hedging present: might, potentially."
+      }
+    ]
+  },
+  "LIBRA_sci_exag": {
+    "spec": {
+      "dataset_id": "LIBRA_sci_exag",
+      "bias_type": "B03",
+      "dataset_name": "Scientific Exaggeration (LIBRA)",
+      "agent": "libra",
+      "how_to_use": "Abstract\u2192press release exaggeration captures scope extension \u2014 LIBRA targets."
+    },
+    "biased": [
+      {
+        "id": "LIBRA_sciexag_1",
+        "dataset_id": "LIBRA_sci_exag",
+        "bias_type": "B03",
+        "agent": "libra",
+        "input_text": "Summary of findings: Happy children make happy adults\nOriginal abstract: From this longitudinal study, we conclude that childhood well-being predicts positive adult wellbeing, and not merely the absence of mental ill-health.\nAssessment: The summary accurately represents the study findings.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "abstract_conclusion": "From this longitudinal study, we conclude that childhood well-being predicts positive adult wellbeing, and not merely the absence of mental ill-health.",
+          "press_conclusion": "Happy children make happy adults",
+          "abstract_strength": "1",
+          "press_strength": "3",
+          "exaggeration_label": "exaggerates"
+        },
+        "transform_description": "Press release exaggerates abstract. Strength mismatch: abstract=1, press=3."
+      },
+      {
+        "id": "LIBRA_sciexag_2",
+        "dataset_id": "LIBRA_sci_exag",
+        "bias_type": "B03",
+        "agent": "libra",
+        "input_text": "Summary of findings: Scientists from the University of Warwick have discovered why a newly found form of cholesterol seems to be \u2018ultra-bad\u2019, leading to increased risk of heart disease.\nOriginal abstract: MG modification of LDL forms small, dense LDL with increased atherogenicity that provides a new route to atherogenic LDL and may explain the escalation of cardiovascular risk in diabetes and the cardioprotective effect of metformin.\nAssessment: The summary accurately represents the study findings.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "abstract_conclusion": "MG modification of LDL forms small, dense LDL with increased atherogenicity that provides a new route to atherogenic LDL and may explain the escalation of cardiovascular risk in diabetes and the cardioprotective effect of metformin.",
+          "press_conclusion": "Scientists from the University of Warwick have discovered why a newly found form of cholesterol seems to be \u2018ultra-bad\u2019, leading to increased risk of heart disease.",
+          "abstract_strength": "2",
+          "press_strength": "3",
+          "exaggeration_label": "exaggerates"
+        },
+        "transform_description": "Press release exaggerates abstract. Strength mismatch: abstract=2, press=3."
+      },
+      {
+        "id": "LIBRA_sciexag_5",
+        "dataset_id": "LIBRA_sci_exag",
+        "bias_type": "B03",
+        "agent": "libra",
+        "input_text": "Summary of findings: An international study suggests that giving vitamin A supplements to children in low and middle income countries could significantly cut rates of mortality, illnesses and blindness amongst those below the age of five.\nOriginal abstract: Vitamin A supplementation is associated with large reductions in mortality\nAssessment: The summary accurately represents the study findings.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "abstract_conclusion": "Vitamin A supplementation is associated with large reductions in mortality",
+          "press_conclusion": "An international study suggests that giving vitamin A supplements to children in low and middle income countries could significantly cut rates of mortality, illnesses and blindness amongst those below the age of five.",
+          "abstract_strength": "1",
+          "press_strength": "2",
+          "exaggeration_label": "exaggerates"
+        },
+        "transform_description": "Press release exaggerates abstract. Strength mismatch: abstract=1, press=2."
+      }
+    ],
+    "control": [
+      {
+        "id": "LIBRA_sciexag_0",
+        "dataset_id": "LIBRA_sci_exag",
+        "bias_type": "B03",
+        "agent": "libra",
+        "input_text": "Summary of findings: Self-control predicts health and wealth\nOriginal abstract: Following a cohort of 1,000 children from birth to the age of 32 y, we show that childhood self-control predicts physical health, substance dependence, personal finances, and criminal offending outcomes, following a gradient of self-control.\nAssessment: The summary accurately represents the study findings.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "abstract_conclusion": "Following a cohort of 1,000 children from birth to the age of 32 y, we show that childhood self-control predicts physical health, substance dependence, personal finances, and criminal offending outcomes, following a gradient of self-control.",
+          "press_conclusion": "Self-control predicts health and wealth",
+          "exaggeration_label": "same"
+        },
+        "transform_description": "Press release faithfully represents abstract scope (SAME)."
+      },
+      {
+        "id": "LIBRA_sciexag_3",
+        "dataset_id": "LIBRA_sci_exag",
+        "bias_type": "B03",
+        "agent": "libra",
+        "input_text": "Summary of findings: A new study has found that protein and not sugar activates the cells responsible for keeping us awake and burning calories.\nOriginal abstract: Physiological mixtures of AAs electrically excited orx/hcrt cells through a dual mechanism involving inhibition of K(ATP) channels and activation of system-A amino acid transporters.\nAssessment: The summary accurately represents the study findings.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "abstract_conclusion": "Physiological mixtures of AAs electrically excited orx/hcrt cells through a dual mechanism involving inhibition of K(ATP) channels and activation of system-A amino acid transporters.",
+          "press_conclusion": "A new study has found that protein and not sugar activates the cells responsible for keeping us awake and burning calories.",
+          "exaggeration_label": "same"
+        },
+        "transform_description": "Press release faithfully represents abstract scope (SAME)."
+      },
+      {
+        "id": "LIBRA_sciexag_4",
+        "dataset_id": "LIBRA_sci_exag",
+        "bias_type": "B03",
+        "agent": "libra",
+        "input_text": "Summary of findings: Pay for performance targets set for GPs in the UK are failing to improve the health of patients with high blood pressure.\nOriginal abstract: Pay for performance had no discernible effects on processes of care or on hypertension related clinical outcomes.\nAssessment: The summary accurately represents the study findings.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "abstract_conclusion": "Pay for performance had no discernible effects on processes of care or on hypertension related clinical outcomes.",
+          "press_conclusion": "Pay for performance targets set for GPs in the UK are failing to improve the health of patients with high blood pressure.",
+          "exaggeration_label": "same"
+        },
+        "transform_description": "Press release faithfully represents abstract scope (SAME)."
+      }
+    ]
+  },
+  "LENS_scicite": {
+    "spec": {
+      "dataset_id": "LENS_scicite",
+      "bias_type": "B01",
+      "dataset_name": "SciCite (LENS)",
+      "agent": "lens",
+      "how_to_use": "Test LENS's citation intent detection and support/contradict direction."
+    },
+    "biased": [
+      {
+        "id": "LENS_scicite_synth_0",
+        "dataset_id": "LENS_scicite",
+        "bias_type": "B01",
+        "agent": "lens",
+        "input_text": "Brown [4] demonstrated that rotation-based data augmentation produces superior results, providing evidence for our claims.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "original_text": "Data augmentation was performed using the rotation method of Brown [4].",
+          "true_intent": "method",
+          "synthetic": true
+        },
+        "transform_description": "Synthetic: method citation misrepresented as result evidence."
+      },
+      {
+        "id": "LENS_scicite_synth_1",
+        "dataset_id": "LENS_scicite",
+        "bias_type": "B01",
+        "agent": "lens",
+        "input_text": "Strong evidence from Chen et al. [2] demonstrates the superiority of this preprocessing approach, conclusively supporting our methodology.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "original_text": "We follow the preprocessing pipeline of Chen et al. [2].",
+          "true_intent": "method",
+          "synthetic": true
+        },
+        "transform_description": "Synthetic: method citation misrepresented as result evidence."
+      },
+      {
+        "id": "LENS_scicite_synth_2",
+        "dataset_id": "LENS_scicite",
+        "bias_type": "B01",
+        "agent": "lens",
+        "input_text": "The results of Vaswani et al. [3] directly prove that attention mechanisms outperform all alternatives, confirming our findings.",
+        "label": "biased",
+        "bias_present": true,
+        "original_fields": {
+          "original_text": "Attention mechanisms were introduced by Vaswani et al. [3].",
+          "true_intent": "background",
+          "synthetic": true
+        },
+        "transform_description": "Synthetic: background citation misrepresented as result evidence."
+      }
+    ],
+    "control": [
+      {
+        "id": "LENS_scicite_synth_3",
+        "dataset_id": "LENS_scicite",
+        "bias_type": "B01",
+        "agent": "lens",
+        "input_text": "The results in [9] demonstrate significant performance gains across all evaluation metrics.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "original_text": "Performance gains were significant across all evaluation metrics [9].",
+          "true_intent": "result",
+          "synthetic": true
+        },
+        "transform_description": "Synthetic: result citation used appropriately."
+      },
+      {
+        "id": "LENS_scicite_synth_4",
+        "dataset_id": "LENS_scicite",
+        "bias_type": "B01",
+        "agent": "lens",
+        "input_text": "Evidence from [8] shows a reduction in error rate from 8.1% to 3.2% with the proposed method, supporting the effectiveness of this approach.",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "original_text": "The error rate decreased from 8.1% to 3.2% with the proposed method [8].",
+          "true_intent": "result",
+          "synthetic": true
+        },
+        "transform_description": "Synthetic: result citation used appropriately."
+      },
+      {
+        "id": "LENS_scicite_synth_5",
+        "dataset_id": "LENS_scicite",
+        "bias_type": "B01",
+        "agent": "lens",
+        "input_text": "Compared to prior results, our model achieved 94.2% accuracy versus 91.5% reported by prior work [6].",
+        "label": "control",
+        "bias_present": false,
+        "original_fields": {
+          "original_text": "Our model achieved 94.2% accuracy, exceeding the 91.5% of prior work [6].",
+          "true_intent": "result",
+          "synthetic": true
+        },
+        "transform_description": "Synthetic: result citation used appropriately."
+      }
+    ]
+  }
+}
