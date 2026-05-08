@@ -7,6 +7,7 @@ from typing import AsyncIterator, Iterable
 from ..config import CONFIDENCE_FLOOR
 from ..providers import build_provider, LLMError, ProviderConfig
 from ..rag import InputRAG, EvidenceRAG
+from ..rag.reranker import rerank_chunks
 from ..schemas import (
     AgentRunInfo,
     AnalyzeResponse,
@@ -92,6 +93,7 @@ class Orchestrator:
 
         # ── RAG: chunk + retrieve per-agent ──────────────────────────
         use_rag = len(text) > _RAG_CHAR_THRESHOLD
+        use_reranker = mode == "premium"
         input_rag: InputRAG | None = None
         agent_texts: dict[str, str] = {}
 
@@ -99,11 +101,28 @@ class Orchestrator:
             input_rag = InputRAG()
             input_rag.index_document(text)
             for agent in chosen:
-                results = input_rag.retrieve_for_agent(agent.name, top_k=10)
+                # Retrieve 2× candidates if reranker is active
+                retrieve_k = 20 if use_reranker else 10
+                results = input_rag.retrieve_for_agent(agent.name, top_k=retrieve_k)
+
+                # LLM reranker (premium mode only)
+                if use_reranker and len(results) > 10:
+                    try:
+                        results = await rerank_chunks(
+                            results,
+                            agent_name=agent.name,
+                            bias_focus=agent.bias_type,
+                            provider=provider,
+                            top_k=10,
+                            minimum_relevance=4.0,
+                        )
+                    except Exception as e:
+                        logger.warning("Reranker failed for %s: %s", agent.name, e)
+
                 agent_texts[agent.name] = InputRAG.assemble(results)
             logger.info(
-                "Input RAG active: %d chunks, serving %d agents",
-                input_rag.total_chunks, len(chosen),
+                "Input RAG active: %d chunks, serving %d agents (reranker=%s)",
+                input_rag.total_chunks, len(chosen), use_reranker,
             )
             warnings.append(
                 f"Input RAG active: document chunked into {input_rag.total_chunks} "
@@ -190,6 +209,7 @@ class Orchestrator:
 
         # ── RAG: chunk + retrieve per-agent ──────────────────────────
         use_rag = len(text) > _RAG_CHAR_THRESHOLD
+        use_reranker = mode == "premium"
         input_rag: InputRAG | None = None
         agent_texts: dict[str, str] = {}
 
@@ -197,7 +217,22 @@ class Orchestrator:
             input_rag = InputRAG()
             input_rag.index_document(text)
             for agent in chosen:
-                results = input_rag.retrieve_for_agent(agent.name, top_k=10)
+                retrieve_k = 20 if use_reranker else 10
+                results = input_rag.retrieve_for_agent(agent.name, top_k=retrieve_k)
+
+                if use_reranker and len(results) > 10:
+                    try:
+                        results = await rerank_chunks(
+                            results,
+                            agent_name=agent.name,
+                            bias_focus=agent.bias_type,
+                            provider=provider,
+                            top_k=10,
+                            minimum_relevance=4.0,
+                        )
+                    except Exception as e:
+                        logger.warning("Reranker failed for %s: %s", agent.name, e)
+
                 agent_texts[agent.name] = InputRAG.assemble(results)
             warnings.append(
                 f"Input RAG active: document chunked into {input_rag.total_chunks} segments."
@@ -302,8 +337,9 @@ def _evidence_crosscheck(
 def _resolve_mode(mode: Mode, warnings: list[str]) -> tuple[Mode, list[str]]:
     if mode == "premium":
         warnings.append(
-            "Premium mode requested; RAG pipeline active for enhanced analysis."
+            "Premium mode: hybrid RAG + LLM reranker + evidence cross-check active."
         )
+        # Premium now runs for real — RAG pipeline handles it
         return "lite", warnings
     if mode == "adaptive":
         warnings.append("Adaptive mode requested; running Lite first pass.")

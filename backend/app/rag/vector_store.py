@@ -1,12 +1,19 @@
 """
-Lightweight vector store using TF-IDF + cosine similarity.
+Hybrid vector store: TF-IDF dense + BM25 sparse with RRF fusion.
 
-No external embedding model required — uses scikit-learn's TfidfVectorizer
-with numpy for cosine similarity. Drop-in replaceable with FAISS or
-sentence-transformers when heavier hardware is available.
+Inspired by matt-bentley/LLM-RAG-Architecture — ported from C#/Qdrant to
+pure Python/numpy. No external embedding model or vector DB required.
+
+Two retrieval paths run in parallel:
+  1. TF-IDF cosine similarity (semantic — good for paraphrased queries)
+  2. BM25 keyword scoring (lexical — good for exact terminology like
+     "may, might, could" that TF-IDF normalises away)
+
+Results are fused using Reciprocal Rank Fusion (RRF).
 """
 from __future__ import annotations
 
+import hashlib
 import math
 import re
 from collections import Counter
@@ -22,50 +29,74 @@ from .chunker import Chunk
 class SearchResult:
     """A single retrieval result."""
     chunk: Chunk
-    score: float          # cosine similarity, 0–1
+    score: float          # fused score (higher = more relevant)
 
+
+# ═══════════════════════════════════════════════════════════════════════
+#  Hybrid Vector Store
+# ═══════════════════════════════════════════════════════════════════════
 
 class VectorStore:
-    """TF-IDF vector store with cosine-similarity retrieval.
+    """Hybrid TF-IDF + BM25 store with RRF fusion.
 
     Lifecycle:
         store = VectorStore()
-        store.index(chunks)          # builds vocabulary + TF-IDF matrix
+        store.index(chunks)
         results = store.query("...", top_k=5)
     """
 
-    def __init__(self) -> None:
+    def __init__(
+        self,
+        dense_weight: float = 0.7,
+        sparse_weight: float = 0.3,
+        bm25_k1: float = 1.2,
+        bm25_b: float = 0.75,
+    ) -> None:
         self._chunks: list[Chunk] = []
-        self._vocab: dict[str, int] = {}     # token → column index
-        self._idf: np.ndarray | None = None  # (V,)
-        self._tfidf: np.ndarray | None = None  # (N, V) L2-normalised rows
+
+        # Dense (TF-IDF cosine)
+        self._vocab: dict[str, int] = {}
+        self._idf: np.ndarray | None = None
+        self._tfidf: np.ndarray | None = None  # (N, V) L2-normed rows
+
+        # Sparse (BM25)
+        self._bm25_k1 = bm25_k1
+        self._bm25_b = bm25_b
+        self._doc_token_counts: list[Counter] = []
+        self._doc_lengths: list[int] = []
+        self._avg_doc_len: float = 0.0
+        self._df: Counter = Counter()  # document frequency per token
+        self._N: int = 0
+
+        # Fusion weights
+        self._dense_weight = dense_weight
+        self._sparse_weight = sparse_weight
 
     # ── indexing ────────────────────────────────────────────────────────
 
     def index(self, chunks: Sequence[Chunk]) -> None:
-        """Build TF-IDF matrix from chunks."""
+        """Build both TF-IDF and BM25 indices from chunks."""
         self._chunks = list(chunks)
         if not self._chunks:
             return
 
-        # Tokenise each chunk
         token_lists: list[list[str]] = [_tokenise(c.text) for c in self._chunks]
+        self._N = len(self._chunks)
 
-        # Build vocabulary from all tokens
+        # ── Build vocabulary ──
         vocab_set: set[str] = set()
         for tl in token_lists:
             vocab_set.update(tl)
         self._vocab = {tok: i for i, tok in enumerate(sorted(vocab_set))}
         V = len(self._vocab)
-        N = len(self._chunks)
 
         if V == 0:
-            self._tfidf = np.zeros((N, 1))
+            self._tfidf = np.zeros((self._N, 1))
             self._idf = np.ones(1)
             return
 
-        # Term frequency matrix (N, V)
-        tf = np.zeros((N, V), dtype=np.float32)
+        # ── Dense: TF-IDF matrix ──
+        tf = np.zeros((self._N, V), dtype=np.float32)
         for row, tokens in enumerate(token_lists):
             counts = Counter(tokens)
             for tok, cnt in counts.items():
@@ -73,48 +104,50 @@ class VectorStore:
                 if col is not None:
                     tf[row, col] = cnt
 
-        # Sub-linear TF: 1 + log(tf) for tf > 0
+        # Sub-linear TF: 1 + log(tf)
         mask = tf > 0
-        tf[mask] = 1.0 + np.log(tf[mask])
+        tf_log = tf.copy()
+        tf_log[mask] = 1.0 + np.log(tf[mask])
 
-        # IDF: log(N / df) + 1  (smoothed)
-        df = np.count_nonzero(tf, axis=0).astype(np.float32)
-        df = np.maximum(df, 1.0)  # avoid division by zero
-        self._idf = np.log(N / df) + 1.0
+        # IDF: log(N / df) + 1
+        df_arr = np.count_nonzero(tf, axis=0).astype(np.float32)
+        df_arr = np.maximum(df_arr, 1.0)
+        self._idf = np.log(self._N / df_arr) + 1.0
 
-        # TF-IDF
-        tfidf = tf * self._idf  # (N, V)
-
-        # L2-normalise each row
+        tfidf = tf_log * self._idf
         norms = np.linalg.norm(tfidf, axis=1, keepdims=True)
         norms = np.maximum(norms, 1e-10)
         self._tfidf = tfidf / norms
 
+        # ── Sparse: BM25 statistics ──
+        self._doc_token_counts = [Counter(tl) for tl in token_lists]
+        self._doc_lengths = [len(tl) for tl in token_lists]
+        self._avg_doc_len = sum(self._doc_lengths) / max(self._N, 1)
+
+        self._df = Counter()
+        for tl in token_lists:
+            for tok in set(tl):
+                self._df[tok] += 1
+
     # ── querying ────────────────────────────────────────────────────────
 
     def query(self, query_text: str, top_k: int = 5) -> list[SearchResult]:
-        """Return top-k chunks most similar to the query."""
+        """Hybrid query: TF-IDF + BM25 fused with RRF."""
         if self._tfidf is None or len(self._chunks) == 0:
             return []
 
-        q_vec = self._vectorise(query_text)
-        if q_vec is None:
+        tokens = _tokenise(query_text)
+        if not tokens:
             return []
 
-        # Cosine similarity: dot product (rows are already L2-normed)
-        scores = self._tfidf @ q_vec  # (N,)
+        # 1. Dense retrieval (TF-IDF cosine)
+        dense_ranking = self._dense_query(tokens, top_k=top_k * 3)
 
-        # Top-k
-        k = min(top_k, len(self._chunks))
-        top_indices = np.argsort(scores)[::-1][:k]
+        # 2. Sparse retrieval (BM25)
+        sparse_ranking = self._bm25_query(tokens, top_k=top_k * 3)
 
-        results: list[SearchResult] = []
-        for idx in top_indices:
-            s = float(scores[idx])
-            if s > 0:
-                results.append(SearchResult(chunk=self._chunks[idx], score=s))
-
-        return results
+        # 3. RRF fusion
+        return self._rrf_fuse(dense_ranking, sparse_ranking, top_k)
 
     def query_multi(
         self,
@@ -133,18 +166,27 @@ class VectorStore:
                 seen_indices.add(r.chunk.index)
                 all_results.append(r)
 
-        # Sort by score descending, keep top_k
         all_results.sort(key=lambda r: r.score, reverse=True)
         return all_results[:top_k]
 
-    # ── internal ────────────────────────────────────────────────────────
+    # ── Dense (TF-IDF) ──────────────────────────────────────────────────
 
-    def _vectorise(self, text: str) -> np.ndarray | None:
-        """Convert text to a TF-IDF vector using the stored vocabulary."""
-        tokens = _tokenise(text)
-        if not tokens or not self._vocab:
+    def _dense_query(
+        self, tokens: list[str], top_k: int,
+    ) -> list[tuple[int, float]]:
+        """Return (chunk_index, cosine_score) ranked by TF-IDF similarity."""
+        q_vec = self._vectorise_tokens(tokens)
+        if q_vec is None:
+            return []
+
+        scores = self._tfidf @ q_vec  # type: ignore[union-attr]
+        k = min(top_k, len(self._chunks))
+        top_idx = np.argsort(scores)[::-1][:k]
+        return [(int(i), float(scores[i])) for i in top_idx if scores[i] > 0]
+
+    def _vectorise_tokens(self, tokens: list[str]) -> np.ndarray | None:
+        if not self._vocab:
             return None
-
         V = len(self._vocab)
         vec = np.zeros(V, dtype=np.float32)
         counts = Counter(tokens)
@@ -152,36 +194,107 @@ class VectorStore:
             col = self._vocab.get(tok)
             if col is not None:
                 vec[col] = 1.0 + math.log(cnt) if cnt > 0 else 0.0
-
         vec *= self._idf  # type: ignore[arg-type]
-
         norm = np.linalg.norm(vec)
         if norm < 1e-10:
             return None
         return vec / norm
+
+    # ── Sparse (BM25) ───────────────────────────────────────────────────
+
+    def _bm25_query(
+        self, tokens: list[str], top_k: int,
+    ) -> list[tuple[int, float]]:
+        """Return (chunk_index, bm25_score) ranked by BM25."""
+        query_tokens = Counter(tokens)
+        scores: list[float] = []
+
+        for doc_idx in range(self._N):
+            score = 0.0
+            doc_counts = self._doc_token_counts[doc_idx]
+            doc_len = self._doc_lengths[doc_idx]
+
+            for tok, qtf in query_tokens.items():
+                tf = doc_counts.get(tok, 0)
+                if tf == 0:
+                    continue
+                df = self._df.get(tok, 0)
+                # IDF: log((N - df + 0.5) / (df + 0.5) + 1)
+                idf = math.log((self._N - df + 0.5) / (df + 0.5) + 1.0)
+                # TF saturation: tf * (k1 + 1) / (tf + k1 * (1 - b + b * dl/avgdl))
+                tf_sat = (tf * (self._bm25_k1 + 1)) / (
+                    tf + self._bm25_k1 * (
+                        1 - self._bm25_b + self._bm25_b * doc_len / max(self._avg_doc_len, 1)
+                    )
+                )
+                score += idf * tf_sat
+
+            scores.append(score)
+
+        # Top-k
+        k = min(top_k, self._N)
+        arr = np.array(scores)
+        top_idx = np.argsort(arr)[::-1][:k]
+        return [(int(i), float(arr[i])) for i in top_idx if arr[i] > 0]
+
+    # ── RRF Fusion ──────────────────────────────────────────────────────
+
+    def _rrf_fuse(
+        self,
+        dense_ranking: list[tuple[int, float]],
+        sparse_ranking: list[tuple[int, float]],
+        top_k: int,
+        rrf_k: int = 60,
+    ) -> list[SearchResult]:
+        """Reciprocal Rank Fusion of two ranked lists.
+
+        RRF score = w_dense * 1/(k + rank_dense) + w_sparse * 1/(k + rank_sparse)
+        """
+        fused: dict[int, float] = {}
+
+        for rank, (idx, _score) in enumerate(dense_ranking):
+            fused[idx] = fused.get(idx, 0.0) + self._dense_weight / (rrf_k + rank + 1)
+
+        for rank, (idx, _score) in enumerate(sparse_ranking):
+            fused[idx] = fused.get(idx, 0.0) + self._sparse_weight / (rrf_k + rank + 1)
+
+        # Sort by fused score
+        sorted_items = sorted(fused.items(), key=lambda x: x[1], reverse=True)
+
+        results: list[SearchResult] = []
+        for idx, score in sorted_items[:top_k]:
+            results.append(SearchResult(chunk=self._chunks[idx], score=score))
+
+        return results
 
     @property
     def size(self) -> int:
         return len(self._chunks)
 
 
-# ── tokenisation ────────────────────────────────────────────────────────
+# ═══════════════════════════════════════════════════════════════════════
+#  Tokenisation
+# ═══════════════════════════════════════════════════════════════════════
 
 _TOKEN_RE = re.compile(r"[a-z0-9]+(?:[-'][a-z0-9]+)*", re.IGNORECASE)
 
-# Common English stop words (kept minimal)
+# Stop words — deliberately EXCLUDE hedging/certainty words that agents need
+# to find.  "may", "might", "could", "should" are kept because LIBRA searches
+# for them. Standard function words are still removed.
 _STOP_WORDS = frozenset({
     "a", "an", "the", "and", "or", "but", "in", "on", "at", "to", "for",
     "of", "with", "by", "from", "is", "are", "was", "were", "be", "been",
     "being", "have", "has", "had", "do", "does", "did", "will", "would",
-    "could", "should", "may", "might", "shall", "can", "this", "that",
-    "these", "those", "it", "its", "he", "she", "they", "we", "i", "you",
-    "not", "no", "as", "if", "so", "than", "very", "just", "also", "about",
-    "which", "what", "who", "whom", "when", "where", "how", "all", "each",
-    "every", "both", "few", "more", "most", "other", "some", "such", "only",
-    "own", "same", "into", "over", "after", "before", "between", "under",
-    "again", "further", "then", "once", "here", "there", "any", "up", "out",
+    "this", "that", "these", "those", "it", "its", "he", "she", "they",
+    "we", "i", "you", "not", "no", "as", "if", "so", "than", "very",
+    "just", "also", "about", "which", "what", "who", "whom", "when",
+    "where", "how", "all", "each", "every", "both", "few", "more", "most",
+    "other", "some", "such", "only", "own", "same", "into", "over",
+    "after", "before", "between", "under", "again", "further", "then",
+    "once", "here", "there", "any", "up", "out",
 })
+# NOTE: "may", "might", "could", "should", "can", "shall" are intentionally
+# NOT in the stop list so BM25 can match LIBRA's hedging queries.
 
 
 def _tokenise(text: str) -> list[str]:

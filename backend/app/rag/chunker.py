@@ -11,8 +11,29 @@ Each chunk carries metadata: section_name, chunk_index, char_offset_start/end.
 
 from __future__ import annotations
 
+import logging
 import re
 from dataclasses import dataclass, field
+
+logger = logging.getLogger(__name__)
+
+# Try to use tiktoken for accurate token counting, fall back to char estimate
+try:
+    import tiktoken
+    _ENCODER = tiktoken.get_encoding("cl100k_base")
+
+    def _count_tokens(text: str) -> int:
+        return len(_ENCODER.encode(text, disallowed_special=()))
+
+    logger.info("Using tiktoken (cl100k_base) for token counting")
+except ImportError:
+    _ENCODER = None
+
+    def _count_tokens(text: str) -> int:
+        """Fallback: ~4 chars per token for English."""
+        return len(text) // 4
+
+    logger.info("tiktoken not available, using char-based token estimate")
 
 
 @dataclass
@@ -27,8 +48,8 @@ class Chunk:
 
     @property
     def token_estimate(self) -> int:
-        """Rough token count (~4 chars per token for English)."""
-        return len(self.text) // 4
+        """Token count (tiktoken if available, else ~4 chars/token)."""
+        return _count_tokens(self.text)
 
 
 # Section header patterns common in systematic reviews
@@ -85,7 +106,7 @@ def chunk_document(
     # Phase 3: Enforce max size — split large chunks by sentence
     sized_chunks: list[tuple[str, str, int]] = []
     for chunk_text, section, start in raw_chunks:
-        estimated_tokens = len(chunk_text) // 4
+        estimated_tokens = _count_tokens(chunk_text)
         if estimated_tokens <= max_chunk_tokens:
             sized_chunks.append((chunk_text, section, start))
         else:
@@ -181,7 +202,7 @@ def _split_by_sentence(
 
     for sent in sentences:
         candidate = (current + " " + sent).strip() if current else sent
-        if len(candidate) // 4 > max_tokens and current:
+        if _count_tokens(candidate) > max_tokens and current:
             chunks.append((current.strip(), current_start))
             current = sent
             current_start = base_offset + text.find(sent, current_start - base_offset)

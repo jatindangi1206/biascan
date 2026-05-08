@@ -1,6 +1,6 @@
 """
 Input RAG — chunks a user's document and retrieves the most relevant
-passages for each agent.
+passages for each agent, with adjacent-chunk expansion for context.
 
 Usage:
     rag = InputRAG()
@@ -15,21 +15,32 @@ from .vector_store import SearchResult, VectorStore
 
 
 class InputRAG:
-    """Facade over chunker + vector store for user-document retrieval."""
+    """Facade over chunker + hybrid vector store for user-document retrieval.
+
+    Features (from LLM-RAG-Architecture):
+      - Hybrid search: TF-IDF dense + BM25 sparse with RRF fusion
+      - Adjacent chunk expansion: ±N neighbouring chunks for context
+      - Per-agent query routing: each agent gets chunks matching its focus
+    """
 
     def __init__(
         self,
         max_chunk_tokens: int = 500,
         overlap_tokens: int = 50,
+        adjacent_chunks: int = 1,
     ) -> None:
         self._store = VectorStore()
         self._chunks: list[Chunk] = []
         self._max_chunk_tokens = max_chunk_tokens
         self._overlap_tokens = overlap_tokens
+        self._adjacent_chunks = adjacent_chunks
         self._indexed = False
 
+        # Section-grouped index for fast adjacent lookup
+        self._section_chunks: dict[str, list[Chunk]] = {}
+
     def index_document(self, text: str) -> list[Chunk]:
-        """Chunk the document and build the TF-IDF index.
+        """Chunk the document and build the hybrid index.
 
         Returns all chunks (useful for inspection / debugging).
         """
@@ -40,30 +51,44 @@ class InputRAG:
         )
         self._store.index(self._chunks)
         self._indexed = True
+
+        # Build section-grouped lookup for adjacent expansion
+        self._section_chunks.clear()
+        for c in self._chunks:
+            self._section_chunks.setdefault(c.section, []).append(c)
+        # Sort each section's chunks by index
+        for sec_chunks in self._section_chunks.values():
+            sec_chunks.sort(key=lambda c: c.index)
+
         return self._chunks
 
     def retrieve_for_agent(
         self,
         agent_name: str,
         top_k: int = 8,
+        expand_adjacent: bool = True,
     ) -> list[SearchResult]:
         """Retrieve chunks relevant to a specific agent's bias focus.
 
-        Uses the predefined AGENT_QUERIES to run multiple semantic queries
-        and merges results.
+        Uses predefined AGENT_QUERIES for hybrid multi-query retrieval,
+        then expands with adjacent chunks for context continuity.
         """
         if not self._indexed:
             raise RuntimeError("Call index_document() before retrieval.")
 
         queries = AGENT_QUERIES.get(agent_name.upper(), [])
         if not queries:
-            # Fallback: return the first top_k chunks in document order
             return [
                 SearchResult(chunk=c, score=1.0)
                 for c in self._chunks[:top_k]
             ]
 
+        # Retrieve with hybrid search (TF-IDF + BM25 + RRF)
         results = self._store.query_multi(queries, top_k=top_k, deduplicate=True)
+
+        # Adjacent chunk expansion (from LLM-RAG-Architecture)
+        if expand_adjacent and self._adjacent_chunks > 0:
+            results = self._expand_adjacent(results)
 
         # Guarantee every agent gets at least min_chunks content
         min_chunks = min(3, len(self._chunks))
@@ -88,6 +113,54 @@ class InputRAG:
             raise RuntimeError("Call index_document() before retrieval.")
         return self._store.query(query, top_k=top_k)
 
+    # ── Adjacent Chunk Expansion ────────────────────────────────────────
+
+    def _expand_adjacent(
+        self, results: list[SearchResult],
+    ) -> list[SearchResult]:
+        """For each retrieved chunk, also include ±N adjacent chunks from
+        the same section. This gives agents surrounding context — critical
+        for bias patterns that span paragraph boundaries.
+
+        Ported from QdrantHybridEmbeddingStore.ExpandWithAdjacentChunksAsync.
+        """
+        seen_indices: set[int] = {r.chunk.index for r in results}
+        expanded = list(results)
+
+        for r in results:
+            section = r.chunk.section
+            sec_chunks = self._section_chunks.get(section, [])
+            if not sec_chunks:
+                continue
+
+            # Find position of this chunk in its section
+            pos = None
+            for i, c in enumerate(sec_chunks):
+                if c.index == r.chunk.index:
+                    pos = i
+                    break
+            if pos is None:
+                continue
+
+            # Grab ±adjacent_chunks neighbours
+            for offset in range(-self._adjacent_chunks, self._adjacent_chunks + 1):
+                if offset == 0:
+                    continue
+                adj_pos = pos + offset
+                if 0 <= adj_pos < len(sec_chunks):
+                    adj_chunk = sec_chunks[adj_pos]
+                    if adj_chunk.index not in seen_indices:
+                        seen_indices.add(adj_chunk.index)
+                        # Adjacent chunks get a diminished score
+                        expanded.append(SearchResult(
+                            chunk=adj_chunk,
+                            score=r.score * 0.5,
+                        ))
+
+        return expanded
+
+    # ── Assembly ────────────────────────────────────────────────────────
+
     @staticmethod
     def assemble(results: list[SearchResult], include_metadata: bool = True) -> str:
         """Reassemble retrieved chunks into a single text block.
@@ -98,7 +171,6 @@ class InputRAG:
         if not results:
             return ""
 
-        # Sort by original chunk index (document order)
         ordered = sorted(results, key=lambda r: r.chunk.index)
 
         parts: list[str] = []
