@@ -52,19 +52,49 @@ class Chunk:
         return _count_tokens(self.text)
 
 
-# Section header patterns common in systematic reviews
+# Section header patterns for systematic reviews.
+# Covers: PRISMA structure, structured abstracts, numbered sections,
+# IMRaD, domain-specific headings, and markdown headers.
 _SECTION_RE = re.compile(
-    r"^(?:#+\s*)?("
-    r"abstract|introduction|background|methods?|methodology|"
-    r"study selection|search strategy|data extraction|"
-    r"results?|findings|"
-    r"gut microbiome|functional|metabolic|"
-    r"disease phenotype|statistical|"
-    r"discussion|limitations|"
-    r"conclusion|summary|"
-    r"references?|bibliography|"
-    r"risk of bias|quality assessment|reporting bias|certainty"
-    r")(?:\s.*)?$",
+    r"^"
+    r"(?:#+\s*)?"                       # optional markdown headers: "## "
+    r"(?:\d+(?:\.\d+)*\.?\s+)?"        # optional numbered prefix: "1.", "2.3"
+    r"("
+    # ── PRISMA / systematic review structure ──
+    r"abstract|introduction|background|objectives?|aims?"
+    r"|methods?|methodology|materials?\s+and\s+methods?"
+    r"|study\s+selection|search\s+strategy|search\s+methods?"
+    r"|data\s+extraction|data\s+collection|data\s+synthesis"
+    r"|data\s+analysis|data\s+sources|eligibility\s+criteria"
+    r"|inclusion\s+criteria|exclusion\s+criteria"
+    r"|selection\s+process|screening"
+    # ── Results / findings ──
+    r"|results?|findings|study\s+characteristics"
+    r"|narrative\s+synthesis|quantitative\s+synthesis"
+    r"|meta-?analysis|forest\s+plot|sensitivity\s+analysis"
+    r"|subgroup\s+analysis|heterogeneity"
+    # ── Quality / risk of bias ──
+    r"|risk\s+of\s+bias|quality\s+assessment|critical\s+appraisal"
+    r"|reporting\s+bias|certainty\s+of\s+evidence"
+    r"|GRADE|evidence\s+quality|methodological\s+quality"
+    r"|assessment\s+of\s+bias|publication\s+bias"
+    # ── Discussion / conclusion ──
+    r"|discussion|limitations|strengths?\s+and\s+limitations?"
+    r"|implications|clinical\s+implications|future\s+research"
+    r"|conclusion|conclusions|summary|key\s+findings"
+    # ── Domain-specific sections (biomedical) ──
+    r"|gut\s+microbiome|functional|metabolic"
+    r"|disease\s+phenotype|statistical|epidemiolog"
+    r"|pathophysiology|pharmacolog|clinical\s+outcomes?"
+    r"|safety|adverse\s+events?|efficacy"
+    # ── References / appendices ──
+    r"|references?|bibliography|supplementary|appendix|appendices"
+    # ── Structured abstract fields ──
+    r"|purpose|design|setting|participants?|interventions?"
+    r"|main\s+outcome|outcome\s+measures?"
+    # ── Table/figure captions ──
+    r"|table\s+\d+|figure\s+\d+|fig\.?\s+\d+"
+    r")(?:[:\.\s].*)?$",
     re.IGNORECASE | re.MULTILINE,
 )
 
@@ -216,31 +246,86 @@ def _split_by_sentence(
 
 
 # ── Agent-specific retrieval queries ──────────────────────────────────────
+# Each agent gets 8-12 queries optimized for both TF-IDF (semantic) and
+# BM25 (keyword) retrieval paths. Queries use the exact vocabulary from
+# the B01-B11 bias pattern markers to maximize recall.
 
 AGENT_QUERIES = {
     "ARGUS": [
+        # B01 Confirmation Bias
         "claims with supporting and refuting evidence",
         "one-sided arguments or missing counter-evidence",
-        "conclusions and findings with causal language",
-        "certainty language and definitive claims",
-        "framing and persuasive language",
+        "consistently supports weight of evidence favors cherry-picked",
+        "selectively presenting evidence ignoring contradictory findings",
+        # B03 Certainty Inflation
+        "certainty language: clearly demonstrates definitively proves",
+        "conclusions expressed with greater certainty than warranted",
+        # B05 Framing Effect
+        "framing persuasive language breakthrough revolutionary",
+        "spin loaded language promising encouraging unprecedented",
+        # B04 Overgeneralization
+        "scope claims: all patients universally applicable regardless",
+        "extending findings beyond warranted scope overgeneralization",
+        # B08 Causal
+        "causal language: causes leads to results in observational",
+        "inferring causation from correlational data",
     ],
     "LIBRA": [
-        "hedging language: may, might, could, possibly, suggests",
-        "certainty boosters: clearly, definitely, proves, establishes",
+        # Hedging detection (B03 — certainty calibration)
+        "hedging language: may might could possibly suggests",
+        "appears to seems to likely probable potential tentatively",
+        "further research is needed it remains unclear presumably",
+        # Certainty boosters
+        "certainty boosters: clearly definitely proves establishes",
+        "firmly established well-established beyond doubt irrefutably",
+        "conclusive evidence indisputable proven fact unequivocally",
+        # Scope calibration (B04)
         "scope claims about populations and generalizability",
+        "all patients universally applicable across all populations",
+        # Mixed signals
+        "conflicting hedging and certainty in same passage",
+        "preliminary yet stated as confirmed established",
     ],
     "LENS": [
+        # Citation analysis
         "citation contexts with references [1] [2] etc",
         "claims that cite specific studies as evidence",
         "argumentation structure: premises and conclusions",
+        # Citation misuse patterns
+        "seminal study landmark paper foundational work anchoring",
+        "as originally shown consistent with the original finding",
+        "supporting evidence from multiple sources corroborates",
+        # Evidence structure
+        "evidence synthesis claims supported by literature",
+        "conflicting citations opposing findings from different studies",
+        "selective citation omitted references missing evidence",
     ],
     "QUILL": [
-        "passages with identified bias that need revision",
-        "text with loaded or non-neutral language",
+        # Language quality (B05 framing)
+        "passages with loaded or non-neutral language",
+        "biased wording that needs neutral revision",
+        "radical devastating reckless catastrophic extreme",
+        "so-called corrupt failed dangerous extremist",
+        # Persuasion techniques
+        "appeal to authority flag waving black and white fallacy",
+        "emotional manipulation exaggeration rhetorical framing",
+        # Tone issues
+        "text with spin positive framing of null results",
+        "encouraging promising breakthrough game-changing paradigm",
     ],
     "VIGIL": [
-        "numerical data, statistics, and measurements",
-        "citation references and specific factual claims",
+        # Statistical verification (B07, B08)
+        "numerical data statistics p-values confidence intervals",
+        "sample sizes effect sizes odds ratios relative risk",
+        "subgroup analysis secondary endpoint post-hoc exploratory",
+        "primary endpoint significance meta-analysis forest plot",
+        # Citation verification
+        "citation references specific factual claims to verify",
+        "reported percentages measurements quantitative outcomes",
+        # Methodological red flags
+        "study design observational cohort cross-sectional RCT",
+        "risk of bias assessment GRADE quality of evidence",
+        "sensitivity analysis heterogeneity funnel plot asymmetry",
+        "publication bias missing null results file drawer",
     ],
 }

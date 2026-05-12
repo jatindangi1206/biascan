@@ -988,6 +988,10 @@ button {
   line-height: 1.55;
 }
 
+.drawer-note.error {
+  color: #8a4a31;
+}
+
 .key-row,
 .test-row,
 .drawer-label-row {
@@ -995,6 +999,16 @@ button {
   align-items: center;
   gap: 8px;
   justify-content: space-between;
+}
+
+.drawer-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.drawer-row .drawer-select {
+  flex: 1;
 }
 
 .drawer-inline-actions {

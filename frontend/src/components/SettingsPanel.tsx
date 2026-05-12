@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { pingProvider } from "../api";
 import { BIAS_LABELS } from "../types";
 import type {
@@ -56,8 +56,44 @@ export function SettingsPanel({
     | { kind: "ok"; sample: string }
     | { kind: "err"; message: string }
   >({ kind: "idle" });
+  const [ollamaModels, setOllamaModels] = useState<string[]>([]);
+  const [ollamaLoading, setOllamaLoading] = useState(false);
+  const [ollamaError, setOllamaError] = useState<string | null>(null);
 
   const current = providers.find((provider) => provider.name === config.provider);
+  const CUSTOM_MODEL_VALUE = "__custom__";
+
+  const normalizeBaseUrl = (value: string | null | undefined) =>
+    value ? value.trim().replace(/\/+$/, "") : "";
+
+  const fetchOllamaModels = async () => {
+    if (config.provider !== "ollama") return;
+    const baseUrl = normalizeBaseUrl(config.base_url);
+    if (!baseUrl) {
+      setOllamaModels([]);
+      setOllamaError("Set a base URL to load models.");
+      return;
+    }
+
+    setOllamaLoading(true);
+    setOllamaError(null);
+
+    try {
+      const res = await fetch(`${baseUrl}/api/tags`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      const models = Array.isArray(data?.models) ? data.models : [];
+      const names = models
+        .map((model: { name?: string }) => (model?.name ?? "").trim())
+        .filter((name: string) => name.length > 0);
+      setOllamaModels(Array.from(new Set(names)));
+    } catch (e) {
+      setOllamaModels([]);
+      setOllamaError(e instanceof Error ? e.message : String(e));
+    } finally {
+      setOllamaLoading(false);
+    }
+  };
 
   const update = (patch: Partial<ProviderConfig>) => {
     const next = { ...config, ...patch };
@@ -65,6 +101,16 @@ export function SettingsPanel({
     storeConfig(next);
     setPingState({ kind: "idle" });
   };
+
+  useEffect(() => {
+    if (config.provider !== "ollama") {
+      setOllamaModels([]);
+      setOllamaError(null);
+      setOllamaLoading(false);
+      return;
+    }
+    void fetchOllamaModels();
+  }, [config.provider, config.base_url]);
 
   const switchProvider = (name: ProviderName) => {
     const info = providers.find((provider) => provider.name === name);
@@ -141,13 +187,58 @@ export function SettingsPanel({
 
         <section className="drawer-section">
           <p className="drawer-label">Model and endpoint</p>
-          <input
-            className="drawer-input"
-            value={config.model}
-            onChange={(e) => update({ model: e.target.value })}
-            placeholder={current?.default_model ?? ""}
-          />
-          {current?.model_hint && <p className="drawer-note">{current.model_hint}</p>}
+          {config.provider === "ollama" ? (
+            <>
+              <div className="drawer-row">
+                <select
+                  className="drawer-select"
+                  value={ollamaModels.includes(config.model) ? config.model : CUSTOM_MODEL_VALUE}
+                  onChange={(e) => {
+                    const next = e.target.value;
+                    update({ model: next === CUSTOM_MODEL_VALUE ? "" : next });
+                  }}
+                >
+                  {ollamaModels.map((model) => (
+                    <option key={model} value={model}>
+                      {model}
+                    </option>
+                  ))}
+                  <option value={CUSTOM_MODEL_VALUE}>Custom model...</option>
+                </select>
+                <button
+                  type="button"
+                  className="mini-action"
+                  onClick={fetchOllamaModels}
+                  disabled={ollamaLoading || !normalizeBaseUrl(config.base_url)}
+                >
+                  {ollamaLoading ? "Loading..." : "Refresh"}
+                </button>
+              </div>
+              {!ollamaModels.includes(config.model) && (
+                <input
+                  className="drawer-input"
+                  value={config.model}
+                  onChange={(e) => update({ model: e.target.value })}
+                  placeholder="e.g., gemma4:latest"
+                />
+              )}
+              {ollamaError && <p className="drawer-note error">{ollamaError}</p>}
+              {!ollamaLoading && !ollamaError && normalizeBaseUrl(config.base_url) && ollamaModels.length === 0 && (
+                <p className="drawer-note">No local models found. Run `ollama pull ...` and refresh.</p>
+              )}
+              <p className="drawer-note">Models are fetched from your Ollama server.</p>
+            </>
+          ) : (
+            <>
+              <input
+                className="drawer-input"
+                value={config.model}
+                onChange={(e) => update({ model: e.target.value })}
+                placeholder={current?.default_model ?? ""}
+              />
+              {current?.model_hint && <p className="drawer-note">{current.model_hint}</p>}
+            </>
+          )}
           <input
             className="drawer-input"
             value={config.base_url ?? ""}

@@ -2,7 +2,6 @@
 """
 HTML Report Generator — creates self-contained HTML benchmark reports
 with Chart.js charts from eval JSON result files.
-
 Usage:
     # Generate report from automated eval results
     python -m eval.generate_report --auto eval/results/auto_eval_*.json

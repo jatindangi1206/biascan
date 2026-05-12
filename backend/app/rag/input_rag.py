@@ -162,11 +162,27 @@ class InputRAG:
     # ── Assembly ────────────────────────────────────────────────────────
 
     @staticmethod
-    def assemble(results: list[SearchResult], include_metadata: bool = True) -> str:
-        """Reassemble retrieved chunks into a single text block.
+    def assemble(
+        results: list[SearchResult],
+        include_metadata: bool = True,
+        agent_name: str | None = None,
+    ) -> str:
+        """Reassemble retrieved chunks into a structured text block.
 
         Chunks are sorted by their original document position so the LLM
         sees them in reading order, not relevance order.
+
+        The output format is optimized for LLM comprehension:
+        - Section headers give document structure context
+        - Relevance scores help the LLM prioritize attention
+        - Contiguous chunks from the same section are merged to reduce
+          token overhead from repeated headers
+        - A preamble tells the agent what it's looking at
+
+        Args:
+            results: Retrieved search results with chunks and scores.
+            include_metadata: Whether to include section/position headers.
+            agent_name: If provided, adds a context preamble for the agent.
         """
         if not results:
             return ""
@@ -174,11 +190,41 @@ class InputRAG:
         ordered = sorted(results, key=lambda r: r.chunk.index)
 
         parts: list[str] = []
+
+        # Preamble: orient the LLM about what it's reading
+        if agent_name and include_metadata:
+            n_chunks = len(ordered)
+            sections = sorted(set(r.chunk.section for r in ordered))
+            top_score = max(r.score for r in ordered) if ordered else 0
+            parts.append(
+                f"[DOCUMENT EXCERPTS for {agent_name} analysis | "
+                f"{n_chunks} passages | "
+                f"Sections: {', '.join(sections)} | "
+                f"Top relevance: {top_score:.3f}]"
+            )
+
+        # Group contiguous same-section chunks to reduce header repetition
+        current_section = None
         for r in ordered:
             c = r.chunk
             if include_metadata:
-                header = f"[Section: {c.section} | Chunk {c.index} | Chars {c.char_start}-{c.char_end}]"
-                parts.append(f"{header}\n{c.text}")
+                if c.section != current_section:
+                    # New section header
+                    current_section = c.section
+                    relevance_tag = (
+                        "HIGH" if r.score > 0.01 else
+                        "MED" if r.score > 0.005 else
+                        "LOW"
+                    )
+                    header = (
+                        f"[Section: {c.section} | "
+                        f"Chunk {c.index} | "
+                        f"Relevance: {relevance_tag}]"
+                    )
+                    parts.append(f"{header}\n{c.text}")
+                else:
+                    # Same section, just append text with a light separator
+                    parts.append(c.text)
             else:
                 parts.append(c.text)
 

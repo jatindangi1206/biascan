@@ -15,7 +15,7 @@ SUPPORTED_PROVIDERS: list[dict] = [
         "needs_base_url": True,
         "default_base_url": "http://localhost:11434",
         "default_model": "qwen2.5:7b",
-        "model_hint": "qwen2.5:7b · llama3.1:8b · mistral:7b · gemma2:9b · phi3.5:3.8b",
+        "model_hint": "qwen2.5:7b · llama3.1:8b · mistral:7b · gemma2:9b · gemma4:latest · phi3.5:3.8b",
         "word_cap": 8000,
     },
     {

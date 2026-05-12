@@ -119,7 +119,9 @@ class Orchestrator:
                     except Exception as e:
                         logger.warning("Reranker failed for %s: %s", agent.name, e)
 
-                agent_texts[agent.name] = InputRAG.assemble(results)
+                agent_texts[agent.name] = InputRAG.assemble(
+                    results, agent_name=agent.name,
+                )
             logger.info(
                 "Input RAG active: %d chunks, serving %d agents (reranker=%s)",
                 input_rag.total_chunks, len(chosen), use_reranker,
@@ -233,7 +235,9 @@ class Orchestrator:
                     except Exception as e:
                         logger.warning("Reranker failed for %s: %s", agent.name, e)
 
-                agent_texts[agent.name] = InputRAG.assemble(results)
+                agent_texts[agent.name] = InputRAG.assemble(
+                    results, agent_name=agent.name,
+                )
             warnings.append(
                 f"Input RAG active: document chunked into {input_rag.total_chunks} segments."
             )

@@ -1,0 +1,155 @@
+{
+  "total_datasets": 15,
+  "total_samples": 420,
+  "total_biased": 218,
+  "total_control": 202,
+  "bias_types_covered": [
+    "B01",
+    "B03",
+    "B04",
+    "B05",
+    "B08"
+  ],
+  "agents_covered": [
+    "argus",
+    "lens",
+    "libra"
+  ],
+  "datasets": {
+    "B01_scifact": {
+      "dataset_name": "SciFact",
+      "bias_type": "B01",
+      "agent": "argus",
+      "total": 6,
+      "biased": 3,
+      "control": 3,
+      "has_synthetic": true
+    },
+    "B01_ibm_claim": {
+      "dataset_name": "IBM Claim Stance",
+      "bias_type": "B01",
+      "agent": "argus",
+      "total": 50,
+      "biased": 25,
+      "control": 25,
+      "has_synthetic": false
+    },
+    "B03_sci_exaggeration": {
+      "dataset_name": "Scientific Exaggeration Detection",
+      "bias_type": "B03",
+      "agent": "argus",
+      "total": 47,
+      "biased": 22,
+      "control": 25,
+      "has_synthetic": false
+    },
+    "B03_bioscope": {
+      "dataset_name": "BioScope Corpus",
+      "bias_type": "B03",
+      "agent": "argus",
+      "total": 30,
+      "biased": 20,
+      "control": 10,
+      "has_synthetic": true
+    },
+    "B03_conll2010": {
+      "dataset_name": "CoNLL-2010 Shared Task",
+      "bias_type": "B03",
+      "agent": "argus",
+      "total": 25,
+      "biased": 15,
+      "control": 10,
+      "has_synthetic": true
+    },
+    "B04_pubhealth": {
+      "dataset_name": "PubHealth",
+      "bias_type": "B04",
+      "agent": "argus",
+      "total": 11,
+      "biased": 6,
+      "control": 5,
+      "has_synthetic": true
+    },
+    "B04_claimbuster": {
+      "dataset_name": "ClaimBuster",
+      "bias_type": "B04",
+      "agent": "argus",
+      "total": 25,
+      "biased": 15,
+      "control": 10,
+      "has_synthetic": true
+    },
+    "B04_sci_exag_scope": {
+      "dataset_name": "Scientific Exaggeration (Scope)",
+      "bias_type": "B04",
+      "agent": "argus",
+      "total": 47,
+      "biased": 22,
+      "control": 25,
+      "has_synthetic": false
+    },
+    "B05_media_frames": {
+      "dataset_name": "Media Frames Corpus",
+      "bias_type": "B05",
+      "agent": "argus",
+      "total": 12,
+      "biased": 6,
+      "control": 6,
+      "has_synthetic": true
+    },
+    "B05_mbic": {
+      "dataset_name": "MBIC (Media Bias Annotation)",
+      "bias_type": "B05",
+      "agent": "argus",
+      "total": 22,
+      "biased": 12,
+      "control": 10,
+      "has_synthetic": true
+    },
+    "B05_semeval2023": {
+      "dataset_name": "SemEval-2023 Task 3",
+      "bias_type": "B05",
+      "agent": "argus",
+      "total": 14,
+      "biased": 8,
+      "control": 6,
+      "has_synthetic": true
+    },
+    "B08_corr2cause": {
+      "dataset_name": "Corr2Cause",
+      "bias_type": "B08",
+      "agent": "argus",
+      "total": 50,
+      "biased": 25,
+      "control": 25,
+      "has_synthetic": false
+    },
+    "LIBRA_bioscope": {
+      "dataset_name": "BioScope (LIBRA)",
+      "bias_type": "B03",
+      "agent": "libra",
+      "total": 24,
+      "biased": 12,
+      "control": 12,
+      "has_synthetic": true
+    },
+    "LIBRA_sci_exag": {
+      "dataset_name": "Scientific Exaggeration (LIBRA)",
+      "bias_type": "B03",
+      "agent": "libra",
+      "total": 47,
+      "biased": 22,
+      "control": 25,
+      "has_synthetic": false
+    },
+    "LENS_scicite": {
+      "dataset_name": "SciCite (LENS)",
+      "bias_type": "B01",
+      "agent": "lens",
+      "total": 10,
+      "biased": 5,
+      "control": 5,
+      "has_synthetic": true
+    }
+  }
+}
