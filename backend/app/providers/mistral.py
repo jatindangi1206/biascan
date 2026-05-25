@@ -1,5 +1,6 @@
 from __future__ import annotations
 import asyncio
+import random
 import httpx
 
 from ..config import PROVIDER_TIMEOUT_S
@@ -37,14 +38,19 @@ class MistralProvider:
             "temperature": 0.2,
             "response_format": {"type": "json_object"},
         }
-        for attempt in range(3):
+        max_attempts = 5
+        for attempt in range(max_attempts):
             try:
                 async with httpx.AsyncClient(timeout=PROVIDER_TIMEOUT_S) as client:
                     resp = await client.post(url, json=payload, headers=headers)
             except httpx.RequestError as e:
                 raise LLMError(f"Cannot reach Mistral: {e}") from e
-            if resp.status_code == 429:
-                await asyncio.sleep(2 ** attempt)
+            if resp.status_code == 429 and attempt < max_attempts - 1:
+                # Honor the server's Retry-After when present; else exponential
+                # backoff. Jitter avoids agents retrying in lockstep. Cap at 30s.
+                retry_after = resp.headers.get("Retry-After", "")
+                base = float(retry_after) if retry_after.isdigit() else 2 ** attempt
+                await asyncio.sleep(min(base + random.uniform(0, 0.5), 30.0))
                 continue
             break
         if resp.status_code == 401:

@@ -4,7 +4,7 @@ import logging
 import uuid
 from typing import AsyncIterator, Iterable
 
-from ..config import CONFIDENCE_FLOOR
+from ..config import CONFIDENCE_FLOOR, MAX_CONCURRENCY
 from ..providers import build_provider, LLMError, ProviderConfig
 from ..rag import InputRAG, EvidenceRAG
 from ..schemas import (
@@ -127,7 +127,7 @@ class Orchestrator:
         evidence_rag = self._get_evidence_rag()
 
         # ── Run agents in parallel ───────────────────────────────────
-        sem = asyncio.Semaphore(3)
+        sem = asyncio.Semaphore(MAX_CONCURRENCY)
 
         async def _run_with_sem(agent: BaseAgent):
             async with sem:

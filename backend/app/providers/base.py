@@ -45,7 +45,7 @@ SUPPORTED_PROVIDERS: list[dict] = [
         "needs_base_url": False,
         "default_base_url": "https://integrate.api.nvidia.com/v1",
         "default_model": "meta/llama-3.3-70b-instruct",
-        "model_hint": "meta/llama-3.3-70b-instruct · deepseek-ai/deepseek-r1 · mistralai/mixtral-8x7b-instruct-v0.1 · google/gemma-3-27b-it",
+        "model_hint": "meta/llama-3.3-70b-instruct · qwen/qwen2.5-coder-32b-instruct · deepseek-ai/deepseek-r1 · mistralai/mixtral-8x7b-instruct-v0.1 · google/gemma-3-27b-it",
         "word_cap": 12000,
     },
     {
