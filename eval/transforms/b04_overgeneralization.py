@@ -35,38 +35,30 @@ def transform_pubhealth(max_samples: int = 50, seed: int = 42) -> list[EvalSampl
     BIASED: FALSE/MIXTURE claims presented as established evidence syntheses.
     CONTROL: TRUE claims presented with their supporting explanations.
     """
-    import json
-    import urllib.request
-    import tempfile
     import os
 
     logger.info("Loading PubHealth...")
 
-    # Try HuggingFace first
-    try:
-        from datasets import load_dataset
-        ds = load_dataset("ImperialCollegeLondon/health_fact")
-        split = ds.get("test", ds.get("validation", ds.get("train")))
-        items = list(split)
-    except Exception as e:
-        logger.warning(f"HF PubHealth failed: {e}. Trying GitHub fallback...")
-        try:
-            # Download from GitHub raw data
-            url = "https://raw.githubusercontent.com/neemakot/Health-Fact-Checking/master/data/PUBHEALTH/test.tsv"
-            tmpdir = tempfile.mkdtemp()
-            path = os.path.join(tmpdir, "pubhealth_test.tsv")
-            urllib.request.urlretrieve(url, path)
+    _raw_dir = os.path.join(os.path.dirname(__file__), "..", "datasets", "raw")
+    local_path = os.path.join(_raw_dir, "PUBHEALTH", "train.tsv")
 
-            items = []
-            with open(path, encoding="utf-8") as f:
-                header = f.readline().strip().split("\t")
-                for line in f:
-                    fields = line.strip().split("\t")
-                    if len(fields) >= len(header):
-                        row = dict(zip(header, fields))
-                        items.append(row)
-        except Exception as e2:
-            logger.warning(f"GitHub fallback also failed: {e2}. Using synthetic.")
+    if os.path.exists(local_path):
+        logger.info("PubHealth: loading from local raw file")
+        items = []
+        with open(local_path, encoding="utf-8") as f:
+            header = f.readline().strip().split("\t")
+            for line in f:
+                fields = line.strip().split("\t")
+                if len(fields) >= len(header):
+                    items.append(dict(zip(header, fields)))
+    else:
+        try:
+            from datasets import load_dataset
+            ds = load_dataset("ImperialCollegeLondon/health_fact")
+            split = ds.get("test", ds.get("validation", ds.get("train")))
+            items = list(split)
+        except Exception as e:
+            logger.warning(f"HF PubHealth failed: {e}. Using synthetic.")
             return _pubhealth_synthetic_fallback(max_samples, seed)
 
     rng = random.Random(seed)

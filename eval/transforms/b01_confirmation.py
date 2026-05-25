@@ -40,26 +40,32 @@ def transform_scifact(max_samples: int = 50, seed: int = 42) -> list[EvalSample]
     refuting context).
     """
     import json
-    import urllib.request
-    import tempfile
     import os
 
-    logger.info("Loading SciFact via GitHub raw data...")
+    logger.info("Loading SciFact...")
 
-    # Download claims and corpus from SciFact GitHub
-    claims_url = "https://raw.githubusercontent.com/allenai/scifact/master/data/claims_dev.jsonl"
-    corpus_url = "https://raw.githubusercontent.com/allenai/scifact/master/data/corpus.jsonl"
+    _raw_dir = os.path.join(os.path.dirname(__file__), "..", "datasets", "raw")
+    local_claims = os.path.join(_raw_dir, "scifact", "data", "claims_train.jsonl")
+    local_corpus = os.path.join(_raw_dir, "scifact", "data", "corpus.jsonl")
 
-    tmpdir = tempfile.mkdtemp()
-    claims_path = os.path.join(tmpdir, "claims.jsonl")
-    corpus_path = os.path.join(tmpdir, "corpus.jsonl")
-
-    try:
-        urllib.request.urlretrieve(claims_url, claims_path)
-        urllib.request.urlretrieve(corpus_url, corpus_path)
-    except Exception as e:
-        logger.warning(f"Could not download SciFact from GitHub: {e}. Using synthetic fallback.")
-        return _scifact_synthetic_fallback(max_samples, seed)
+    if os.path.exists(local_claims) and os.path.exists(local_corpus):
+        logger.info("SciFact: loading from local raw files")
+        claims_path = local_claims
+        corpus_path = local_corpus
+    else:
+        import urllib.request
+        import tempfile
+        claims_url = "https://raw.githubusercontent.com/allenai/scifact/master/data/claims_dev.jsonl"
+        corpus_url = "https://raw.githubusercontent.com/allenai/scifact/master/data/corpus.jsonl"
+        tmpdir = tempfile.mkdtemp()
+        claims_path = os.path.join(tmpdir, "claims.jsonl")
+        corpus_path = os.path.join(tmpdir, "corpus.jsonl")
+        try:
+            urllib.request.urlretrieve(claims_url, claims_path)
+            urllib.request.urlretrieve(corpus_url, corpus_path)
+        except Exception as e:
+            logger.warning(f"Could not download SciFact: {e}. Using synthetic fallback.")
+            return _scifact_synthetic_fallback(max_samples, seed)
 
     # Parse corpus: doc_id -> {title, abstract_sentences}
     corpus = {}

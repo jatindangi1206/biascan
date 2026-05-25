@@ -13,6 +13,7 @@ from eval.transforms import b05_framing
 from eval.transforms import b08_causal
 from eval.transforms import libra_hedging
 from eval.transforms import lens_discourse
+from eval.transforms import mbib_real  # real HF-backed transforms
 
 from eval.transforms.registry import (
     EvalSample,

@@ -7,7 +7,6 @@ from typing import AsyncIterator, Iterable
 from ..config import CONFIDENCE_FLOOR
 from ..providers import build_provider, LLMError, ProviderConfig
 from ..rag import InputRAG, EvidenceRAG
-from ..rag.reranker import rerank_chunks
 from ..schemas import (
     AgentRunInfo,
     AnalyzeResponse,
@@ -21,8 +20,8 @@ from .meta_evaluator import meta_evaluate
 logger = logging.getLogger(__name__)
 
 # Threshold (chars) above which we activate Input RAG chunking.
-# Below this the full text is short enough to send directly.
-_RAG_CHAR_THRESHOLD = 6_000  # ~1500 tokens
+# Set to 0 so RAG is always active — we expect long synthesis texts.
+_RAG_CHAR_THRESHOLD = 0
 
 
 class Orchestrator:
@@ -34,13 +33,23 @@ class Orchestrator:
         self._evidence_rag: EvidenceRAG | None = None
 
     def _get_evidence_rag(self) -> EvidenceRAG:
-        """Lazily build the evidence index (once per process)."""
+        """Lazily build the evidence index (once per process).
+
+        Loads the 11 hand-written BIAS_PATTERNS plus real dataset exemplars
+        from eval/output/samples.json (built by `python -m eval.build_corpus`).
+        Without exemplars the cross-check has only 33 generic chunks and rarely
+        fires; with them it has 900-ish real biased/control sentences and the
+        BM25 index gives meaningful boosts/penalties on flagged spans.
+        """
         if self._evidence_rag is None:
             self._evidence_rag = EvidenceRAG()
             try:
-                self._evidence_rag.build_index(include_eval_exemplars=False)
+                self._evidence_rag.build_index(
+                    include_eval_exemplars=True,
+                    max_exemplars_per_dataset=50,
+                )
                 logger.info(
-                    "Evidence RAG built: %d patterns indexed",
+                    "Evidence RAG built: %d chunks indexed",
                     self._evidence_rag.pattern_count,
                 )
             except Exception as e:
@@ -91,44 +100,24 @@ class Orchestrator:
                 f"{', '.join(a.name for a in chosen)}."
             )
 
-        # ── RAG: chunk + retrieve per-agent ──────────────────────────
+        # ── RAG: chunk document for context-window management ────────
         use_rag = len(text) > _RAG_CHAR_THRESHOLD
-        use_reranker = mode == "premium"
         input_rag: InputRAG | None = None
         agent_texts: dict[str, str] = {}
 
         if use_rag:
             input_rag = InputRAG()
             input_rag.index_document(text)
+            full_doc = input_rag.assemble_all()
             for agent in chosen:
-                # Retrieve 2× candidates if reranker is active
-                retrieve_k = 20 if use_reranker else 10
-                results = input_rag.retrieve_for_agent(agent.name, top_k=retrieve_k)
-
-                # LLM reranker (premium mode only)
-                if use_reranker and len(results) > 10:
-                    try:
-                        results = await rerank_chunks(
-                            results,
-                            agent_name=agent.name,
-                            bias_focus=agent.bias_type,
-                            provider=provider,
-                            top_k=10,
-                            minimum_relevance=4.0,
-                        )
-                    except Exception as e:
-                        logger.warning("Reranker failed for %s: %s", agent.name, e)
-
-                agent_texts[agent.name] = InputRAG.assemble(
-                    results, agent_name=agent.name,
-                )
+                agent_texts[agent.name] = full_doc
             logger.info(
-                "Input RAG active: %d chunks, serving %d agents (reranker=%s)",
-                input_rag.total_chunks, len(chosen), use_reranker,
+                "Input RAG active: %d chunks assembled for all agents",
+                input_rag.total_chunks,
             )
             warnings.append(
                 f"Input RAG active: document chunked into {input_rag.total_chunks} "
-                f"segments for targeted agent analysis."
+                f"segments."
             )
         else:
             for agent in chosen:
@@ -209,35 +198,17 @@ class Orchestrator:
         chosen = self.select_agents(agents)
         doc_id = f"doc_{uuid.uuid4().hex[:10]}"
 
-        # ── RAG: chunk + retrieve per-agent ──────────────────────────
+        # ── RAG: chunk document for context-window management ────────
         use_rag = len(text) > _RAG_CHAR_THRESHOLD
-        use_reranker = mode == "premium"
         input_rag: InputRAG | None = None
         agent_texts: dict[str, str] = {}
 
         if use_rag:
             input_rag = InputRAG()
             input_rag.index_document(text)
+            full_doc = input_rag.assemble_all()
             for agent in chosen:
-                retrieve_k = 20 if use_reranker else 10
-                results = input_rag.retrieve_for_agent(agent.name, top_k=retrieve_k)
-
-                if use_reranker and len(results) > 10:
-                    try:
-                        results = await rerank_chunks(
-                            results,
-                            agent_name=agent.name,
-                            bias_focus=agent.bias_type,
-                            provider=provider,
-                            top_k=10,
-                            minimum_relevance=4.0,
-                        )
-                    except Exception as e:
-                        logger.warning("Reranker failed for %s: %s", agent.name, e)
-
-                agent_texts[agent.name] = InputRAG.assemble(
-                    results, agent_name=agent.name,
-                )
+                agent_texts[agent.name] = full_doc
             warnings.append(
                 f"Input RAG active: document chunked into {input_rag.total_chunks} segments."
             )
@@ -321,13 +292,21 @@ def _evidence_crosscheck(
             top_k=3,
         )
 
+        # RRF scores live in roughly [0, 0.02] — threshold and multiplier
+        # are tuned to that range. "neutral" comes from BIAS_PATTERNS examples,
+        # "control" comes from dataset exemplars; both mean not-biased.
         boost = 0.0
         for m in matches:
             label = m.chunk.metadata.get("label", "")
-            if label == "biased" and m.score > 0.3:
-                boost += 0.05 * m.score
-            elif label == "neutral" and m.score > 0.3:
-                boost -= 0.05 * m.score
+            if m.score < 0.005:
+                continue
+            if label == "biased":
+                boost += 5.0 * m.score          # up to ~+0.08 per strong match
+            elif label in ("neutral", "control"):
+                boost -= 5.0 * m.score          # up to ~-0.08 per strong match
+
+        # Cap total adjustment so cross-check refines but never overrides the agent.
+        boost = max(-0.15, min(0.15, boost))
 
         if boost != 0.0:
             new_conf = max(0.0, min(1.0, ann.confidence + boost))

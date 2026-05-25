@@ -252,96 +252,100 @@ def transform_media_frames(max_samples: int = 50, seed: int = 42) -> list[EvalSa
 
 def transform_mbic(max_samples: int = 50, seed: int = 42) -> list[EvalSample]:
     """
-    MBIC B05 transform.
+    MBIC B05 transform — backed by MBIB text_level_bias split.
 
-    HOW TO USE: Word-level and sentence-level bias annotations.
-    Directly tests framing bias detection in language.
+    Source: mediabiasgroup/mbib-base — `text_level_bias` split (~9K rows,
+    binary labels: 1=biased, 0=neutral). Covers sentence-level framing and
+    loaded language patterns, which is the bias type MBIC originally tested.
 
-    BIASED: Sentences annotated as biased by majority of annotators.
-    CONTROL: Sentences annotated as unbiased.
-
-    NOTE: MBIC requires Kaggle download. Uses synthetic examples modeled on
-    the annotation schema (biased/non-biased with word-level bias spans).
+    Transform: wrap each sentence in an "Analysis:" preamble identical for
+    both classes so the wrapper cannot leak the label to the BM25 index.
     """
+    try:
+        from datasets import load_dataset
+        logger.info("Loading mediabiasgroup/mbib-base · text_level_bias ...")
+        ds = load_dataset("mediabiasgroup/mbib-base", split="text_level_bias")
+    except Exception as e:
+        logger.warning(f"MBIB text_level_bias load failed: {e}. Using synthetic fallback.")
+        return _mbic_synthetic_fallback(max_samples, seed)
+
     rng = random.Random(seed)
+    rows = list(range(len(ds)))
+    rng.shuffle(rows)
 
-    biased_sentences = [
-        ("The radical policy will devastate working families.",
-         ["radical", "devastate"]),
-        ("Critics slammed the disastrous proposal as a reckless gamble.",
-         ["slammed", "disastrous", "reckless gamble"]),
-        ("The controversial leader pushed through the extreme agenda.",
-         ["controversial", "pushed through", "extreme"]),
-        ("Opponents of the measure are clearly motivated by greed.",
-         ["clearly", "greed"]),
-        ("The failed policy has been a catastrophic waste of taxpayer money.",
-         ["failed", "catastrophic", "waste"]),
-        ("The so-called experts have once again been proven wrong.",
-         ["so-called", "once again"]),
-        ("This reckless spending spree threatens our children's future.",
-         ["reckless", "spending spree", "threatens"]),
-        ("The extremist group continues to undermine democratic institutions.",
-         ["extremist", "undermine"]),
-        ("Despite overwhelming evidence, deniers cling to their discredited theories.",
-         ["deniers", "cling", "discredited"]),
-        ("The corrupt establishment refuses to address the will of the people.",
-         ["corrupt", "establishment", "refuses"]),
-        ("The draconian measures imposed by the regime restrict basic freedoms.",
-         ["draconian", "imposed", "regime"]),
-        ("Supporters blindly follow the charismatic but dangerous leader.",
-         ["blindly", "dangerous"]),
+    samples: list[EvalSample] = []
+    biased_n = control_n = 0
+    half = max_samples // 2
+
+    for i in rows:
+        if len(samples) >= max_samples:
+            break
+        row = ds[i]
+        text = (row.get("text") or "").strip()
+        if len(text) < 25:
+            continue
+        label = int(row.get("label", -1))
+
+        if label == 1 and biased_n < half:
+            samples.append(EvalSample(
+                id=f"B05_mbic_{len(samples)}",
+                dataset_id="B05_mbic",
+                bias_type="B05",
+                agent="argus",
+                input_text=f"Analysis: {text}",
+                label="biased",
+                bias_present=True,
+                original_fields={"raw_text": text, "mbib_label": label, "row_id": row.get("id")},
+                transform_description="Real text-level-bias sentence from MBIB (label=1).",
+            ))
+            biased_n += 1
+        elif label == 0 and control_n < half:
+            samples.append(EvalSample(
+                id=f"B05_mbic_{len(samples)}",
+                dataset_id="B05_mbic",
+                bias_type="B05",
+                agent="argus",
+                input_text=f"Analysis: {text}",
+                label="control",
+                bias_present=False,
+                original_fields={"raw_text": text, "mbib_label": label, "row_id": row.get("id")},
+                transform_description="Real text-level-bias control sentence from MBIB (label=0).",
+            ))
+            control_n += 1
+
+    logger.info(f"MBIC (text_level_bias): {len(samples)} samples ({biased_n} biased, {control_n} control)")
+    return samples
+
+
+def _mbic_synthetic_fallback(max_samples: int, seed: int) -> list[EvalSample]:
+    rng = random.Random(seed)
+    biased = [
+        ("The radical policy will devastate working families.", ["radical", "devastate"]),
+        ("Critics slammed the disastrous proposal as a reckless gamble.", ["slammed", "disastrous", "reckless gamble"]),
+        ("The corrupt establishment refuses to address the will of the people.", ["corrupt", "establishment", "refuses"]),
     ]
-
-    unbiased_sentences = [
+    neutral = [
         "The proposed policy would affect approximately 30 million households.",
-        "The study found a 15% difference between the treatment and control groups.",
         "Representatives from both parties expressed concerns about the timeline.",
-        "The budget allocates $4.2 billion to infrastructure projects over five years.",
-        "According to the report, unemployment rates varied across regions.",
-        "The committee heard testimony from stakeholders on both sides of the issue.",
-        "The amendment was approved with 58 votes in favor and 42 against.",
-        "Research participants completed surveys at three-month intervals.",
-        "The organization released its annual report documenting program outcomes.",
         "Three independent analyses reached different conclusions about the policy's impact.",
     ]
-
-    rng.shuffle(biased_sentences)
-    rng.shuffle(unbiased_sentences)
-
     samples = []
-
-    for i, (sent, bias_words) in enumerate(biased_sentences[:max_samples // 2]):
+    for i, (sent, bias_words) in enumerate(biased[:max_samples // 2]):
         samples.append(EvalSample(
-            id=f"B05_mbic_{len(samples)}",
-            dataset_id="B05_mbic",
-            bias_type="B05",
-            agent="argus",
-            input_text=f"Analysis: {sent}",
-            label="biased",
-            bias_present=True,
-            original_fields={
-                "sentence": sent,
-                "bias_words": bias_words,
-                "synthetic": True,
-            },
-            transform_description=f"Sentence with biased language: {', '.join(bias_words)}.",
+            id=f"B05_mbic_synth_{i}", dataset_id="B05_mbic",
+            bias_type="B05", agent="argus",
+            input_text=f"Analysis: {sent}", label="biased", bias_present=True,
+            original_fields={"sentence": sent, "bias_words": bias_words, "synthetic": True},
+            transform_description=f"Synthetic MBIC: {', '.join(bias_words)}.",
         ))
-
-    for i, sent in enumerate(unbiased_sentences[:max_samples // 2]):
+    for i, sent in enumerate(neutral[:max_samples // 2]):
         samples.append(EvalSample(
-            id=f"B05_mbic_{len(samples)}",
-            dataset_id="B05_mbic",
-            bias_type="B05",
-            agent="argus",
-            input_text=f"Analysis: {sent}",
-            label="control",
-            bias_present=False,
+            id=f"B05_mbic_synth_ctrl_{i}", dataset_id="B05_mbic",
+            bias_type="B05", agent="argus",
+            input_text=f"Analysis: {sent}", label="control", bias_present=False,
             original_fields={"sentence": sent, "synthetic": True},
-            transform_description="Neutral, factual statement without framing bias.",
+            transform_description="Synthetic MBIC: neutral factual statement.",
         ))
-
-    rng.shuffle(samples)
-    logger.info(f"MBIC (synthetic): {len(samples)} samples")
     return samples
 
 

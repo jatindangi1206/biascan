@@ -230,6 +230,18 @@ class InputRAG:
 
         return "\n\n---\n\n".join(parts)
 
+    def assemble_all(self, include_metadata: bool = True) -> str:
+        """Return the full document in reading order, no retrieval filtering.
+
+        Every chunk is included. This is the correct path for bias detection:
+        agents must see the whole document so they can judge bias in context,
+        not just passages that already match bias keywords.
+        """
+        if not self._indexed:
+            raise RuntimeError("Call index_document() before assembly.")
+        all_results = [SearchResult(chunk=c, score=1.0) for c in self._chunks]
+        return self.assemble(all_results, include_metadata=include_metadata)
+
     @property
     def total_chunks(self) -> int:
         return len(self._chunks)

@@ -36,17 +36,27 @@ def transform_scicite(max_samples: int = 50, seed: int = 42) -> list[EvalSample]
       as result-supporting evidence, or method citation used as evidence claim)
     - CONTROL: Citations used appropriately for their actual intent
     """
+    import json
+    import os
+
     logger.info("Loading SciCite dataset...")
 
-    # Try HuggingFace
-    try:
-        from datasets import load_dataset
-        ds = load_dataset("allenai/scicite")
-        split = ds.get("test", ds.get("validation", ds.get("train")))
-        items = list(split)
-    except Exception as e:
-        logger.warning(f"SciCite HF load failed: {e}. Using synthetic fallback.")
-        return _scicite_synthetic_fallback(max_samples, seed)
+    _raw_dir = os.path.join(os.path.dirname(__file__), "..", "datasets", "raw")
+    local_path = os.path.join(_raw_dir, "scicite", "test.jsonl")
+
+    if os.path.exists(local_path):
+        logger.info("SciCite: loading from local raw file")
+        with open(local_path, encoding="utf-8") as f:
+            items = [json.loads(line) for line in f if line.strip()]
+    else:
+        try:
+            from datasets import load_dataset
+            ds = load_dataset("allenai/scicite")
+            split = ds.get("test", ds.get("validation", ds.get("train")))
+            items = list(split)
+        except Exception as e:
+            logger.warning(f"SciCite load failed: {e}. Using synthetic fallback.")
+            return _scicite_synthetic_fallback(max_samples, seed)
 
     rng = random.Random(seed)
     rng.shuffle(items)

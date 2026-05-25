@@ -3,13 +3,17 @@ import os
 
 import httpx
 
-from ..config import PROVIDER_TIMEOUT_S
+from ..config import DEFAULT_MAX_TOKENS, PROVIDER_TIMEOUT_S
 from .base import LLMError, ProviderConfig
 
 # Ollama's default num_ctx is 2048, which silently truncates our system prompt
 # (~3K tokens) plus any non-trivial synthesis text. Force a larger window so the
 # model actually sees the whole paste.
 OLLAMA_NUM_CTX = int(os.getenv("BIASSCAN_OLLAMA_NUM_CTX", "16384"))
+_OLLAMA_MAX_TOKENS_ENV = os.getenv("BIASSCAN_OLLAMA_MAX_TOKENS")
+OLLAMA_MAX_TOKENS = (
+    int(_OLLAMA_MAX_TOKENS_ENV) if _OLLAMA_MAX_TOKENS_ENV else DEFAULT_MAX_TOKENS
+)
 
 
 class OllamaProvider:
@@ -29,7 +33,7 @@ class OllamaProvider:
             "format": "json",
             "options": {
                 "num_ctx": OLLAMA_NUM_CTX,
-                "num_predict": max_tokens,
+                "num_predict": OLLAMA_MAX_TOKENS or max_tokens,
                 "temperature": 0.2,
             },
             "messages": [
@@ -51,7 +55,18 @@ class OllamaProvider:
         if resp.status_code >= 400:
             raise LLMError(f"Ollama error {resp.status_code}: {resp.text[:300]}")
         data = resp.json()
-        msg = (data.get("message") or {}).get("content")
+        message = data.get("message") or {}
+        msg = message.get("content")
         if not msg:
-            raise LLMError(f"Ollama returned no content: {data}")
+            done_reason = data.get("done_reason")
+            if message.get("thinking"):
+                hint = (
+                    "Ollama returned only reasoning with no JSON content. "
+                    "Increase BIASSCAN_OLLAMA_MAX_TOKENS or use a JSON-friendly model "
+                    "(qwen2.5, gemma2, mistral)."
+                )
+                if done_reason == "length":
+                    hint = f"{hint} Response hit the token limit."
+                raise LLMError(hint)
+            raise LLMError("Ollama returned empty content.")
         return msg
