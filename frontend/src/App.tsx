@@ -36,6 +36,8 @@ const PROVIDER_LABELS = {
   groq: "Groq",
   together: "Together AI",
   nvidia: "NVIDIA NIM",
+  qwen: "Qwen",
+  openrouter: "OpenRouter",
   anthropic: "Anthropic",
   openai: "OpenAI",
   gemini: "Gemini",

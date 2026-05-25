@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import Literal, Protocol, Optional
 from pydantic import BaseModel, Field
 
-ProviderName = Literal["ollama", "groq", "together", "nvidia", "anthropic", "openai", "gemini", "lightning", "mistral"]
+ProviderName = Literal["ollama", "groq", "together", "nvidia", "qwen", "openrouter", "anthropic", "openai", "gemini", "lightning", "mistral"]
 
 # word_cap is a deliberately conservative input ceiling per provider, chosen for
 # cost / context-window safety. Inputs longer than this are truncated server-side
@@ -45,8 +45,28 @@ SUPPORTED_PROVIDERS: list[dict] = [
         "needs_base_url": False,
         "default_base_url": "https://integrate.api.nvidia.com/v1",
         "default_model": "meta/llama-3.3-70b-instruct",
-        "model_hint": "meta/llama-3.3-70b-instruct · qwen/qwen2.5-coder-32b-instruct · deepseek-ai/deepseek-r1 · mistralai/mixtral-8x7b-instruct-v0.1 · google/gemma-3-27b-it",
+        "model_hint": "meta/llama-3.3-70b-instruct · deepseek-ai/deepseek-r1 · mistralai/mixtral-8x7b-instruct-v0.1 · google/gemma-3-27b-it",
         "word_cap": 12000,
+    },
+    {
+        "name": "qwen",
+        "label": "Qwen (Alibaba Model Studio)",
+        "needs_key": True,
+        "needs_base_url": False,
+        "default_base_url": "https://dashscope-intl.aliyuncs.com/compatible-mode/v1",
+        "default_model": "qwen-plus",
+        "model_hint": "qwen-max · qwen-plus · qwen-turbo · qwen2.5-72b-instruct · qwen2.5-14b-instruct",
+        "word_cap": 15000,
+    },
+    {
+        "name": "openrouter",
+        "label": "OpenRouter (all models)",
+        "needs_key": True,
+        "needs_base_url": False,
+        "default_base_url": "https://openrouter.ai/api/v1",
+        "default_model": "openai/gpt-4o-mini",
+        "model_hint": "openai/gpt-4o-mini · anthropic/claude-3.5-sonnet · meta-llama/llama-3.3-70b-instruct · qwen/qwen-2.5-72b-instruct · google/gemini-2.0-flash-001 · deepseek/deepseek-chat",
+        "word_cap": 15000,
     },
     {
         "name": "anthropic",
@@ -148,6 +168,8 @@ def build_provider(config: ProviderConfig) -> LLMProvider:
     from .groq import GroqProvider
     from .together import TogetherProvider
     from .nvidia import NvidiaProvider
+    from .qwen import QwenProvider
+    from .openrouter import OpenRouterProvider
     from .anthropic import AnthropicProvider
     from .openai_compat import OpenAIProvider
     from .gemini import GeminiProvider
@@ -162,6 +184,10 @@ def build_provider(config: ProviderConfig) -> LLMProvider:
         return TogetherProvider(config)
     if config.provider == "nvidia":
         return NvidiaProvider(config)
+    if config.provider == "qwen":
+        return QwenProvider(config)
+    if config.provider == "openrouter":
+        return OpenRouterProvider(config)
     if config.provider == "anthropic":
         return AnthropicProvider(config)
     if config.provider == "openai":
