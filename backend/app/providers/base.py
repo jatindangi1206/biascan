@@ -65,7 +65,7 @@ SUPPORTED_PROVIDERS: list[dict] = [
         "needs_base_url": False,
         "default_base_url": "https://openrouter.ai/api/v1",
         "default_model": "openai/gpt-4o-mini",
-        "model_hint": "openai/gpt-4o-mini · anthropic/claude-3.5-sonnet · meta-llama/llama-3.3-70b-instruct · qwen/qwen-2.5-72b-instruct · google/gemini-2.0-flash-001 · deepseek/deepseek-chat",
+        "model_hint": "openai/gpt-4o-mini · anthropic/claude-sonnet-4.6 · meta-llama/llama-3.3-70b-instruct · qwen/qwen-2.5-72b-instruct · google/gemini-2.0-flash-001 · deepseek/deepseek-chat",
         "word_cap": 15000,
     },
     {

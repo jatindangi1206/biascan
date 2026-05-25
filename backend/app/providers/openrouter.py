@@ -33,6 +33,11 @@ class OpenRouterProvider:
             "HTTP-Referer": "https://github.com/jatindangi1206/biascan",
             "X-Title": "BiasScan",
         }
+        # NOTE: no response_format here. OpenRouter routes to many models that
+        # don't support json_object mode — notably every Anthropic Claude model,
+        # Amazon Nova, Perplexity Sonar, and most ":free" variants — so forcing
+        # it would break those. We rely on the agent system prompt (which already
+        # demands JSON) plus BaseAgent's defensive JSON parser instead.
         payload = {
             "model": self._model,
             "messages": [
@@ -41,7 +46,6 @@ class OpenRouterProvider:
             ],
             "max_tokens": max_tokens,
             "temperature": 0.2,
-            "response_format": {"type": "json_object"},
         }
         max_attempts = 5
         for attempt in range(max_attempts):
