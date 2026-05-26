@@ -1,11 +1,18 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { analyzeStream, health, listAgents, listProviders } from "./api";
-import type { AgentDoneEvent, StreamCompletePayload } from "./api";
+import type {
+  AgentDoneEvent,
+  StreamCompletePayload,
+  StreamPipelineMetaEvent,
+  StreamAgentStartedEvent,
+} from "./api";
 import { InputPanel } from "./components/InputPanel";
 import { AnnotatedOutput } from "./components/AnnotatedOutput";
 import { ResultsPanel } from "./components/ResultsPanel";
 import { ProgressPanel, agentStatusFromEvent } from "./components/ProgressPanel";
 import type { AgentStatus } from "./components/ProgressPanel";
+import { AnalysisLog, nowStamp } from "./components/AnalysisLog";
+import type { LogEntry } from "./components/AnalysisLog";
 import {
   SettingsPanel,
   loadStoredConfig,
@@ -64,6 +71,7 @@ interface StreamState {
   agentStatuses: Record<string, AgentStatus>;
   partialAnnotations: Annotation[];
   finalResult: AnalyzeResponse | null;
+  logEntries: LogEntry[];
 }
 
 const EMPTY_STREAM: StreamState = {
@@ -73,7 +81,12 @@ const EMPTY_STREAM: StreamState = {
   agentStatuses: {},
   partialAnnotations: [],
   finalResult: null,
+  logEntries: [],
 };
+
+function appendLog(prev: LogEntry[], text: string, kind: LogEntry["kind"] = "info"): LogEntry[] {
+  return [...prev, { ts: nowStamp(), text, kind }];
+}
 
 export default function App() {
   const [text, setText] = useState("");
@@ -195,6 +208,7 @@ export default function App() {
     const initialStatuses: Record<string, AgentStatus> = {};
     for (const n of agentList) initialStatuses[n] = { phase: "waiting" };
 
+    const charCount = text.length.toLocaleString();
     setStream({
       phase: "streaming",
       docId: "",
@@ -202,6 +216,7 @@ export default function App() {
       agentStatuses: initialStatuses,
       partialAnnotations: [],
       finalResult: null,
+      logEntries: appendLog([], `Sent ${charCount} chars to BiasScan`, "info"),
     });
 
     const abort = analyzeStream(
@@ -213,21 +228,62 @@ export default function App() {
       {
         onStart(e) {
           setStream((prev) => {
-            // Mark all as "running" once the server confirms it started
+            // Mark all as "running" once the server confirms it started.
+            // Per-agent activation copy is appended on each agent_started
+            // event below.
             const statuses: Record<string, AgentStatus> = {};
             for (const n of e.agent_names) statuses[n] = { phase: "running" };
-            return { ...prev, docId: e.document_id, agentNames: e.agent_names, agentStatuses: statuses };
+            return {
+              ...prev,
+              docId: e.document_id,
+              agentNames: e.agent_names,
+              agentStatuses: statuses,
+              logEntries: appendLog(
+                prev.logEntries,
+                `Pipeline started — ${e.agent_names.length} agents queued`,
+                "info"
+              ),
+            };
           });
         },
-        onAgentDone(e: AgentDoneEvent) {
+        onPipelineMeta(e: StreamPipelineMetaEvent) {
+          setStream((prev) => {
+            // The pipeline_meta event carries the backend's initial warnings
+            // (e.g. "Input RAG active: document chunked into 5 segments.")
+            // which already encode the chunk count. Logging them is enough;
+            // we don't separately surface e.chunks here.
+            let log = prev.logEntries;
+            for (const w of e.warnings) log = appendLog(log, w, "info");
+            return { ...prev, logEntries: log };
+          });
+        },
+        onAgentStarted(e: StreamAgentStartedEvent) {
           setStream((prev) => ({
             ...prev,
-            agentStatuses: {
-              ...prev.agentStatuses,
-              [e.agent]: agentStatusFromEvent(e),
-            },
-            partialAnnotations: [...prev.partialAnnotations, ...e.annotations],
+            logEntries: appendLog(prev.logEntries, `${e.agent} scanning…`, "agent"),
           }));
+        },
+        onAgentDone(e: AgentDoneEvent) {
+          setStream((prev) => {
+            const summary = e.error
+              ? `${e.agent} error — ${e.error}`
+              : e.kept_count === 0
+                ? `${e.agent} complete — no flags`
+                : `${e.agent} complete — ${e.kept_count} flag${e.kept_count === 1 ? "" : "s"}`;
+            return {
+              ...prev,
+              agentStatuses: {
+                ...prev.agentStatuses,
+                [e.agent]: agentStatusFromEvent(e),
+              },
+              partialAnnotations: [...prev.partialAnnotations, ...e.annotations],
+              logEntries: appendLog(
+                prev.logEntries,
+                summary,
+                e.error ? "error" : e.kept_count > 0 ? "flag" : "done"
+              ),
+            };
+          });
         },
         onComplete(e: StreamCompletePayload) {
           const finalResult: AnalyzeResponse = {
@@ -246,7 +302,18 @@ export default function App() {
             warnings: e.warnings,
             provider: e.provider as AnalyzeResponse["provider"],
           };
-          setStream((prev) => ({ ...prev, phase: "done", finalResult }));
+          setStream((prev) => {
+            // Initial warnings were already logged via pipeline_meta; any
+            // late-added warnings (e.g. agent errors) are already surfaced
+            // via their agent_done error field, so we don't re-iterate
+            // e.warnings here.
+            const log = appendLog(
+              prev.logEntries,
+              `Analysis complete — score ${e.overall_bias_score.toFixed(2)}`,
+              "done"
+            );
+            return { ...prev, phase: "done", finalResult, logEntries: log };
+          });
           setResult(finalResult);
           setLoading(false);
         },
@@ -417,10 +484,13 @@ export default function App() {
               <article className="analysis-column">
                 {/* Live agent progress — shown while streaming */}
                 {isStreaming && (
-                  <ProgressPanel
-                    agentNames={stream.agentNames}
-                    statuses={stream.agentStatuses}
-                  />
+                  <>
+                    <ProgressPanel
+                      agentNames={stream.agentNames}
+                      statuses={stream.agentStatuses}
+                    />
+                    <AnalysisLog entries={stream.logEntries} />
+                  </>
                 )}
 
                 {/* Results panel — shown once complete */}

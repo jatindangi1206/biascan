@@ -1229,6 +1229,79 @@ button {
   margin-top: 12px;
 }
 
+/* ── Analysis Log (live notebook) ── */
+
+.progress-panel .section-label,
+.analysis-log .section-label {
+  margin: 0 0 12px 0;
+  display: block;
+}
+
+.analysis-log {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 22px;
+  margin-bottom: 22px;
+  border-bottom: 1px solid var(--line);
+}
+
+.analysis-log-stream {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 260px;
+  overflow-y: auto;
+  padding: 2px 0;
+}
+
+.analysis-log-entry {
+  display: grid;
+  grid-template-columns: 76px 1fr;
+  align-items: baseline;
+  gap: 14px;
+  padding: 4px 12px;
+  font-size: var(--text-xs);
+  border-radius: 6px;
+  animation: log-enter 220ms ease-out;
+}
+
+@keyframes log-enter {
+  from { opacity: 0; transform: translateY(-2px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.analysis-log-time {
+  font-family: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 0.02em;
+}
+
+.analysis-log-text {
+  color: var(--ink);
+  line-height: 1.4;
+}
+
+.analysis-log-entry.kind-flag .analysis-log-text {
+  color: var(--accent);
+}
+
+.analysis-log-entry.kind-error .analysis-log-text {
+  color: #c96f45;
+}
+
+.analysis-log-entry.kind-done .analysis-log-text {
+  font-weight: 600;
+}
+
+.analysis-log-empty {
+  color: var(--muted);
+  font-size: var(--text-xs);
+  font-style: italic;
+  padding: 4px 12px;
+  margin: 0;
+}
+
 /* ── Footer ── */
 
 .app-footer {

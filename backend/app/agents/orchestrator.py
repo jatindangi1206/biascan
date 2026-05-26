@@ -225,14 +225,32 @@ class Orchestrator:
             "agent_names": [a.name for a in chosen],
         }
 
+        # Real pipeline numbers (no invention) — emitted right after start so
+        # the client can log "Input RAG: N segments" up front instead of
+        # waiting for the final warnings list.
+        yield {
+            "event": "pipeline_meta",
+            "chunks": input_rag.total_chunks if input_rag else 1,
+            "warnings": list(warnings),
+        }
+
         # Run agents concurrently (matching the non-stream path) and emit
-        # agent_done events as each completes via an asyncio.Queue. The
+        # agent_started + agent_done events through an asyncio.Queue. Items
+        # are tagged dicts so the generator can dispatch on kind. The
         # semaphore caps in-flight provider calls to MAX_CONCURRENCY so we
         # don't blow past per-provider rate limits.
         sem = asyncio.Semaphore(MAX_CONCURRENCY)
         queue: asyncio.Queue = asyncio.Queue()
 
         async def _run_and_enqueue(agent: BaseAgent) -> None:
+            # Signal that this agent is about to start (fired before the
+            # semaphore wait so the client sees per-agent activation even
+            # when MAX_CONCURRENCY < len(chosen)).
+            await queue.put({
+                "kind": "started",
+                "agent": agent.name,
+                "bias_type": agent.bias_type,
+            })
             async with sem:
                 anns, err = await agent.run(
                     text=agent_texts[agent.name],
@@ -252,14 +270,26 @@ class Orchestrator:
                 "kept_count": len(kept),
                 "error": err,
             }
-            await queue.put((kept, info, err))
+            await queue.put({"kind": "done", "kept": kept, "info": info, "err": err})
 
         tasks = [asyncio.create_task(_run_and_enqueue(a)) for a in chosen]
 
         agent_infos: dict[str, dict] = {}
         all_kept: list[Annotation] = []
-        for _ in chosen:
-            kept, info, err = await queue.get()
+        done_count = 0
+        while done_count < len(chosen):
+            item = await queue.get()
+            if item["kind"] == "started":
+                yield {
+                    "event": "agent_started",
+                    "agent": item["agent"],
+                    "bias_type": item["bias_type"],
+                }
+                continue
+            # kind == "done"
+            info = item["info"]
+            kept = item["kept"]
+            err = item["err"]
             agent_infos[info["agent"]] = info
             all_kept.extend(kept)
             if err:
@@ -269,10 +299,11 @@ class Orchestrator:
                 **info,
                 "annotations": [a.model_dump() for a in kept],
             }
+            done_count += 1
 
-        # All puts have happened, so all tasks have finished. Awaiting them
-        # surfaces any unexpected exception (agent.run normally swallows them
-        # into err, but create_task could hide a programming error).
+        # All "done" puts have happened, so all tasks have finished. Awaiting
+        # them surfaces any unexpected exception (agent.run normally swallows
+        # them into err, but create_task could hide a programming error).
         await asyncio.gather(*tasks)
 
         merged = meta_evaluate(all_kept)

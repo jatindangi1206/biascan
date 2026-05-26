@@ -28,6 +28,16 @@ export interface StreamStartEvent {
   agent_names: AgentName[];
 }
 
+export interface StreamPipelineMetaEvent {
+  chunks: number;
+  warnings: string[];
+}
+
+export interface StreamAgentStartedEvent {
+  agent: AgentName;
+  bias_type: BiasType;
+}
+
 export interface StreamCompletePayload {
   document_id: string;
   overall_bias_score: number;
@@ -55,6 +65,8 @@ export function analyzeStream(
   agents: AgentName[],
   callbacks: {
     onStart: (e: StreamStartEvent) => void;
+    onPipelineMeta?: (e: StreamPipelineMetaEvent) => void;
+    onAgentStarted?: (e: StreamAgentStartedEvent) => void;
     onAgentDone: (e: AgentDoneEvent) => void;
     onComplete: (e: StreamCompletePayload) => void;
     onError: (message: string) => void;
@@ -114,6 +126,8 @@ export function analyzeStream(
           try {
             const data = JSON.parse(dataStr);
             if (eventType === "start") callbacks.onStart(data);
+            else if (eventType === "pipeline_meta") callbacks.onPipelineMeta?.(data);
+            else if (eventType === "agent_started") callbacks.onAgentStarted?.(data);
             else if (eventType === "agent_done") callbacks.onAgentDone(data);
             else if (eventType === "complete") callbacks.onComplete(data);
             else if (eventType === "error") callbacks.onError(data.message ?? "Unknown error");
