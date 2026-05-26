@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { analyzeStream, health, listAgents, listProviders } from "./api";
+import { analyzeStream, listAgents, listProviders } from "./api";
 import type {
   AgentDoneEvent,
   StreamCompletePayload,
@@ -15,6 +15,7 @@ import { ProgressPanel, agentStatusFromEvent } from "./components/ProgressPanel"
 import type { AgentStatus } from "./components/ProgressPanel";
 import { AnalysisLog, nowStamp } from "./components/AnalysisLog";
 import type { LogEntry } from "./components/AnalysisLog";
+import { HowItWorks } from "./components/HowItWorks";
 import {
   SettingsPanel,
   loadStoredConfig,
@@ -25,7 +26,6 @@ import type {
   AgentName,
   AnalyzeResponse,
   Annotation,
-  HealthResponse,
   Mode,
   ProviderConfig,
   ProviderInfo,
@@ -40,17 +40,6 @@ const DEFAULT_CONFIG: ProviderConfig = {
 };
 
 const SELECTION_KEY = "biasscan.agents";
-const PROVIDER_LABELS = {
-  ollama: "Ollama",
-  groq: "Groq",
-  nvidia: "NVIDIA NIM",
-  qwen: "Qwen",
-  openrouter: "OpenRouter",
-  anthropic: "Anthropic",
-  openai: "OpenAI",
-  gemini: "Gemini",
-  mistral: "Mistral",
-} as const;
 
 function loadStoredAgents(): AgentName[] {
   try {
@@ -99,7 +88,7 @@ export default function App() {
   const [result, setResult] = useState<AnalyzeResponse | null>(null);
   const [entered, setEntered] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [healthInfo, setHealthInfo] = useState<HealthResponse | null>(null);
+  const [showHowItWorks, setShowHowItWorks] = useState(false);
   const [providers, setProviders] = useState<ProviderInfo[]>([]);
   const [agents, setAgents] = useState<AgentInfo[]>([]);
   const [bootWarning, setBootWarning] = useState<string | null>(null);
@@ -118,16 +107,10 @@ export default function App() {
 
   useEffect(() => {
     let cancelled = false;
-    Promise.allSettled([health(), listProviders(), listAgents()]).then(
-      ([healthResult, providersResult, agentsResult]) => {
+    Promise.allSettled([listProviders(), listAgents()]).then(
+      ([providersResult, agentsResult]) => {
         if (cancelled) return;
         const warnings: string[] = [];
-
-        if (healthResult.status === "fulfilled") {
-          setHealthInfo(healthResult.value);
-        } else {
-          warnings.push("Backend health could not be loaded.");
-        }
 
         if (providersResult.status === "fulfilled") {
           const nextProviders = providersResult.value;
@@ -192,10 +175,7 @@ export default function App() {
 
   const stage = result || stream.phase !== "idle" ? "result" : entered ? "compose" : "landing";
   const currentProvider = providers.find((p) => p.name === config.provider);
-  const providerLabel =
-    currentProvider?.label.split(" (")[0] ?? PROVIDER_LABELS[config.provider];
   const wordCap = currentProvider?.word_cap ?? 8000;
-  const promptLabel = healthInfo ? `Prompt ${healthInfo.prompt_version}` : "Prompt unknown";
 
   const onAnalyze = () => {
     setLoading(true);
@@ -383,7 +363,6 @@ export default function App() {
       <SettingsPanel
         open={settingsOpen}
         onClose={() => setSettingsOpen(false)}
-        healthInfo={healthInfo}
         providers={providers}
         agents={agents}
         config={config}
@@ -425,24 +404,28 @@ export default function App() {
         </div>
 
           <div className="topbar-right">
-            {stage === "landing" ? (
-              <span className="preview-tag">Research Preview</span>
-            ) : (
+            {!showHowItWorks && stage !== "landing" && (
               <button
                 type="button"
-              className="nav-link"
-              onClick={() => setSettingsOpen(true)}
-            >
-              Settings
-            </button>
-          )}
+                className="nav-link"
+                onClick={() => setSettingsOpen(true)}
+              >
+                Settings
+              </button>
+            )}
         </div>
       </header>
 
-      {bootWarning && <div className="boot-banner">{bootWarning}</div>}
-      {error && <div className="error-banner">{error}</div>}
+      {bootWarning && !showHowItWorks && <div className="boot-banner">{bootWarning}</div>}
+      {error && !showHowItWorks && <div className="error-banner">{error}</div>}
 
-      <main className="main-stage">
+      {showHowItWorks && (
+        <main className="main-stage">
+          <HowItWorks onBack={() => setShowHowItWorks(false)} />
+        </main>
+      )}
+
+      {!showHowItWorks && <main className="main-stage">
         {stage === "landing" && (
           <section className="landing-stage">
             <p className="eyebrow">A focused thinking tool</p>
@@ -463,10 +446,6 @@ export default function App() {
               setReferences={setReferences}
               mode={mode}
               setMode={setMode}
-              providerLabel={providerLabel}
-              modelLabel={config.model}
-              backendLabel={promptLabel}
-              agentCount={selected.size}
               wordCap={wordCap}
               canAnalyze={canAnalyze}
               loading={loading}
@@ -534,14 +513,17 @@ export default function App() {
             </div>
           </section>
         )}
-      </main>
+      </main>}
 
       <footer className="app-footer">
-        <span>
-          Five agents · Confirmation · Certainty · Overgeneralisation · Framing ·
-          Causal
-        </span>
-        <span className="footer-line" />
+        <span className="footer-preview">Research Preview</span>
+        <button
+          type="button"
+          className="footer-link"
+          onClick={() => setShowHowItWorks(true)}
+        >
+          How it works
+        </button>
       </footer>
     </div>
   );

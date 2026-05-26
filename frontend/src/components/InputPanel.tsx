@@ -1,10 +1,30 @@
 import { useState } from "react";
 import type { Mode } from "../types";
 
-const MODE_META: Record<Mode, { label: string; description: string }> = {
-  lite:     { label: "Lite",     description: "Text-only scan, fastest." },
-  adaptive: { label: "Adaptive", description: "Lite first; escalates if bias found." },
-  premium:  { label: "Premium",  description: "Reference-aware — checks your citations." },
+const MODE_META: Record<
+  Mode,
+  { label: string; description: string; tooltip: string; available: boolean }
+> = {
+  lite: {
+    label: "Lite",
+    description: "Text-only scan. Fastest.",
+    tooltip: "Reads only the text you paste. No outside lookups.",
+    available: true,
+  },
+  adaptive: {
+    label: "Adaptive",
+    description: "Pulls a summary of cited studies for cross-checking.",
+    tooltip:
+      "When a flag says 'RAG check needed', BiasScan pulls a summary of the study you cited and lets the agent re-check the claim against the source.",
+    available: false,
+  },
+  premium: {
+    label: "Premium",
+    description: "Fetches the full cited paper and audits the source itself.",
+    tooltip:
+      "When the cited study is open access, BiasScan retrieves the full text, runs bias detection on the source's own claims, and uses citation counts as a quality signal.",
+    available: false,
+  },
 };
 
 interface Props {
@@ -14,10 +34,6 @@ interface Props {
   setReferences: (s: string) => void;
   mode: Mode;
   setMode: (m: Mode) => void;
-  providerLabel: string;
-  modelLabel: string;
-  backendLabel: string;
-  agentCount: number;
   wordCap: number;
   canAnalyze: boolean;
   loading: boolean;
@@ -39,22 +55,18 @@ export function InputPanel({
   setReferences,
   mode,
   setMode,
-  providerLabel,
-  modelLabel,
-  backendLabel,
-  agentCount,
   wordCap,
   canAnalyze,
   loading,
   onAnalyze,
 }: Props) {
   const [showReferences, setShowReferences] = useState(false);
+  const [showAdvancedModes, setShowAdvancedModes] = useState(false);
   const wordCount = countWords(text);
   const overCap = wordCount > wordCap;
 
   return (
     <div className="composer">
-      <p className="eyebrow">Paste a results or synthesis section</p>
       <h2 className="composer-title">What would you like to scan?</h2>
 
       <div className="input-shell">
@@ -79,11 +91,11 @@ export function InputPanel({
             {wordCount.toLocaleString()} / {wordCap.toLocaleString()} words
           </span>
         </div>
-        <p className="input-cap-note">
-          {overCap
-            ? `Over the ${providerLabel} cap — only the first ${wordCap.toLocaleString()} words will be analysed.`
-            : `${providerLabel} cap: ${wordCap.toLocaleString()} words. Capped for cost; raise word_cap in providers/base.py if your API limits allow.`}
-        </p>
+        {overCap && (
+          <p className="input-cap-note">
+            Over the {wordCap.toLocaleString()}-word cap — only the first {wordCap.toLocaleString()} words will be analysed.
+          </p>
+        )}
       </div>
 
       <div className="references-block">
@@ -108,24 +120,44 @@ export function InputPanel({
 
       <div className="mode-picker">
         <div className="mode-tabs">
-          {(["lite", "adaptive", "premium"] as Mode[]).map((m) => (
-            <button
-              key={m}
-              type="button"
-              className={`mode-tab ${mode === m ? "active" : ""}`}
-              onClick={() => setMode(m)}
-            >
-              {MODE_META[m].label}
-            </button>
-          ))}
-        </div>
-        <p className="mode-description">{MODE_META[mode].description}</p>
-      </div>
+          <button
+            type="button"
+            className={`mode-tab ${mode === "lite" ? "active" : ""}`}
+            onClick={() => setMode("lite")}
+          >
+            {MODE_META.lite.label}
+          </button>
 
-      <p className="composer-status">
-        {providerLabel} · {modelLabel} · {agentCount} agent
-        {agentCount === 1 ? "" : "s"} · {backendLabel}
-      </p>
+          {showAdvancedModes &&
+            (["adaptive", "premium"] as Mode[]).map((m) => (
+              <span
+                key={m}
+                className="mode-tab disabled"
+                data-tooltip={MODE_META[m].tooltip}
+                aria-disabled="true"
+              >
+                {MODE_META[m].label}
+                <span className="soon-tag">soon</span>
+              </span>
+            ))}
+
+          <button
+            type="button"
+            className="mode-expand"
+            onClick={() => setShowAdvancedModes((v) => !v)}
+            aria-expanded={showAdvancedModes}
+          >
+            {showAdvancedModes ? "Less" : "More modes"}
+            <span className="mode-chevron">{showAdvancedModes ? "▴" : "▾"}</span>
+          </button>
+        </div>
+        <p className="mode-description">
+          {MODE_META[mode].description}
+          {showAdvancedModes && (
+            <span className="mode-soon-note"> · Adaptive and Premium are rolling out soon.</span>
+          )}
+        </p>
+      </div>
 
       <button
         type="button"

@@ -4,7 +4,6 @@ import { BIAS_LABELS } from "../types";
 import type {
   AgentInfo,
   AgentName,
-  HealthResponse,
   ProviderConfig,
   ProviderInfo,
   ProviderName,
@@ -13,7 +12,6 @@ import type {
 interface Props {
   open: boolean;
   onClose: () => void;
-  healthInfo: HealthResponse | null;
   providers: ProviderInfo[];
   agents: AgentInfo[];
   config: ProviderConfig;
@@ -41,7 +39,6 @@ export function storeConfig(c: ProviderConfig) {
 export function SettingsPanel({
   open,
   onClose,
-  healthInfo,
   providers,
   agents,
   config,
@@ -158,19 +155,6 @@ export function SettingsPanel({
 
       <div className="drawer-body">
         <section className="drawer-section">
-          <p className="drawer-label">Backend</p>
-          <div className="drawer-meta-card">
-            <p>
-              Status · <strong>{healthInfo?.status ?? "unknown"}</strong>
-            </p>
-            <p>
-              Prompt version · <strong>{healthInfo?.prompt_version ?? "unknown"}</strong>
-            </p>
-            {healthInfo?.key_storage && <p>{healthInfo.key_storage}</p>}
-          </div>
-        </section>
-
-        <section className="drawer-section">
           <p className="drawer-label">Provider</p>
           <select
             className="drawer-select"
@@ -252,23 +236,26 @@ export function SettingsPanel({
           </p>
 
           {current?.needs_key && (
-            <div className="key-row">
-              <input
-                className="drawer-input key-input"
-                type={showKey ? "text" : "password"}
-                autoComplete="off"
-                value={config.api_key ?? ""}
-                onChange={(e) => update({ api_key: e.target.value })}
-                placeholder="API key"
-              />
-              <button
-                type="button"
-                className="mini-action"
-                onClick={() => setShowKey((value) => !value)}
-              >
-                {showKey ? "Hide" : "Show"}
-              </button>
-            </div>
+            <>
+              <div className="key-row">
+                <input
+                  className="drawer-input key-input"
+                  type={showKey ? "text" : "password"}
+                  autoComplete="off"
+                  value={config.api_key ?? ""}
+                  onChange={(e) => update({ api_key: e.target.value })}
+                  placeholder="API key"
+                />
+                <button
+                  type="button"
+                  className="mini-action"
+                  onClick={() => setShowKey((value) => !value)}
+                >
+                  {showKey ? "Hide" : "Show"}
+                </button>
+              </div>
+              <p className="drawer-note">Key is sent per request and never stored on our servers.</p>
+            </>
           )}
 
           <div className="test-row">

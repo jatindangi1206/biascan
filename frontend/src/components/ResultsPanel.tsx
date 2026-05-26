@@ -16,17 +16,34 @@ const BIAS_ORDER: BiasType[] = [
 export function ResultsPanel({ result }: Props) {
   const scoreValue = result.overall_bias_score * 10;
   const scoreLabel =
-    scoreValue >= 6.6
-      ? "High concern"
-      : scoreValue >= 3.3
-        ? "Moderate concern"
-        : "Low concern";
+    scoreValue >= 7.5
+      ? "Severe"
+      : scoreValue >= 5.5
+        ? "Concerning"
+        : scoreValue >= 3.0
+          ? "Moderate"
+          : "Low";
 
   const counts = BIAS_ORDER.map((biasType) => ({
     biasType,
     count: result.annotations.filter((annotation) => annotation.bias_type === biasType)
       .length,
   })).filter((entry) => entry.count > 0);
+
+  const severityCounts = result.annotations.reduce(
+    (acc, a) => {
+      acc[a.severity] = (acc[a.severity] ?? 0) + 1;
+      return acc;
+    },
+    { high: 0, medium: 0, low: 0 } as Record<"high" | "medium" | "low", number>,
+  );
+  const compositionParts = (["high", "medium", "low"] as const)
+    .filter((s) => severityCounts[s] > 0)
+    .map((s) => `${severityCounts[s]} ${s}`);
+  const uniqueTypes = counts.length;
+  const composition = result.annotations.length
+    ? `${compositionParts.join(", ")} · ${uniqueTypes} bias ${uniqueTypes === 1 ? "type" : "types"}`
+    : null;
 
   return (
     <section className="summary-section">
@@ -37,6 +54,7 @@ export function ResultsPanel({ result }: Props) {
             <span className="score-value">{scoreValue.toFixed(1)}</span>
             <span className="score-context">/10 · {scoreLabel}</span>
           </div>
+          {composition && <p className="score-composition">{composition}</p>}
         </div>
 
         <div className="metric-block metric-block-right">
@@ -60,17 +78,7 @@ export function ResultsPanel({ result }: Props) {
         ))}
       </div>
 
-      {result.warnings.length > 0 && (
-        <div className="warning-stack">
-          {result.warnings.map((warning, index) => (
-            <p key={index} className="warning-copy">
-              {warning}
-            </p>
-          ))}
-        </div>
-      )}
-
-      <details className="run-details" open>
+      <details className="run-details">
         <summary>Run details</summary>
         <div className="detail-list">
           <p>
@@ -82,20 +90,14 @@ export function ResultsPanel({ result }: Props) {
           <p>
             Model · <strong>{result.provider.model}</strong>
           </p>
-          {result.provider.base_url && (
-            <p>
-              Endpoint · <strong>{result.provider.base_url}</strong>
-            </p>
-          )}
-          <p>
-            Document · <strong>{result.document_id}</strong>
-          </p>
-          {result.agents.map((agent) => (
-            <p key={agent.agent}>
-              {agent.agent} · {BIAS_LABELS[agent.bias_type]} · {agent.raw_count} raw /{" "}
-              {agent.kept_count} kept{agent.error ? ` · ${agent.error}` : ""}
-            </p>
-          ))}
+          {result.agents.some((a) => a.error) &&
+            result.agents
+              .filter((a) => a.error)
+              .map((agent) => (
+                <p key={agent.agent} className="detail-error">
+                  {agent.agent} · {agent.error}
+                </p>
+              ))}
         </div>
       </details>
 

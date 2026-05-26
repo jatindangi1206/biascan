@@ -182,7 +182,7 @@ class Orchestrator:
             )
         else:
             merged = sorted(all_annotations, key=lambda a: (a.span_start, -a.confidence))
-        score = _overall_score(merged)
+        score = _overall_score(merged, text)
 
         return AnalyzeResponse(
             document_id=f"doc_{uuid.uuid4().hex[:10]}",
@@ -338,7 +338,7 @@ class Orchestrator:
             yield {"event": "aegis_done", "resolved": len(clusters)}
         else:
             merged = sorted(all_kept, key=lambda a: (a.span_start, -a.confidence))
-        score = _overall_score(merged)
+        score = _overall_score(merged, text)
 
         yield {
             "event": "complete",
@@ -408,24 +408,44 @@ def _resolve_mode(mode: Mode, warnings: list[str]) -> tuple[Mode, list[str]]:
     return mode, warnings
 
 
-def _overall_score(annotations: Iterable[Annotation]) -> float:
-    """Max-pooling with decay.
+def _overall_score(annotations: Iterable[Annotation], source_text: str) -> float:
+    """Density-aware, diversity-weighted top-k score.
 
-    Each annotation scores ``severity_weight × confidence``. The highest such
-    score becomes the baseline (so the worst single flag anchors the document).
-    Remaining scores are sorted descending and added with rapidly diminishing
-    weight (``0.1 / 2**i``), so additional flags can nudge the score up but
-    can't pile-on linearly. The internal score is capped at 10 and rescaled
-    to [0, 1].
+    Three multiplicative factors so a single flag can never peg the score:
+      base       = weighted average of the top 5 (severity × confidence),
+                   weights 1, 1/2, 1/3, 1/4, 1/5 — softer than max-pool but
+                   still emphasises the worst flag.
+      density    = flags per 1000 words, mapped to [0.7, 1.3]. A short doc
+                   peppered with flags scores higher than the same flags in
+                   a long doc.
+      diversity  = +4% per distinct bias_type beyond the first, capped at 5.
+                   Five different biases is a sicker document than five of
+                   the same.
+
+    Severity weights are intentionally lower than before (1.5/3.5/6.0 vs
+    2.5/5/8.5) so the maximum realistic base is ~6, leaving headroom for
+    density and diversity multipliers to actually matter.
     """
-    severity_weight = {"low": 2.5, "medium": 5.0, "high": 8.5}
-    scores = sorted(
-        (severity_weight[a.severity] * a.confidence for a in annotations),
+    anns = list(annotations)
+    if not anns:
+        return 0.0
+
+    severity_weight = {"low": 1.5, "medium": 3.5, "high": 6.0}
+    scored = sorted(
+        (severity_weight[a.severity] * a.confidence for a in anns),
         reverse=True,
     )
-    if not scores:
-        return 0.0
-    baseline = scores[0]
-    decayed = sum((0.1 / (2 ** i)) * s for i, s in enumerate(scores[1:]))
-    internal = baseline + decayed
+
+    k = min(5, len(scored))
+    weights = [1.0 / (i + 1) for i in range(k)]
+    base = sum(w * s for w, s in zip(weights, scored[:k])) / sum(weights)
+
+    word_count = len(source_text.split())
+    density = len(anns) / max(word_count / 1000.0, 0.1)
+    density_mult = 0.7 + min(0.6, 0.08 * density)
+
+    unique_types = len({a.bias_type for a in anns})
+    diversity_mult = 1.0 + (unique_types - 1) * 0.04
+
+    internal = base * density_mult * diversity_mult
     return round(min(10.0, internal) / 10.0, 3)
