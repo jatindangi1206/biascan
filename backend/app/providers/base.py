@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import Literal, Protocol, Optional
 from pydantic import BaseModel, Field
 
-ProviderName = Literal["ollama", "groq", "together", "nvidia", "qwen", "openrouter", "anthropic", "openai", "gemini", "lightning", "mistral"]
+ProviderName = Literal["ollama", "groq", "nvidia", "qwen", "openrouter", "anthropic", "openai", "gemini", "mistral"]
 
 # word_cap is a deliberately conservative input ceiling per provider, chosen for
 # cost / context-window safety. Inputs longer than this are truncated server-side
@@ -26,16 +26,6 @@ SUPPORTED_PROVIDERS: list[dict] = [
         "default_base_url": "https://api.groq.com/openai/v1",
         "default_model": "llama-3.3-70b-versatile",
         "model_hint": "llama-3.3-70b-versatile · llama3-8b-8192 · mixtral-8x7b-32768 · gemma2-9b-it",
-        "word_cap": 12000,
-    },
-    {
-        "name": "together",
-        "label": "Together AI (open-source)",
-        "needs_key": True,
-        "needs_base_url": False,
-        "default_base_url": "https://api.together.xyz/v1",
-        "default_model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
-        "model_hint": "meta-llama/Llama-3.3-70B-Instruct-Turbo · mistralai/Mixtral-8x7B-Instruct-v0.1 · Qwen/Qwen2.5-72B-Instruct-Turbo",
         "word_cap": 12000,
     },
     {
@@ -99,16 +89,6 @@ SUPPORTED_PROVIDERS: list[dict] = [
         "word_cap": 20000,
     },
     {
-        "name": "lightning",
-        "label": "Lightning AI (open-source)",
-        "needs_key": True,
-        "needs_base_url": False,
-        "default_base_url": "https://lightning.ai/api/v1",
-        "default_model": "lightning-ai/gemma-4-31B-it",
-        "model_hint": "lightning-ai/gemma-4-31B-it · lightning-ai/gpt-oss-120b",
-        "word_cap": 12000,
-    },
-    {
         "name": "mistral",
         "label": "Mistral (La Plateforme)",
         "needs_key": True,
@@ -166,22 +146,18 @@ class LLMProvider(Protocol):
 def build_provider(config: ProviderConfig) -> LLMProvider:
     from .ollama import OllamaProvider
     from .groq import GroqProvider
-    from .together import TogetherProvider
     from .nvidia import NvidiaProvider
     from .qwen import QwenProvider
     from .openrouter import OpenRouterProvider
     from .anthropic import AnthropicProvider
     from .openai_compat import OpenAIProvider
     from .gemini import GeminiProvider
-    from .lightning import LightningProvider
     from .mistral import MistralProvider
 
     if config.provider == "ollama":
         return OllamaProvider(config)
     if config.provider == "groq":
         return GroqProvider(config)
-    if config.provider == "together":
-        return TogetherProvider(config)
     if config.provider == "nvidia":
         return NvidiaProvider(config)
     if config.provider == "qwen":
@@ -194,8 +170,6 @@ def build_provider(config: ProviderConfig) -> LLMProvider:
         return OpenAIProvider(config)
     if config.provider == "gemini":
         return GeminiProvider(config)
-    if config.provider == "lightning":
-        return LightningProvider(config)
     if config.provider == "mistral":
         return MistralProvider(config)
     raise LLMError(f"Unknown provider: {config.provider}")

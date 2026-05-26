@@ -34,14 +34,12 @@ const SELECTION_KEY = "biasscan.agents";
 const PROVIDER_LABELS = {
   ollama: "Ollama",
   groq: "Groq",
-  together: "Together AI",
   nvidia: "NVIDIA NIM",
   qwen: "Qwen",
   openrouter: "OpenRouter",
   anthropic: "Anthropic",
   openai: "OpenAI",
   gemini: "Gemini",
-  lightning: "Lightning AI",
   mistral: "Mistral",
 } as const;
 

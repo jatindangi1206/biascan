@@ -3,7 +3,7 @@ import asyncio
 import random
 import httpx
 
-from ..config import PROVIDER_TIMEOUT_S
+from ._http import get_client
 from .base import LLMError, ProviderConfig
 
 
@@ -41,8 +41,7 @@ class MistralProvider:
         max_attempts = 5
         for attempt in range(max_attempts):
             try:
-                async with httpx.AsyncClient(timeout=PROVIDER_TIMEOUT_S) as client:
-                    resp = await client.post(url, json=payload, headers=headers)
+                resp = await get_client().post(url, json=payload, headers=headers)
             except httpx.RequestError as e:
                 raise LLMError(f"Cannot reach Mistral: {e}") from e
             if resp.status_code == 429 and attempt < max_attempts - 1:

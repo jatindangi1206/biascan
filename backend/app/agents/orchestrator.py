@@ -225,25 +225,25 @@ class Orchestrator:
             "agent_names": [a.name for a in chosen],
         }
 
-        agent_infos: dict[str, dict] = {}
-        all_kept: list[Annotation] = []
+        # Run agents concurrently (matching the non-stream path) and emit
+        # agent_done events as each completes via an asyncio.Queue. The
+        # semaphore caps in-flight provider calls to MAX_CONCURRENCY so we
+        # don't blow past per-provider rate limits.
+        sem = asyncio.Semaphore(MAX_CONCURRENCY)
+        queue: asyncio.Queue = asyncio.Queue()
 
-        for agent in chosen:
-            anns, err = await agent.run(
-                text=agent_texts[agent.name],
-                source_text=text,
-                references=references,
-                mode=effective_mode,
-                provider=provider,
-            )
+        async def _run_and_enqueue(agent: BaseAgent) -> None:
+            async with sem:
+                anns, err = await agent.run(
+                    text=agent_texts[agent.name],
+                    source_text=text,
+                    references=references,
+                    mode=effective_mode,
+                    provider=provider,
+                )
             kept = [a for a in anns if a.confidence >= CONFIDENCE_FLOOR]
-
             if evidence_rag.is_built:
                 kept = _evidence_crosscheck(kept, evidence_rag)
-
-            all_kept.extend(kept)
-            if err:
-                warnings.append(f"{agent.name}: {err}")
             info = {
                 "agent": agent.name,
                 "bias_type": agent.bias_type,
@@ -252,12 +252,28 @@ class Orchestrator:
                 "kept_count": len(kept),
                 "error": err,
             }
-            agent_infos[agent.name] = info
+            await queue.put((kept, info, err))
+
+        tasks = [asyncio.create_task(_run_and_enqueue(a)) for a in chosen]
+
+        agent_infos: dict[str, dict] = {}
+        all_kept: list[Annotation] = []
+        for _ in chosen:
+            kept, info, err = await queue.get()
+            agent_infos[info["agent"]] = info
+            all_kept.extend(kept)
+            if err:
+                warnings.append(f"{info['agent']}: {err}")
             yield {
                 "event": "agent_done",
                 **info,
                 "annotations": [a.model_dump() for a in kept],
             }
+
+        # All puts have happened, so all tasks have finished. Awaiting them
+        # surfaces any unexpected exception (agent.run normally swallows them
+        # into err, but create_task could hide a programming error).
+        await asyncio.gather(*tasks)
 
         merged = meta_evaluate(all_kept)
         score = _overall_score(merged, len(text))

@@ -1,7 +1,7 @@
 from __future__ import annotations
 import httpx
 
-from ..config import PROVIDER_TIMEOUT_S
+from ._http import get_client
 from .base import LLMError, ProviderConfig
 
 
@@ -34,8 +34,7 @@ class GeminiProvider:
             },
         }
         try:
-            async with httpx.AsyncClient(timeout=PROVIDER_TIMEOUT_S) as client:
-                resp = await client.post(url, json=payload)
+            resp = await get_client().post(url, json=payload)
         except httpx.RequestError as e:
             raise LLMError(f"Cannot reach Gemini: {e}") from e
         if resp.status_code >= 400:

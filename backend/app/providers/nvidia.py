@@ -2,7 +2,7 @@ from __future__ import annotations
 import asyncio
 import httpx
 
-from ..config import PROVIDER_TIMEOUT_S
+from ._http import get_client
 from .base import LLMError, ProviderConfig
 
 
@@ -40,8 +40,7 @@ class NvidiaProvider:
         }
         for attempt in range(3):
             try:
-                async with httpx.AsyncClient(timeout=PROVIDER_TIMEOUT_S) as client:
-                    resp = await client.post(url, json=payload, headers=headers)
+                resp = await get_client().post(url, json=payload, headers=headers)
             except httpx.RequestError as e:
                 raise LLMError(f"Cannot reach NVIDIA NIM: {e}") from e
             if resp.status_code == 429:

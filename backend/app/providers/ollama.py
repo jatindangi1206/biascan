@@ -3,7 +3,8 @@ import os
 
 import httpx
 
-from ..config import DEFAULT_MAX_TOKENS, PROVIDER_TIMEOUT_S
+from ..config import DEFAULT_MAX_TOKENS
+from ._http import get_client
 from .base import LLMError, ProviderConfig
 
 # Ollama's default num_ctx is 2048, which silently truncates our system prompt
@@ -42,8 +43,7 @@ class OllamaProvider:
             ],
         }
         try:
-            async with httpx.AsyncClient(timeout=PROVIDER_TIMEOUT_S) as client:
-                resp = await client.post(url, json=payload)
+            resp = await get_client().post(url, json=payload)
         except httpx.RequestError as e:
             raise LLMError(
                 f"Cannot reach Ollama at {self._base_url}. Is `ollama serve` running? ({e})"
