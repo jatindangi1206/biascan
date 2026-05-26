@@ -5,6 +5,8 @@ import type {
   StreamCompletePayload,
   StreamPipelineMetaEvent,
   StreamAgentStartedEvent,
+  StreamAegisStartedEvent,
+  StreamAegisDoneEvent,
 } from "./api";
 import { InputPanel } from "./components/InputPanel";
 import { AnnotatedOutput } from "./components/AnnotatedOutput";
@@ -263,6 +265,26 @@ export default function App() {
             logEntries: appendLog(prev.logEntries, `${e.agent} scanning…`, "agent"),
           }));
         },
+        onAegisStarted(e: StreamAegisStartedEvent) {
+          setStream((prev) => ({
+            ...prev,
+            logEntries: appendLog(
+              prev.logEntries,
+              `AEGIS resolving ${e.conflicts} conflict${e.conflicts === 1 ? "" : "s"}…`,
+              "agent"
+            ),
+          }));
+        },
+        onAegisDone(e: StreamAegisDoneEvent) {
+          setStream((prev) => ({
+            ...prev,
+            logEntries: appendLog(
+              prev.logEntries,
+              `AEGIS resolved ${e.resolved} conflict${e.resolved === 1 ? "" : "s"}`,
+              "done"
+            ),
+          }));
+        },
         onAgentDone(e: AgentDoneEvent) {
           setStream((prev) => {
             const summary = e.error
@@ -402,14 +424,12 @@ export default function App() {
           </div>
         </div>
 
-        <div className="topbar-right">
-          {stage === "landing" ? (
-            <span className="preview-tag">
-              {healthInfo ? `${promptLabel} · research preview` : "Research preview"}
-            </span>
-          ) : (
-            <button
-              type="button"
+          <div className="topbar-right">
+            {stage === "landing" ? (
+              <span className="preview-tag">Research Preview</span>
+            ) : (
+              <button
+                type="button"
               className="nav-link"
               onClick={() => setSettingsOpen(true)}
             >

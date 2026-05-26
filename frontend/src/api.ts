@@ -38,6 +38,14 @@ export interface StreamAgentStartedEvent {
   bias_type: BiasType;
 }
 
+export interface StreamAegisStartedEvent {
+  conflicts: number;
+}
+
+export interface StreamAegisDoneEvent {
+  resolved: number;
+}
+
 export interface StreamCompletePayload {
   document_id: string;
   overall_bias_score: number;
@@ -67,6 +75,8 @@ export function analyzeStream(
     onStart: (e: StreamStartEvent) => void;
     onPipelineMeta?: (e: StreamPipelineMetaEvent) => void;
     onAgentStarted?: (e: StreamAgentStartedEvent) => void;
+    onAegisStarted?: (e: StreamAegisStartedEvent) => void;
+    onAegisDone?: (e: StreamAegisDoneEvent) => void;
     onAgentDone: (e: AgentDoneEvent) => void;
     onComplete: (e: StreamCompletePayload) => void;
     onError: (message: string) => void;
@@ -128,6 +138,8 @@ export function analyzeStream(
             if (eventType === "start") callbacks.onStart(data);
             else if (eventType === "pipeline_meta") callbacks.onPipelineMeta?.(data);
             else if (eventType === "agent_started") callbacks.onAgentStarted?.(data);
+            else if (eventType === "aegis_started") callbacks.onAegisStarted?.(data);
+            else if (eventType === "aegis_done") callbacks.onAegisDone?.(data);
             else if (eventType === "agent_done") callbacks.onAgentDone(data);
             else if (eventType === "complete") callbacks.onComplete(data);
             else if (eventType === "error") callbacks.onError(data.message ?? "Unknown error");

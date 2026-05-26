@@ -1,34 +1,125 @@
+"""Conflict resolution between primary agents.
+
+When two or more primary agents flag overlapping text spans (IoU >= threshold)
+for different bias_types, that's a conflict. AEGIS resolves each cluster of
+conflicting annotations down to a single consolidated annotation.
+
+This module provides two primitives:
+  - find_conflict_clusters(): pure, synchronous IoU + union-find grouping.
+  - aegis_resolve_clusters(): async; calls AEGIS on each cluster in parallel
+    and returns the merged annotation list with un-conflicting annotations
+    untouched.
+"""
 from __future__ import annotations
 
+import asyncio
+import logging
+from typing import Iterable
+
+from ..providers import LLMProvider
 from ..schemas import Annotation
+from .aegis import AegisAgent
+
+logger = logging.getLogger(__name__)
 
 
-def meta_evaluate(annotations: list[Annotation]) -> list[Annotation]:
-    """Mark conflicts when two agents flag overlapping spans for different biases.
+def find_conflict_clusters(
+    annotations: list[Annotation],
+    iou_threshold: float = 0.3,
+) -> list[list[int]]:
+    """Return clusters (lists of annotation indices) where every cluster
+    contains 2+ annotations that pairwise overlap (IoU >= threshold) with
+    different bias_types. Singleton (non-conflicting) annotations are NOT
+    returned — only the clusters AEGIS needs to resolve.
 
-    Preserves all annotations (no silent drops). Sorts by span_start, then by
-    descending confidence within the same span.
+    Uses union-find so transitively-overlapping triples (A↔B, B↔C) collapse
+    into one cluster, not two pairwise clusters.
     """
-    if not annotations:
+    n = len(annotations)
+    if n < 2:
         return []
 
-    flagged = [a.model_copy() for a in annotations]
-    flagged.sort(key=lambda a: (a.span_start, a.span_end))
+    parent = list(range(n))
 
-    n = len(flagged)
+    def find(x: int) -> int:
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+
+    def union(x: int, y: int) -> None:
+        px, py = find(x), find(y)
+        if px != py:
+            parent[px] = py
+
     for i in range(n):
         for j in range(i + 1, n):
-            a, b = flagged[i], flagged[j]
-            if b.span_start >= a.span_end:
-                continue  # no overlap, list is sorted
+            a, b = annotations[i], annotations[j]
             if a.bias_type == b.bias_type:
                 continue
-            if _iou(a, b) >= 0.3:
-                a.conflict = True
-                b.conflict = True
+            if _iou(a, b) >= iou_threshold:
+                union(i, j)
 
-    flagged.sort(key=lambda a: (a.span_start, -a.confidence))
-    return flagged
+    groups: dict[int, list[int]] = {}
+    for i in range(n):
+        groups.setdefault(find(i), []).append(i)
+
+    return [members for members in groups.values() if len(members) >= 2]
+
+
+async def aegis_resolve_clusters(
+    annotations: list[Annotation],
+    clusters: list[list[int]],
+    source_text: str,
+    provider: LLMProvider,
+    aegis: AegisAgent,
+    *,
+    context_pad: int = 80,
+) -> list[Annotation]:
+    """Run AEGIS on each cluster in parallel, then return the merged list:
+    every non-conflicting annotation preserved as-is, plus one annotation per
+    cluster (AEGIS's resolution, or the highest-confidence original on
+    AEGIS failure).
+    """
+    if not clusters:
+        return _sorted(annotations)
+
+    async def _resolve(indices: list[int]) -> tuple[list[int], Annotation | None]:
+        cluster = [annotations[i] for i in indices]
+        ctx_lo = max(0, min(a.span_start for a in cluster) - context_pad)
+        ctx_hi = min(len(source_text), max(a.span_end for a in cluster) + context_pad)
+        span_text = source_text[ctx_lo:ctx_hi]
+        resolved = await aegis.resolve(
+            span_text=span_text,
+            candidates=cluster,
+            source_text=source_text,
+            provider=provider,
+        )
+        return indices, resolved
+
+    results = await asyncio.gather(*(_resolve(c) for c in clusters))
+
+    in_cluster = {i for c in clusters for i in c}
+    merged: list[Annotation] = [
+        a for i, a in enumerate(annotations) if i not in in_cluster
+    ]
+    for indices, resolved in results:
+        if resolved is not None:
+            merged.append(resolved)
+        else:
+            # AEGIS failed for this cluster — keep the highest-confidence
+            # original so we don't silently drop the flag entirely.
+            logger.warning(
+                "AEGIS resolution returned None for cluster of %d annotations",
+                len(indices),
+            )
+            fallback = max(
+                (annotations[i] for i in indices),
+                key=lambda a: a.confidence,
+            )
+            merged.append(fallback)
+
+    return _sorted(merged)
 
 
 def _iou(a: Annotation, b: Annotation) -> float:
@@ -37,5 +128,12 @@ def _iou(a: Annotation, b: Annotation) -> float:
     inter = max(0, inter_end - inter_start)
     if inter == 0:
         return 0.0
-    union = (a.span_end - a.span_start) + (b.span_end - b.span_start) - inter
-    return inter / union if union > 0 else 0.0
+    union_len = (a.span_end - a.span_start) + (b.span_end - b.span_start) - inter
+    return inter / union_len if union_len > 0 else 0.0
+
+
+def _sorted(annotations: Iterable[Annotation]) -> list[Annotation]:
+    return sorted(annotations, key=lambda a: (a.span_start, -a.confidence))
+
+
+__all__ = ["find_conflict_clusters", "aegis_resolve_clusters"]

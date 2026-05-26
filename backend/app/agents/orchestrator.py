@@ -14,8 +14,9 @@ from ..schemas import (
     Mode,
 )
 from . import ALL_AGENTS
+from .aegis import AegisAgent
 from .base import BaseAgent
-from .meta_evaluator import meta_evaluate
+from .meta_evaluator import aegis_resolve_clusters, find_conflict_clusters
 
 logger = logging.getLogger(__name__)
 
@@ -31,6 +32,14 @@ class Orchestrator:
     def __init__(self) -> None:
         self._agents: list[BaseAgent] = [cls() for cls in ALL_AGENTS]
         self._evidence_rag: EvidenceRAG | None = None
+        self._aegis: AegisAgent | None = None
+
+    def _get_aegis(self) -> AegisAgent:
+        """Lazily build the AEGIS conflict-resolver. One instance per process;
+        only its system prompt is cached."""
+        if self._aegis is None:
+            self._aegis = AegisAgent()
+        return self._aegis
 
     def _get_evidence_rag(self) -> EvidenceRAG:
         """Lazily build the evidence index (once per process).
@@ -162,8 +171,18 @@ class Orchestrator:
             if err:
                 warnings.append(f"{agent.name}: {err}")
 
-        merged = meta_evaluate(all_annotations)
-        score = _overall_score(merged, len(text))
+        clusters = find_conflict_clusters(all_annotations)
+        if clusters:
+            merged = await aegis_resolve_clusters(
+                all_annotations,
+                clusters,
+                source_text=text,
+                provider=provider,
+                aegis=self._get_aegis(),
+            )
+        else:
+            merged = sorted(all_annotations, key=lambda a: (a.span_start, -a.confidence))
+        score = _overall_score(merged)
 
         return AnalyzeResponse(
             document_id=f"doc_{uuid.uuid4().hex[:10]}",
@@ -306,8 +325,20 @@ class Orchestrator:
         # them into err, but create_task could hide a programming error).
         await asyncio.gather(*tasks)
 
-        merged = meta_evaluate(all_kept)
-        score = _overall_score(merged, len(text))
+        clusters = find_conflict_clusters(all_kept)
+        if clusters:
+            yield {"event": "aegis_started", "conflicts": len(clusters)}
+            merged = await aegis_resolve_clusters(
+                all_kept,
+                clusters,
+                source_text=text,
+                provider=provider,
+                aegis=self._get_aegis(),
+            )
+            yield {"event": "aegis_done", "resolved": len(clusters)}
+        else:
+            merged = sorted(all_kept, key=lambda a: (a.span_start, -a.confidence))
+        score = _overall_score(merged)
 
         yield {
             "event": "complete",
@@ -377,10 +408,24 @@ def _resolve_mode(mode: Mode, warnings: list[str]) -> tuple[Mode, list[str]]:
     return mode, warnings
 
 
-def _overall_score(annotations: Iterable[Annotation], doc_len: int) -> float:
-    if doc_len <= 0:
+def _overall_score(annotations: Iterable[Annotation]) -> float:
+    """Max-pooling with decay.
+
+    Each annotation scores ``severity_weight × confidence``. The highest such
+    score becomes the baseline (so the worst single flag anchors the document).
+    Remaining scores are sorted descending and added with rapidly diminishing
+    weight (``0.1 / 2**i``), so additional flags can nudge the score up but
+    can't pile-on linearly. The internal score is capped at 10 and rescaled
+    to [0, 1].
+    """
+    severity_weight = {"low": 2.5, "medium": 5.0, "high": 8.5}
+    scores = sorted(
+        (severity_weight[a.severity] * a.confidence for a in annotations),
+        reverse=True,
+    )
+    if not scores:
         return 0.0
-    weight = {"low": 1.0, "medium": 2.0, "high": 3.0}
-    total = sum(weight[a.severity] * a.confidence for a in annotations)
-    saturation = 9.0 * max(1.0, doc_len / 1500.0)
-    return round(min(1.0, total / saturation), 3)
+    baseline = scores[0]
+    decayed = sum((0.1 / (2 ** i)) * s for i, s in enumerate(scores[1:]))
+    internal = baseline + decayed
+    return round(min(10.0, internal) / 10.0, 3)

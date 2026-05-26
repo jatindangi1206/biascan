@@ -79,6 +79,12 @@ class BaseAgent:
         if not isinstance(items, list):
             return []
 
+        # Preserve the wrapper-level chain_of_thought so AEGIS can later
+        # evaluate the agent's reasoning during conflict resolution. The CoT
+        # is per-call, so we attach the same object to every annotation this
+        # call emits.
+        cot = data.get("chain_of_thought") if isinstance(data, dict) else None
+
         out: list[Annotation] = []
         for item in items:
             if not isinstance(item, dict):
@@ -88,6 +94,8 @@ class BaseAgent:
             except Exception:
                 continue
             if ann is not None:
+                if cot is not None:
+                    ann.extras["chain_of_thought"] = cot
                 out.append(ann)
         return out
 
