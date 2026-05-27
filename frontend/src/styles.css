@@ -772,6 +772,71 @@ button {
   margin: 6px 0 0;
 }
 
+.score-breakdown {
+  margin: 6px 0 0;
+  font-size: var(--text-sm);
+}
+
+.score-breakdown > summary {
+  cursor: pointer;
+  color: var(--muted);
+  font-size: var(--text-xs);
+  list-style: none;
+  user-select: none;
+}
+
+.score-breakdown > summary::marker,
+.score-breakdown > summary::-webkit-details-marker {
+  display: none;
+}
+
+.score-breakdown > summary::before {
+  content: "▸ ";
+  display: inline-block;
+  transition: transform 120ms ease;
+}
+
+.score-breakdown[open] > summary::before {
+  content: "▾ ";
+}
+
+.score-breakdown > summary:hover {
+  color: var(--ink);
+}
+
+.breakdown-rows {
+  margin: 10px 0 6px;
+  display: grid;
+  gap: 4px;
+  font-size: var(--text-xs);
+  color: #5e554d;
+}
+
+.breakdown-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+}
+
+.breakdown-pts {
+  font-variant-numeric: tabular-nums;
+  color: #2a2520;
+}
+
+.breakdown-total {
+  border-top: 1px solid var(--line);
+  padding-top: 6px;
+  margin-top: 4px;
+  font-weight: 600;
+}
+
+.breakdown-note {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+}
+
 .bias-list {
   display: grid;
   gap: 9px;

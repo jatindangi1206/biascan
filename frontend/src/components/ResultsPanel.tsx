@@ -45,6 +45,17 @@ export function ResultsPanel({ result }: Props) {
     ? `${compositionParts.join(", ")} · ${uniqueTypes} bias ${uniqueTypes === 1 ? "type" : "types"}`
     : null;
 
+  // Score breakdown — must stay in sync with _overall_score in
+  // backend/app/agents/orchestrator.py. Count drives the score; severity
+  // and diversity add small bumps.
+  const n = result.annotations.length;
+  const flagCountPts = n === 0 ? 0 : 2.5 + 5.5 * (1 - 1 / (1 + n / 3));
+  const severityPts = Math.min(
+    1.5,
+    0.4 * severityCounts.high + 0.15 * severityCounts.medium,
+  );
+  const diversityPts = 0.15 * Math.max(0, uniqueTypes - 1);
+
   return (
     <section className="summary-section">
       <div className="summary-metrics">
@@ -62,6 +73,43 @@ export function ResultsPanel({ result }: Props) {
           <div className="flag-value">{result.annotations.length}</div>
         </div>
       </div>
+
+      {n > 0 && (
+        <details className="score-breakdown">
+          <summary>How is this calculated?</summary>
+          <div className="breakdown-rows">
+            <div className="breakdown-row">
+              <span>
+                Flag count ({n} flag{n === 1 ? "" : "s"})
+              </span>
+              <span className="breakdown-pts">+{flagCountPts.toFixed(2)}</span>
+            </div>
+            {severityPts > 0 && (
+              <div className="breakdown-row">
+                <span>
+                  Severity ({severityCounts.high} high
+                  {severityCounts.medium > 0 ? `, ${severityCounts.medium} medium` : ""})
+                </span>
+                <span className="breakdown-pts">+{severityPts.toFixed(2)}</span>
+              </div>
+            )}
+            {diversityPts > 0 && (
+              <div className="breakdown-row">
+                <span>Bias-type spread ({uniqueTypes} types)</span>
+                <span className="breakdown-pts">+{diversityPts.toFixed(2)}</span>
+              </div>
+            )}
+            <div className="breakdown-row breakdown-total">
+              <span>Total</span>
+              <span className="breakdown-pts">{scoreValue.toFixed(1)} / 10</span>
+            </div>
+          </div>
+          <p className="breakdown-note">
+            Flag count is the main signal. Severity and bias-type spread add
+            small bumps. Adding a flag never lowers the score.
+          </p>
+        </details>
+      )}
 
       <div className="bias-list">
         {counts.map((entry) => (

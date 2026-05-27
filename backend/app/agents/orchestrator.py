@@ -182,7 +182,7 @@ class Orchestrator:
             )
         else:
             merged = sorted(all_annotations, key=lambda a: (a.span_start, -a.confidence))
-        score = _overall_score(merged, text)
+        score = _overall_score(merged)
 
         return AnalyzeResponse(
             document_id=f"doc_{uuid.uuid4().hex[:10]}",
@@ -338,7 +338,7 @@ class Orchestrator:
             yield {"event": "aegis_done", "resolved": len(clusters)}
         else:
             merged = sorted(all_kept, key=lambda a: (a.span_start, -a.confidence))
-        score = _overall_score(merged, text)
+        score = _overall_score(merged)
 
         yield {
             "event": "complete",
@@ -408,44 +408,38 @@ def _resolve_mode(mode: Mode, warnings: list[str]) -> tuple[Mode, list[str]]:
     return mode, warnings
 
 
-def _overall_score(annotations: Iterable[Annotation], source_text: str) -> float:
-    """Density-aware, diversity-weighted top-k score.
+def _overall_score(annotations: Iterable[Annotation]) -> float:
+    """Count-first score. Monotonic in flag count; severity and diversity
+    add small bumps within a flag-count band.
 
-    Three multiplicative factors so a single flag can never peg the score:
-      base       = weighted average of the top 5 (severity × confidence),
-                   weights 1, 1/2, 1/3, 1/4, 1/5 — softer than max-pool but
-                   still emphasises the worst flag.
-      density    = flags per 1000 words, mapped to [0.7, 1.3]. A short doc
-                   peppered with flags scores higher than the same flags in
-                   a long doc.
-      diversity  = +4% per distinct bias_type beyond the first, capped at 5.
-                   Five different biases is a sicker document than five of
-                   the same.
+      base       = 2.5 + 5.5 × (1 − 1 / (1 + n/3))
+                   f(0)=0 (early-out), f(1)=3.9, f(2)=4.7, f(4)=5.6,
+                   f(8)=6.5, saturates near 8.
+      severity   = +0.4 per high, +0.15 per medium, capped at +1.5
+      diversity  = +0.15 per distinct bias_type beyond the first
 
-    Severity weights are intentionally lower than before (1.5/3.5/6.0 vs
-    2.5/5/8.5) so the maximum realistic base is ~6, leaving headroom for
-    density and diversity multipliers to actually matter.
+    Properties:
+      - Adding any flag strictly increases the score (no dilution).
+      - Flag count is the dominant signal; severity is a secondary bump.
+      - No density factor — short and long docs are scored the same way.
+        Users trust flag count more than a length-normalised abstraction.
+
+    Keep this formula in sync with the breakdown displayed in
+    frontend/src/components/ResultsPanel.tsx so users see the same numbers.
     """
     anns = list(annotations)
-    if not anns:
+    n = len(anns)
+    if n == 0:
         return 0.0
 
-    severity_weight = {"low": 1.5, "medium": 3.5, "high": 6.0}
-    scored = sorted(
-        (severity_weight[a.severity] * a.confidence for a in anns),
-        reverse=True,
-    )
+    base = 2.5 + 5.5 * (1.0 - 1.0 / (1.0 + n / 3.0))
 
-    k = min(5, len(scored))
-    weights = [1.0 / (i + 1) for i in range(k)]
-    base = sum(w * s for w, s in zip(weights, scored[:k])) / sum(weights)
-
-    word_count = len(source_text.split())
-    density = len(anns) / max(word_count / 1000.0, 0.1)
-    density_mult = 0.7 + min(0.6, 0.08 * density)
+    high = sum(1 for a in anns if a.severity == "high")
+    medium = sum(1 for a in anns if a.severity == "medium")
+    severity_bump = min(1.5, 0.4 * high + 0.15 * medium)
 
     unique_types = len({a.bias_type for a in anns})
-    diversity_mult = 1.0 + (unique_types - 1) * 0.04
+    diversity_bump = 0.15 * (unique_types - 1)
 
-    internal = base * density_mult * diversity_mult
+    internal = base + severity_bump + diversity_bump
     return round(min(10.0, internal) / 10.0, 3)
