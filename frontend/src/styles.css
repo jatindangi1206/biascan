@@ -129,7 +129,7 @@ button {
 
 .app-shell {
   min-height: 100vh;
-  padding: 20px 36px 56px;
+  padding: 20px 36px 108px;
   position: relative;
   overflow: hidden;
 }
@@ -231,6 +231,22 @@ button {
 .landing-stage,
 .compose-stage {
   width: 100%;
+}
+
+/* ── Notices ── */
+
+.research-banner {
+  margin: 18px auto 0;
+  max-width: 760px;
+  padding: 10px 16px;
+  border: 1px solid rgba(90, 73, 56, 0.14);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink-soft);
+  font-size: var(--text-xs);
+  line-height: 1.45;
+  text-align: center;
+  backdrop-filter: blur(10px);
 }
 
 /* ── Landing ── */
@@ -616,6 +632,41 @@ button {
   font-size: var(--text-body);
   line-height: 1.6;
   max-width: 60ch;
+}
+
+.howitworks-panel {
+  width: 100%;
+  padding: 24px 26px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--paper);
+  backdrop-filter: blur(14px);
+}
+
+.howitworks-section-title {
+  font-family: "Fraunces", Georgia, serif;
+  font-size: clamp(1.35rem, 2vw, 1.65rem);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  margin-bottom: 14px;
+}
+
+.howitworks-copy-stack {
+  display: grid;
+  gap: 12px;
+}
+
+.howitworks-list {
+  display: grid;
+  gap: 8px;
+  padding-left: 20px;
+  color: var(--ink-soft);
+  font-size: var(--text-body);
+  line-height: 1.6;
+}
+
+.howitworks-list li::marker {
+  color: var(--accent);
 }
 
 .video-frame {
@@ -1492,14 +1543,34 @@ button {
 
 .app-footer {
   position: fixed;
+  left: 36px;
   right: 36px;
   bottom: 18px;
   display: flex;
-  align-items: center;
-  gap: 14px;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
   color: var(--muted);
   font-size: var(--text-xs);
   z-index: 5;
+}
+
+.footer-disclaimer {
+  max-width: min(760px, calc(100% - 220px));
+  color: var(--muted-warm);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+}
+
+.footer-disclaimer-break {
+  display: block;
+}
+
+.footer-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
 }
 
 .footer-preview {
@@ -1524,7 +1595,7 @@ button {
 
 .stage-result .app-footer {
   position: static;
-  margin: 32px 36px 18px auto;
+  margin: 32px 36px 18px;
 }
 
 /* ── Responsive ── */
@@ -1548,7 +1619,7 @@ button {
 
 @media (max-width: 820px) {
   .app-shell {
-    padding: 16px 16px 60px;
+    padding: 16px 16px 28px;
   }
 
   .topbar {
@@ -1564,6 +1635,12 @@ button {
     font-size: 15px;
   }
 
+  .research-banner {
+    margin-top: 14px;
+    padding: 10px 12px;
+    border-radius: 18px;
+  }
+
   .preview-tag,
   .nav-link,
   .eyebrow,
@@ -1577,6 +1654,15 @@ button {
   .composer-textarea {
     min-height: 240px;
     padding: 16px 16px 12px;
+  }
+
+  .howitworks-stage {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .howitworks-panel {
+    padding: 20px 18px;
   }
 
   .input-meta {
@@ -1607,7 +1693,18 @@ button {
   }
 
   .app-footer {
-    left: 16px;
-    right: 16px;
+    position: static;
+    margin-top: 28px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .footer-disclaimer {
+    max-width: none;
+  }
+
+  .footer-meta {
+    gap: 12px;
   }
 }
