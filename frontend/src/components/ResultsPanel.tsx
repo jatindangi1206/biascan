@@ -51,10 +51,15 @@ export function ResultsPanel({ result }: Props) {
   // and diversity add small bumps.
   const n = result.annotations.length;
   const flagCountPts = n === 0 ? 0 : Math.min(8.0, (12.0 * n) / (5.0 + n));
-  const severityPts = Math.min(
-    1.5,
-    0.4 * severityCounts.high + 0.15 * severityCounts.medium,
-  );
+  // Severity bumps are now weighted by each flag's confidence — must stay in
+  // sync with _overall_score in backend/app/agents/orchestrator.py.
+  const highConfSum = result.annotations
+    .filter((a) => a.severity === "high")
+    .reduce((s, a) => s + a.confidence, 0);
+  const mediumConfSum = result.annotations
+    .filter((a) => a.severity === "medium")
+    .reduce((s, a) => s + a.confidence, 0);
+  const severityPts = Math.min(1.5, 0.4 * highConfSum + 0.15 * mediumConfSum);
   const diversityPts = 0.15 * Math.max(0, uniqueTypes - 1);
 
   return (

@@ -85,6 +85,7 @@ class Orchestrator:
         provider_config: ProviderConfig,
         agents: list[str] | None,
         extra_warnings: list[str] | None = None,
+        aegis_provider_config: ProviderConfig | None = None,
     ) -> AnalyzeResponse:
         warnings: list[str] = list(extra_warnings or [])
 
@@ -100,6 +101,16 @@ class Orchestrator:
                 warnings=warnings + [str(e)],
                 provider=provider_config.model_dump_safe(),
             )
+
+        aegis_provider = provider
+        if aegis_provider_config is not None:
+            try:
+                aegis_provider = build_provider(aegis_provider_config)
+                warnings.append(
+                    f"AEGIS using separate provider: {aegis_provider_config.provider}/{aegis_provider_config.model}"
+                )
+            except LLMError as e:
+                warnings.append(f"AEGIS provider unavailable, falling back to primary: {e}")
 
         effective_mode, warnings = _resolve_mode(mode, warnings)
         chosen = self.select_agents(agents)
@@ -156,11 +167,11 @@ class Orchestrator:
         infos: list[AgentRunInfo] = []
         all_annotations: list[Annotation] = []
         for agent, (anns, err) in zip(chosen, results):
-            kept = [a for a in anns if a.confidence >= CONFIDENCE_FLOOR]
-
-            # Evidence RAG cross-check: boost or penalise confidence
-            if evidence_rag.is_built:
-                kept = _evidence_crosscheck(kept, evidence_rag)
+            # Cross-check FIRST so the evidence index can nudge borderline
+            # confidence (±0.15) before the floor filters anything. A flag at
+            # 0.48 with strong biased exemplar matches can survive at 0.55.
+            adjusted = _evidence_crosscheck(anns, evidence_rag) if evidence_rag.is_built else anns
+            kept = [a for a in adjusted if a.confidence >= CONFIDENCE_FLOOR]
 
             infos.append(AgentRunInfo(
                 agent=agent.name, bias_type=agent.bias_type,
@@ -177,7 +188,7 @@ class Orchestrator:
                 all_annotations,
                 clusters,
                 source_text=text,
-                provider=provider,
+                provider=aegis_provider,
                 aegis=self._get_aegis(),
             )
         else:
@@ -203,6 +214,7 @@ class Orchestrator:
         provider_config: ProviderConfig,
         agents: list[str] | None,
         extra_warnings: list[str] | None = None,
+        aegis_provider_config: ProviderConfig | None = None,
     ) -> AsyncIterator[dict]:
         """Async generator — yields SSE-ready dicts as each agent completes."""
         warnings: list[str] = list(extra_warnings or [])
@@ -212,6 +224,16 @@ class Orchestrator:
         except LLMError as e:
             yield {"event": "error", "message": str(e)}
             return
+
+        aegis_provider = provider
+        if aegis_provider_config is not None:
+            try:
+                aegis_provider = build_provider(aegis_provider_config)
+                warnings.append(
+                    f"AEGIS using separate provider: {aegis_provider_config.provider}/{aegis_provider_config.model}"
+                )
+            except LLMError as e:
+                warnings.append(f"AEGIS provider unavailable, falling back to primary: {e}")
 
         effective_mode, warnings = _resolve_mode(mode, warnings)
         chosen = self.select_agents(agents)
@@ -278,9 +300,9 @@ class Orchestrator:
                     mode=effective_mode,
                     provider=provider,
                 )
-            kept = [a for a in anns if a.confidence >= CONFIDENCE_FLOOR]
-            if evidence_rag.is_built:
-                kept = _evidence_crosscheck(kept, evidence_rag)
+            # Cross-check before floor — see analyze() for rationale.
+            adjusted = _evidence_crosscheck(anns, evidence_rag) if evidence_rag.is_built else anns
+            kept = [a for a in adjusted if a.confidence >= CONFIDENCE_FLOOR]
             info = {
                 "agent": agent.name,
                 "bias_type": agent.bias_type,
@@ -332,7 +354,7 @@ class Orchestrator:
                 all_kept,
                 clusters,
                 source_text=text,
-                provider=provider,
+                provider=aegis_provider,
                 aegis=self._get_aegis(),
             )
             yield {"event": "aegis_done", "resolved": len(clusters)}
@@ -415,7 +437,11 @@ def _overall_score(annotations: Iterable[Annotation]) -> float:
       base       = min(8.0, 12 × n / (5 + n))
                    f(0)=0, f(1)=2.0, f(2)=3.4, f(3)=4.5, f(5)=6.0,
                    f(7)=7.0, hits cap of 8.0 at n≥10.
-      severity   = +0.4 per high, +0.15 per medium, capped at +1.5
+      severity   = min(1.5, 0.4 × Σconf(high) + 0.15 × Σconf(medium))
+                   Severity bumps are weighted by each flag's confidence —
+                   a confident high-severity flag contributes more than an
+                   uncertain one. A 'certain' (1.0) high flag adds +0.4;
+                   a 'suspected' (0.6) high flag adds +0.24.
       diversity  = +0.15 per distinct bias_type beyond the first
 
     Curve tuned so per-flag deltas stay roughly even at low counts (the
@@ -439,9 +465,9 @@ def _overall_score(annotations: Iterable[Annotation]) -> float:
 
     base = min(8.0, 12.0 * n / (5.0 + n))
 
-    high = sum(1 for a in anns if a.severity == "high")
-    medium = sum(1 for a in anns if a.severity == "medium")
-    severity_bump = min(1.5, 0.4 * high + 0.15 * medium)
+    high_conf_sum = sum(a.confidence for a in anns if a.severity == "high")
+    medium_conf_sum = sum(a.confidence for a in anns if a.severity == "medium")
+    severity_bump = min(1.5, 0.4 * high_conf_sum + 0.15 * medium_conf_sum)
 
     unique_types = len({a.bias_type for a in anns})
     diversity_bump = 0.15 * (unique_types - 1)

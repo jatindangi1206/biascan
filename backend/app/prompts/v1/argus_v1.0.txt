@@ -44,6 +44,30 @@ LOW: Slightly over-weights supporting evidence but mentions contradicting findin
 MEDIUM: Supporting evidence dominates; contradicting evidence is dismissed with asymmetric quality critique.
 HIGH: Contradicting studies are structurally absent; conclusion stated with certainty.
 
+═══ BLOCK 7.5: WORKED EXAMPLES (calibration) ═══
+
+Four examples to anchor your judgement: two genuine biases (one high, one medium) and two positive controls that look biased but should NOT be flagged.
+
+EXAMPLE A — biased, severity HIGH
+INPUT: "These findings clearly demonstrate that intervention X causes substantial reduction in anxiety across all populations. Three RCTs confirm the benefit. While one observational study reported null results, methodological limitations preclude drawing strong conclusions from that work."
+EXPECTED: flag with mechanism=quality_critique_asymmetry, severity=high.
+WHY: Contrary evidence (null result) is mentioned only to be dismissed via post-hoc methodological critique. The author commits epistemically to the positive direction with no symmetric scrutiny.
+
+EXAMPLE B — biased, severity MEDIUM
+INPUT: "The weight of evidence supports a substantial effect of intervention X. Multiple high-quality trials demonstrate the benefit."
+EXPECTED: flag with mechanism=absent_contrary_evidence, severity=medium.
+WHY: Confirmatory framing with NO structural mention of contradicting findings. May be FP-2 (genuinely one-sided literature) — flag with medium severity and let downstream RAG verify.
+
+EXAMPLE C — clean, DO NOT flag (FP-1)
+INPUT: "The evidence for intervention X is mixed: three randomised trials show a moderate benefit (effect size 0.3–0.5), while one well-powered observational study reported a null result. The literature does not yet support a definitive conclusion, and further trials are warranted."
+EXPECTED: annotations = [].
+WHY: Symmetric integration — both directions named, uncertainty acknowledged, no asymmetric quality critique. Positive control, FP-1.
+
+EXAMPLE D — clean, DO NOT flag (FP-3)
+INPUT: "Smoking causes lung cancer. Decades of epidemiological evidence consistently support this conclusion."
+EXPECTED: annotations = [].
+WHY: Highly replicated finding — one-sidedness reflects scientific consensus, not author bias. FP-3.
+
 ═══ BLOCK 8: REASONING PROTOCOL + OUTPUT SCHEMA ═══
 
 MANDATORY REASONING PROTOCOL
@@ -51,6 +75,12 @@ Step 1: Identify all empirical claims and their supporting/contradicting evidenc
 Step 2: Check epistemic symmetry and integration language.
 Step 3: Make a binary determination: Is unwarranted bias actually present, or is the author acknowledging mixed evidence?
 Step 4: If true, generate the annotation. If false, leave the annotations array empty.
+
+CERTAINTY SCALE — use one of four discrete levels for the `certainty` field:
+- "certain"   — multiple clear signals; you would stake your reputation on the flag.
+- "probable"  — more likely biased than not; one strong signal or several weaker ones.
+- "suspected" — could plausibly go either way; flag for downstream verification.
+- "weak"     — borderline; flag only out of caution. The system filters these by default.
 
 OUTPUT FORMAT
 Return ONLY a valid JSON object. Do not include markdown formatting. Return exactly this structure:
@@ -70,7 +100,7 @@ Return ONLY a valid JSON object. Do not include markdown formatting. Return exac
       "flagged_text": "<exact flagged text>",
       "mechanism": "<asymmetric_citation | absent_contrary_evidence | quality_critique_asymmetry>",
       "false_positive_check": "<which FP rule checked>",
-      "confidence": <float 0.0-1.0>,
+      "certainty": "<certain|probable|suspected|weak>",
       "severity": "<low|medium|high>",
       "clean_alternative": "<one sentence showing unbiased language>"
     }

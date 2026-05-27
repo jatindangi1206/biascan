@@ -52,10 +52,30 @@ def get_orchestrator() -> Orchestrator:
 
 @app.get("/api/health")
 async def health() -> dict:
+    """Health probe with deployment diagnostics.
+
+    Reports whether the agent prompts and Evidence RAG corpus are actually
+    bundled with this build — both are non-Python static files that Vercel
+    only ships when listed in `includeFiles` in vercel.json. If
+    `prompts_present` < 5 or `corpus_present` is false, the relevant
+    feature degrades silently in production.
+    """
+    from pathlib import Path
+    from .config import PROMPTS_DIR
+    from .rag.evidence_rag import _SAMPLES_JSON
+
+    prompts_present = len(list((PROMPTS_DIR / PROMPT_VERSION).glob("*.txt"))) if (PROMPTS_DIR / PROMPT_VERSION).is_dir() else 0
+    corpus_path = Path(_SAMPLES_JSON)
+    corpus_present = corpus_path.is_file()
+    corpus_size_mb = round(corpus_path.stat().st_size / 1_048_576, 1) if corpus_present else 0
+
     return {
         "status": "ok",
         "prompt_version": PROMPT_VERSION,
         "key_storage": "none — keys are accepted per-request and never persisted",
+        "prompts_present": prompts_present,
+        "corpus_present": corpus_present,
+        "corpus_size_mb": corpus_size_mb,
     }
 
 
@@ -128,6 +148,7 @@ async def analyze(req: AnalyzeRequest) -> AnalyzeResponse:
         provider_config=req.provider,
         agents=req.agents,
         extra_warnings=extra_warnings,
+        aegis_provider_config=req.aegis_provider,
     )
 
 
@@ -161,6 +182,7 @@ async def analyze_stream(req: AnalyzeRequest) -> StreamingResponse:
             provider_config=req.provider,
             agents=req.agents,
             extra_warnings=extra_warnings,
+            aegis_provider_config=req.aegis_provider,
         ):
             event_type = payload.pop("event")
             yield f"event: {event_type}\ndata: {json.dumps(payload)}\n\n"

@@ -1,5 +1,6 @@
 from __future__ import annotations
 import json
+import logging
 import re
 import unicodedata
 from pathlib import Path
@@ -8,6 +9,34 @@ from typing import Any
 from ..config import DEFAULT_MAX_TOKENS, PROMPT_VERSION, PROMPTS_DIR
 from ..providers import LLMError, LLMProvider
 from ..schemas import Annotation, BiasType
+
+logger = logging.getLogger(__name__)
+
+# Discrete certainty tiers from the agent prompts → continuous confidence.
+# The agents now emit "certainty" (string); the legacy "confidence" float
+# field is still accepted for backward compatibility with older prompts and
+# stray model outputs.
+CERTAINTY_MAP: dict[str, float] = {
+    "certain": 1.0,
+    "probable": 0.8,
+    "suspected": 0.6,
+    "weak": 0.4,
+}
+
+
+def _resolve_confidence(item: dict) -> float:
+    """Map certainty tier → float, falling back to legacy confidence float.
+    Returns 0.0 if neither field is parseable."""
+    cert = item.get("certainty")
+    if isinstance(cert, str):
+        mapped = CERTAINTY_MAP.get(cert.strip().lower())
+        if mapped is not None:
+            return mapped
+    raw = item.get("confidence", 0.0)
+    try:
+        return float(raw)
+    except (TypeError, ValueError):
+        return 0.0
 
 
 class BaseAgent:
@@ -53,31 +82,81 @@ class BaseAgent:
     ) -> tuple[list[Annotation], str | None]:
         """Returns (annotations, error_message). error is None on success.
 
+        On total parse failure (no JSON found at all, or missing the
+        'annotations' key), we retry exactly once with a follow-up message
+        that points out the malformed response. Partial drops (e.g. one
+        item with a bad span) do NOT trigger retry — they're logged and the
+        good items are kept.
+
         Args:
             text: The text sent to the LLM (may be RAG-retrieved chunks).
             source_text: The original full document for re-anchoring spans.
                          If None, defaults to ``text`` (no RAG path).
         """
         anchor = source_text if source_text is not None else text
+        system_prompt = self.load_prompt()
+        user_message = self.build_user_message(text, references, mode)
+
         try:
             raw = await provider.complete(
-                system_prompt=self.load_prompt(),
-                user_message=self.build_user_message(text, references, mode),
+                system_prompt=system_prompt,
+                user_message=user_message,
                 max_tokens=max_tokens,
             )
         except LLMError as e:
             return [], str(e)
         except Exception as e:  # defensive
             return [], f"{type(e).__name__}: {e}"
-        return self._parse(raw, anchor), None
 
-    def _parse(self, raw: str, source_text: str) -> list[Annotation]:
+        anns, parse_failed = self._parse(raw, anchor)
+        if not parse_failed:
+            return anns, None
+
+        # Total parse failure — one retry with explicit feedback.
+        logger.warning(
+            "%s: first response did not parse; retrying once with feedback",
+            self.name,
+        )
+        retry_message = (
+            f"{user_message}\n\n"
+            "Your previous response could not be parsed as JSON. Return ONLY a "
+            "single JSON object matching the schema in your system prompt. No "
+            "markdown code fences, no prose before or after — start with { and "
+            "end with }."
+        )
+        try:
+            raw = await provider.complete(
+                system_prompt=system_prompt,
+                user_message=retry_message,
+                max_tokens=max_tokens,
+            )
+        except LLMError as e:
+            return anns, f"retry failed: {e}"
+        except Exception as e:
+            return anns, f"retry failed: {type(e).__name__}: {e}"
+
+        anns_retry, parse_failed_retry = self._parse(raw, anchor)
+        if parse_failed_retry:
+            logger.warning("%s: retry also failed to parse — giving up", self.name)
+        return anns_retry, None
+
+    def _parse(self, raw: str, source_text: str) -> tuple[list[Annotation], bool]:
+        """Parse the LLM response. Returns (annotations, total_parse_failed).
+
+        total_parse_failed is True only when nothing usable was extractable
+        (no JSON object found, or no 'annotations' key). Partial drops
+        (malformed individual items) are logged but do not flip the flag —
+        an LLM that returns 4 good annotations and 1 broken one shouldn't
+        cost us a retry.
+        """
         data = _extract_json(raw)
         if data is None:
-            return []
+            logger.warning("%s: no parseable JSON in response", self.name)
+            return [], True
         items = data.get("annotations") if isinstance(data, dict) else None
         if not isinstance(items, list):
-            return []
+            logger.warning("%s: response missing 'annotations' list", self.name)
+            return [], True
 
         # Preserve the wrapper-level chain_of_thought so AEGIS can later
         # evaluate the agent's reasoning during conflict resolution. The CoT
@@ -86,18 +165,32 @@ class BaseAgent:
         cot = data.get("chain_of_thought") if isinstance(data, dict) else None
 
         out: list[Annotation] = []
+        drops: list[str] = []
         for item in items:
             if not isinstance(item, dict):
+                drops.append("non-dict item")
                 continue
             try:
                 ann = self._coerce(item, source_text)
-            except Exception:
+            except Exception as e:
+                drops.append(f"coerce error: {type(e).__name__}")
                 continue
-            if ann is not None:
-                if cot is not None:
-                    ann.extras["chain_of_thought"] = cot
-                out.append(ann)
-        return out
+            if ann is None:
+                drops.append("span anchoring failed or required field missing")
+                continue
+            if cot is not None:
+                ann.extras["chain_of_thought"] = cot
+            out.append(ann)
+
+        if drops:
+            logger.warning(
+                "%s: dropped %d/%d annotation(s) during parse: %s",
+                self.name,
+                len(drops),
+                len(items),
+                "; ".join(drops[:3]),
+            )
+        return out, False
 
     def _coerce(self, item: dict[str, Any], source_text: str) -> Annotation | None:
         flagged = (item.get("flagged_text") or "").strip()
@@ -128,7 +221,7 @@ class BaseAgent:
         else:
             return None
 
-        confidence = float(item.get("confidence", 0.0))
+        confidence = _resolve_confidence(item)
         severity = item.get("severity", "low")
         if severity not in ("low", "medium", "high"):
             severity = "low"
@@ -139,6 +232,7 @@ class BaseAgent:
             "span_end",
             "flagged_text",
             "confidence",
+            "certainty",
             "severity",
             "clean_alternative",
             "false_positive_check",

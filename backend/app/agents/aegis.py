@@ -18,7 +18,7 @@ from typing import Any
 from ..config import DEFAULT_MAX_TOKENS, PROMPT_VERSION, PROMPTS_DIR
 from ..providers import LLMError, LLMProvider
 from ..schemas import Annotation, BiasType
-from .base import _extract_json, _find_in_source
+from .base import _extract_json, _find_in_source, _resolve_confidence
 
 _VALID_BIAS_TYPES = {
     "confirmation_bias",
@@ -63,9 +63,10 @@ class AegisAgent:
         source_text: str,
         provider: LLMProvider,
         max_tokens: int = DEFAULT_MAX_TOKENS,
-    ) -> Annotation | None:
-        """Returns a single consolidated Annotation, or None if AEGIS can't
-        produce a valid one. Caller is responsible for fallback behaviour."""
+    ) -> list[Annotation]:
+        """Returns one or more consolidated Annotations (one per distinct
+        cognitive error AEGIS identifies on the span), or [] on failure.
+        Caller is responsible for fallback behaviour when the list is empty."""
         try:
             raw = await provider.complete(
                 system_prompt=self.load_prompt(),
@@ -73,9 +74,9 @@ class AegisAgent:
                 max_tokens=max_tokens,
             )
         except LLMError:
-            return None
+            return []
         except Exception:
-            return None
+            return []
         return self._parse(raw, source_text, candidates)
 
     def _parse(
@@ -83,20 +84,31 @@ class AegisAgent:
         raw: str,
         source_text: str,
         candidates: list[Annotation],
-    ) -> Annotation | None:
+    ) -> list[Annotation]:
         data = _extract_json(raw)
         if not isinstance(data, dict):
-            return None
+            return []
         items = data.get("annotations")
         if not isinstance(items, list) or not items:
-            return None
-        item = items[0]
-        if not isinstance(item, dict):
-            return None
-        try:
-            return self._coerce(item, source_text, data, candidates)
-        except Exception:
-            return None
+            return []
+        out: list[Annotation] = []
+        seen_types: set[str] = set()
+        for item in items:
+            if not isinstance(item, dict):
+                continue
+            try:
+                ann = self._coerce(item, source_text, data, candidates)
+            except Exception:
+                continue
+            if ann is None:
+                continue
+            # Defensive dedup: AEGIS shouldn't emit two annotations of the
+            # same bias_type on the same cluster — drop the duplicate.
+            if ann.bias_type in seen_types:
+                continue
+            seen_types.add(ann.bias_type)
+            out.append(ann)
+        return out
 
     def _coerce(
         self,
@@ -140,7 +152,9 @@ class AegisAgent:
             span_start = min(c.span_start for c in candidates)
             span_end = max(c.span_end for c in candidates)
 
-        confidence = float(item.get("confidence", 0.9))
+        # Default to "probable" (0.8) if neither certainty nor confidence is provided —
+        # AEGIS only fires on real conflicts, so absence implies a moderately confident merge.
+        confidence = _resolve_confidence(item) or 0.8
         severity = item.get("severity", "medium")
         if severity not in ("low", "medium", "high"):
             severity = "medium"

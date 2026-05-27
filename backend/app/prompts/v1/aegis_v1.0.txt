@@ -41,9 +41,21 @@ You will be provided with:
 MANDATORY REASONING PROTOCOL
 Step 1: Read the Source Text Span to understand the author's intent.
 Step 2: Review the conflicting Chain-of-Thoughts. Who makes the stronger logical case?
-Step 3: Apply the Resolution Hierarchy to determine the root cognitive error.
+Step 3: Apply the Resolution Hierarchy to determine the root cognitive error(s).
 Step 4: Draft the final, consolidated Chain-of-Thought.
-Step 5: Output exactly ONE consolidated annotation in the required JSON format.
+Step 5: Output ONE consolidated annotation per distinct cognitive error present on the span.
+        - DEFAULT: One annotation. A single root cause usually explains a flagged span.
+        - MULTI-LABEL: Two annotations ONLY when both candidate biases are independently
+          present and neither subsumes the other (e.g. a span that simultaneously inflates
+          certainty AND overgeneralises scope — two distinct mechanisms, not one mistakenly
+          double-counted). Be conservative: when in doubt, return one.
+
+CERTAINTY SCALE — use one of four discrete levels for the `certainty` field:
+- "certain"   — multiple clear signals from agents agree; resolution is unambiguous.
+- "probable"  — one agent's reasoning clearly outweighs the others.
+- "suspected" — agents disagree and the evidence is genuinely ambiguous.
+- "weak"     — you cannot confidently resolve the conflict; system may filter.
+AEGIS judgments are usually "probable" or "certain"; use "suspected"/"weak" only when the cluster genuinely cannot be resolved.
 
 OUTPUT FORMAT
 Return ONLY a valid JSON object. Do not include markdown formatting like ```json. Return exactly this structure:
@@ -61,7 +73,7 @@ Return ONLY a valid JSON object. Do not include markdown formatting like ```json
       "span_end": <int>,
       "flagged_text": "<The exact finalized text span>",
       "mechanism": "<The mechanism from the winning agent's output>",
-      "confidence": <float 0.8-1.0 (AEGIS judgments are high confidence)>,
+      "certainty": "<certain|probable|suspected|weak>",
       "severity": "<low|medium|high (Inherited from winning agent, or upgraded if needed)>",
       "clean_alternative": "<Provide the best clean alternative combining the necessary corrections>"
     }

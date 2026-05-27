@@ -49,6 +49,30 @@ LOW: One or two booster words in an otherwise hedged synthesis.
 MEDIUM: Consistent absence of hedges; multiple boosters in mixed-quality evidence section.
 HIGH: A synthesis presents tentative, heterogeneous evidence as definitively established fact.
 
+═══ BLOCK 7.5: WORKED EXAMPLES (calibration) ═══
+
+Four examples to anchor your judgement: two genuine certainty inflations and two positive controls.
+
+EXAMPLE A — biased, severity HIGH
+INPUT: "The data definitively prove that Treatment B reduces all-cause mortality. The mechanism is fully understood."
+EXPECTED: flag with mechanism=booster_in_weak_evidence, severity=high.
+WHY: "Definitively prove" and "fully understood" are absolute claims that medicine almost never reaches. The booster is unhedged on what is virtually always tentative evidence.
+
+EXAMPLE B — biased, severity MEDIUM
+INPUT: "Our results unequivocally demonstrate the efficacy of intervention C, with significant improvements observed in the pilot trial."
+EXPECTED: flag with mechanism=booster_in_weak_evidence, severity=medium.
+WHY: "Unequivocally demonstrate" is too strong for pilot-trial evidence. Appropriate hedge: "suggests", "indicates a preliminary signal".
+
+EXAMPLE C — clean, DO NOT flag
+INPUT: "Preliminary evidence suggests that intervention D may improve outcomes in the studied subset, though further trials are needed before generalising."
+EXPECTED: annotations = [].
+WHY: Hedges ("suggests", "may improve") match the strength of evidence; explicit caveat about generalisation.
+
+EXAMPLE D — clean, DO NOT flag (strong claim, strong evidence)
+INPUT: "Three large RCTs consistently show a 25% reduction in mortality with intervention E (p<0.001 in each)."
+EXPECTED: annotations = [].
+WHY: Strong claim is appropriate given strong, converging RCT evidence. No booster inflation — strength of language matches strength of evidence.
+
 ═══ BLOCK 8: REASONING PROTOCOL + OUTPUT SCHEMA ═══
 
 MANDATORY REASONING PROTOCOL
@@ -56,6 +80,12 @@ Step 1: Inventory booster words and assess the underlying evidence quality.
 Step 2: Identify if the author is acknowledging limitations or using the boosters in a negated/hedged context.
 Step 3: Make a binary determination: Is unwarranted certainty inflation actually present?
 Step 4: If true, generate the annotation. If false, leave the annotations array empty.
+
+CERTAINTY SCALE — use one of four discrete levels for the `certainty` field:
+- "certain"   — multiple clear signals; you would stake your reputation on the flag.
+- "probable"  — more likely biased than not; one strong signal or several weaker ones.
+- "suspected" — could plausibly go either way; flag for downstream verification.
+- "weak"     — borderline; flag only out of caution. The system filters these by default.
 
 OUTPUT FORMAT
 Return ONLY a valid JSON object. Do not include markdown formatting. Return exactly this structure:
@@ -76,7 +106,7 @@ Return ONLY a valid JSON object. Do not include markdown formatting. Return exac
       "flagged_text": "<exact flagged text>",
       "mechanism": "<booster_in_weak_evidence | single_study_as_settled | heterogeneity_blind>",
       "false_positive_check": "<which FP rule checked>",
-      "confidence": <float 0.0-1.0>,
+      "certainty": "<certain|probable|suspected|weak>",
       "severity": "<low|medium|high>",
       "clean_alternative": "<one sentence showing appropriately hedged language>"
     }

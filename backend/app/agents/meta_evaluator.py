@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 def find_conflict_clusters(
     annotations: list[Annotation],
-    iou_threshold: float = 0.3,
+    iou_threshold: float = 0.5,
 ) -> list[list[int]]:
     """Return clusters (lists of annotation indices) where every cluster
     contains 2+ annotations that pairwise overlap (IoU >= threshold) with
@@ -34,6 +34,11 @@ def find_conflict_clusters(
 
     Uses union-find so transitively-overlapping triples (A↔B, B↔C) collapse
     into one cluster, not two pairwise clusters.
+
+    Default threshold 0.5: only spans whose intersection is at least half
+    their union qualify as conflicting. Lower thresholds (e.g. 0.3) pull in
+    brushing spans that share only a few words — those are usually two
+    distinct findings on adjacent phrases, not a real conflict.
     """
     n = len(annotations)
     if n < 2:
@@ -84,7 +89,7 @@ async def aegis_resolve_clusters(
     if not clusters:
         return _sorted(annotations)
 
-    async def _resolve(indices: list[int]) -> tuple[list[int], Annotation | None]:
+    async def _resolve(indices: list[int]) -> tuple[list[int], list[Annotation]]:
         cluster = [annotations[i] for i in indices]
         ctx_lo = max(0, min(a.span_start for a in cluster) - context_pad)
         ctx_hi = min(len(source_text), max(a.span_end for a in cluster) + context_pad)
@@ -104,14 +109,15 @@ async def aegis_resolve_clusters(
         a for i, a in enumerate(annotations) if i not in in_cluster
     ]
     for indices, resolved in results:
-        if resolved is not None:
-            merged.append(resolved)
+        if resolved:
+            # AEGIS may return 1 annotation (single root cause) or 2+
+            # (genuinely co-occurring distinct biases).
+            merged.extend(resolved)
         else:
             # AEGIS failed for this cluster — keep the highest-confidence
             # original so we don't silently drop the flag entirely.
             logger.warning(
-                "AEGIS resolution returned None for cluster of %d annotations",
-                len(indices),
+                "AEGIS returned no annotations for cluster of %d", len(indices),
             )
             fallback = max(
                 (annotations[i] for i in indices),

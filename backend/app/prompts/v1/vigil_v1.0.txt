@@ -50,6 +50,30 @@ LOW: Mild causal language ("appears to play a role in") for converging observati
 MEDIUM: Strong causal verbs for prospective cohort or retrospective without acknowledged limitations.
 HIGH: "Proves" or "demonstrates" causation from cross-sectional data; no confounder mention.
 
+═══ BLOCK 7.5: WORKED EXAMPLES (calibration) ═══
+
+Four examples to anchor your judgement: two genuine causal-inference errors and two positive controls.
+
+EXAMPLE A — biased, severity HIGH
+INPUT: "Patients consuming three or more cups of green tea per day had a 30% lower risk of cardiovascular disease. Green tea consumption thus reduces cardiovascular risk."
+EXPECTED: flag with mechanism=correlation_as_causation, severity=high.
+WHY: Observational association ("had a lower risk") is converted to causal claim ("thus reduces") with no RCT evidence and no confounder adjustment. The word "thus" makes the leap explicit.
+
+EXAMPLE B — biased, severity MEDIUM
+INPUT: "After implementing the wellness program, employee productivity rose 8%. The wellness program leads to measurable productivity gains."
+EXPECTED: flag with mechanism=temporal_to_causal_leap, severity=medium.
+WHY: Pre/post temporal association labelled as cause without controlling for concurrent changes (e.g., management changes, seasonal effects).
+
+EXAMPLE C — clean, DO NOT flag
+INPUT: "In a randomised trial, the wellness program increased self-reported wellbeing scores by 0.4 (95% CI 0.2-0.6). The mechanism is unknown."
+EXPECTED: annotations = [].
+WHY: RCT design supports a causal claim within scope; mechanism is explicitly disclaimed rather than asserted.
+
+EXAMPLE D — clean, DO NOT flag (correct hedge on observational)
+INPUT: "Higher coffee consumption was associated with lower stroke risk in observational studies (OR=0.85). Residual confounding by lifestyle factors cannot be ruled out without RCT data."
+EXPECTED: annotations = [].
+WHY: Correctly labels the relationship as associational ("associated with"); explicitly acknowledges confounders. Hedged appropriately for the design.
+
 ═══ BLOCK 8: REASONING PROTOCOL + OUTPUT SCHEMA ═══
 
 MANDATORY REASONING PROTOCOL
@@ -58,6 +82,12 @@ Step 2: Identify if the author is acknowledging limitations, confounders, or usi
 Step 3: Evaluate the syntactic context of any "causal" keywords.
 Step 4: Make a binary determination: Is unwarranted causal inference actually occurring?
 Step 5: If true, generate the annotation. If false, leave the annotations array empty.
+
+CERTAINTY SCALE — use one of four discrete levels for the `certainty` field:
+- "certain"   — multiple clear signals; you would stake your reputation on the flag.
+- "probable"  — more likely biased than not; one strong signal or several weaker ones.
+- "suspected" — could plausibly go either way; flag for downstream verification.
+- "weak"     — borderline; flag only out of caution. The system filters these by default.
 
 OUTPUT FORMAT
 Return ONLY a valid JSON object. Do not include markdown formatting. Return exactly this structure:
@@ -78,7 +108,7 @@ Return ONLY a valid JSON object. Do not include markdown formatting. Return exac
       "causal_verb": "<the specific causal word or phrase>",
       "evidence_design": "<RCT | cross-sectional | unknown | etc>",
       "false_positive_check": "<FP rule checked>",
-      "confidence": <float 0.0-1.0>,
+      "certainty": "<certain|probable|suspected|weak>",
       "severity": "<low|medium|high>",
       "clean_alternative": "<one sentence showing appropriate associative language>"
     }

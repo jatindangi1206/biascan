@@ -49,6 +49,30 @@ LOW: One frame slightly more positive than neutral; alternative would not substa
 MEDIUM: Relative risk without absolute; gain framing without loss.
 HIGH: Asymmetric benefit-harm framing (benefits relative, harms absolute).
 
+═══ BLOCK 7.5: WORKED EXAMPLES (calibration) ═══
+
+Four examples to anchor your judgement: two genuine framing biases and two positive controls.
+
+EXAMPLE A — biased, severity HIGH
+INPUT: "Treatment X reduces stroke risk by 40%. Side effects occurred in 1 in 50 patients."
+EXPECTED: flag with mechanism=asymmetric_benefit_harm_framing, severity=high.
+WHY: Benefit framed in relative terms (40%) — sounds large. Harm framed in absolute terms (1 in 50 = 2%) — sounds small. Same scale would make both numbers comparable. This is the classic asymmetric frame.
+
+EXAMPLE B — biased, severity MEDIUM
+INPUT: "Patients on intervention Y achieved a substantial improvement in survival, with 65% remaining disease-free at 5 years."
+EXPECTED: flag with mechanism=gain_frame_without_loss, severity=medium.
+WHY: 65% disease-free is the gain frame; the corresponding loss frame (35% had disease progression) is omitted. Reader perceives the result as more positive than the data supports.
+
+EXAMPLE C — clean, DO NOT flag
+INPUT: "Treatment Z reduced stroke risk by 1.2 percentage points (from 3.5% to 2.3%). Side effects occurred in 2.0% of patients."
+EXPECTED: annotations = [].
+WHY: Both benefit and harm reported on the same scale (absolute percentages). Reader can compare directly.
+
+EXAMPLE D — clean, DO NOT flag
+INPUT: "Of patients on intervention W, 65% remained disease-free at 5 years (35% had progression). Median time to progression in the affected group was 18 months."
+EXPECTED: annotations = [].
+WHY: Both gain (65% disease-free) and loss (35% progression) frames given explicitly. No asymmetry.
+
 ═══ BLOCK 8: REASONING PROTOCOL + OUTPUT SCHEMA ═══
 
 MANDATORY REASONING PROTOCOL
@@ -56,6 +80,12 @@ Step 1: Identify every quantitative claim and determine its frame.
 Step 2: Check for asymmetry or missing alternative frames (like missing absolute risk).
 Step 3: Make a binary determination: Is the text genuinely employing a biased framing effect?
 Step 4: If true, generate the annotation. If false, leave the annotations array empty.
+
+CERTAINTY SCALE — use one of four discrete levels for the `certainty` field:
+- "certain"   — multiple clear signals; you would stake your reputation on the flag.
+- "probable"  — more likely biased than not; one strong signal or several weaker ones.
+- "suspected" — could plausibly go either way; flag for downstream verification.
+- "weak"     — borderline; flag only out of caution. The system filters these by default.
 
 OUTPUT FORMAT
 Return ONLY a valid JSON object. Do not include markdown formatting. Return exactly this structure:
@@ -75,7 +105,7 @@ Return ONLY a valid JSON object. Do not include markdown formatting. Return exac
       "flagged_text": "<exact flagged text>",
       "mechanism": "<gain_loss | relative_absolute | positive_negative_label | asymmetric_metric>",
       "false_positive_check": "<FP rule checked>",
-      "confidence": <float 0.0-1.0>,
+      "certainty": "<certain|probable|suspected|weak>",
       "severity": "<low|medium|high>",
       "clean_alternative": "<one sentence showing symmetrically framed language>"
     }

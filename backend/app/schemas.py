@@ -40,6 +40,10 @@ class AnalyzeRequest(BaseModel):
     provider: ProviderConfig
     # If empty / None, all 5 agents run.
     agents: Optional[list[AgentName]] = None
+    # Optional separate provider for AEGIS (the conflict-resolution judge).
+    # If omitted, AEGIS reuses `provider` — same as today. Useful for breaking
+    # bias correlation: run primary agents on Sonnet, run AEGIS on Opus.
+    aegis_provider: Optional[ProviderConfig] = None
 
 
 class PingRequest(BaseModel):

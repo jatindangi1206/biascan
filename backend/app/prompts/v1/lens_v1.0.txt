@@ -46,6 +46,30 @@ LOW: Conclusion slightly broader than evidence; one missing qualifier.
 MEDIUM: Conclusion population substantially broader than study populations.
 HIGH: Conclusion makes a universal claim based on narrow evidence.
 
+═══ BLOCK 7.5: WORKED EXAMPLES (calibration) ═══
+
+Four examples to anchor your judgement: two genuine overgeneralisations and two positive controls.
+
+EXAMPLE A — biased, severity HIGH
+INPUT: "Mouse studies of compound F revealed weight loss in obese animals. Therefore, compound F should be recommended for treating obesity in adults."
+EXPECTED: flag with mechanism=scope_expansion_to_unstudied_population, severity=high.
+WHY: Generalises from mice to humans without intermediate evidence — classic species/population leap. The word "therefore" makes the leap explicit.
+
+EXAMPLE B — biased, severity MEDIUM
+INPUT: "In a study of 47 male university students aged 20-25, intervention G improved attention. This finding applies to anyone seeking cognitive enhancement."
+EXPECTED: flag with mechanism=scope_overclaiming, severity=medium.
+WHY: Sample (young men, healthy) does not support the universal "anyone" claim. The leap is to a broader population but at least within the same species.
+
+EXAMPLE C — clean, DO NOT flag
+INPUT: "In adults aged 60-75 with hypertension, intervention H reduced cardiovascular events. Effects in younger or healthier populations are unknown."
+EXPECTED: annotations = [].
+WHY: Conclusion scope matches study scope; unstudied populations are explicitly excluded.
+
+EXAMPLE D — clean, DO NOT flag
+INPUT: "Across the studied cohort of 1,200 patients with type-2 diabetes, intervention I improved HbA1c by 0.7 percentage points on average."
+EXPECTED: annotations = [].
+WHY: Conclusion bound to studied cohort; no leap beyond the data.
+
 ═══ BLOCK 8: REASONING PROTOCOL + OUTPUT SCHEMA ═══
 
 MANDATORY REASONING PROTOCOL
@@ -53,6 +77,12 @@ Step 1: Identify the conclusion population and the evidence population. Compute 
 Step 2: Check whether scope qualifiers or limitations are present anywhere in the surrounding text.
 Step 3: Make a binary determination: Is overgeneralization actually occurring?
 Step 4: If true, generate the annotation. If false, leave the annotations array empty.
+
+CERTAINTY SCALE — use one of four discrete levels for the `certainty` field:
+- "certain"   — multiple clear signals; you would stake your reputation on the flag.
+- "probable"  — more likely biased than not; one strong signal or several weaker ones.
+- "suspected" — could plausibly go either way; flag for downstream verification.
+- "weak"     — borderline; flag only out of caution. The system filters these by default.
 
 OUTPUT FORMAT
 Return ONLY a valid JSON object. Do not include markdown formatting. Return exactly this structure:
@@ -72,7 +102,7 @@ Return ONLY a valid JSON object. Do not include markdown formatting. Return exac
       "flagged_text": "<exact flagged text>",
       "mechanism": "<population_scope | setting_scope | temporal_scope>",
       "false_positive_check": "<FP rule checked>",
-      "confidence": <float 0.0-1.0>,
+      "certainty": "<certain|probable|suspected|weak>",
       "severity": "<low|medium|high>",
       "clean_alternative": "<one sentence showing appropriately scoped language>"
     }
