@@ -2,7 +2,14 @@ backend/.venv/
 __pycache__/
 *.pyc
 .DS_Store
-eval/
+# Don't exclude the whole eval/ tree — eval/output/samples.json (33MB) is
+# loaded at runtime by Evidence RAG. Only exclude the bulk subdirectories
+# (raw datasets, reports, results — hundreds of MB) that the backend never uses.
+eval/datasets/
+eval/reports/
+eval/results/
+eval/__pycache__/
+eval/.cache/
 *.md
 LICENSE
 run_test.py

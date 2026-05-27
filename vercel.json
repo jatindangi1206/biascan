@@ -1,5 +1,5 @@
 {
-  "buildCommand": "mkdir -p backend/app/_corpus && cp eval/output/samples.json backend/app/_corpus/samples.json && cd frontend && npm install && npm run build",
+  "buildCommand": "cd frontend && npm install && npm run build",
   "outputDirectory": "frontend/dist",
   "framework": null,
   "rewrites": [
@@ -8,7 +8,8 @@
   "functions": {
     "api/index.py": {
       "maxDuration": 300,
-      "memory": 2048
+      "memory": 2048,
+      "includeFiles": "eval/output/samples.json"
     }
   }
 }
