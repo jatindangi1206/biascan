@@ -8,8 +8,8 @@
   "functions": {
     "api/index.py": {
       "maxDuration": 300,
-      "memory": 1024,
-      "includeFiles": "{backend/app/prompts/**/*.txt,eval/output/samples.json}"
+      "memory": 2048,
+      "includeFiles": "eval/output/samples.json"
     }
   }
 }

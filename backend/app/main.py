@@ -72,10 +72,17 @@ async def health() -> dict:
     return {
         "status": "ok",
         "prompt_version": PROMPT_VERSION,
-        "key_storage": "none — keys are accepted per-request and never persisted",
+        "key_storage": "none - keys are accepted per-request and never persisted",
         "prompts_present": prompts_present,
         "corpus_present": corpus_present,
         "corpus_size_mb": corpus_size_mb,
+        # Debug info — surfaces the actual path Python is checking and the
+        # function's working directory. Useful for diagnosing Vercel includeFiles
+        # bundling: if the corpus is missing, this tells us where Vercel placed it.
+        "debug": {
+            "corpus_path": str(corpus_path),
+            "cwd": str(Path.cwd()),
+        },
     }
 
 
