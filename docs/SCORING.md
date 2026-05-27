@@ -91,14 +91,14 @@ AEGIS only fires when **two or more flags overlap (IoU ≥ 0.3) with different
 
 ```
 n           = number of surviving flags
-base        = 8.0 × (1 − 1 / (1 + n/3))
+base        = min(8.0,  12 × n / (5 + n))
 severity    = min(1.5,  0.4 × high_count  +  0.15 × medium_count)
 diversity   = 0.15 × (unique_bias_types − 1)
 
 score (0–10) = min(10, base + severity + diversity)
 ```
 
-Three properties this guarantees:
+Four properties this guarantees:
 
 1. **Monotonic in flag count.** Adding a flag can never lower the score.
 2. **Count dominates.** `base` ranges 0 – 8; severity adds at most +1.5;
@@ -106,22 +106,27 @@ Three properties this guarantees:
    things were flagged."
 3. **Continuous at zero.** No flags → 0.0. One flag never jumps into the
    "Moderate" band.
+4. **Roughly even per-flag deltas at low counts.** Because the score is
+   bounded 0–10, perfect linearity is impossible — something has to give.
+   The curve is tuned so the first 5 flags contribute fairly evenly
+   (+2.00, +1.43, +1.07, +0.83, +0.67) and only saturates aggressively
+   past 10 flags (where the document is already clearly broken).
 
 ### Base curve (purely a function of flag count)
 
-| Flags | Base |
-|---:|---:|
-| 0 | 0.00 |
-| 1 | 2.00 |
-| 2 | 3.20 |
-| 3 | 4.00 |
-| 4 | 4.57 |
-| 5 | 5.00 |
-| 6 | 5.33 |
-| 8 | 5.82 |
-| 10 | 6.15 |
-| 20 | 6.96 |
-| ∞ | 8.00 |
+| Flags | Base | Δ from previous |
+|---:|---:|---:|
+| 0 | 0.00 | — |
+| 1 | 2.00 | +2.00 |
+| 2 | 3.43 | +1.43 |
+| 3 | 4.50 | +1.07 |
+| 4 | 5.33 | +0.83 |
+| 5 | 6.00 | +0.67 |
+| 6 | 6.55 | +0.55 |
+| 7 | 7.00 | +0.45 |
+| 8 | 7.38 | +0.38 |
+| 10 | **8.00 (cap)** | |
+| 20+ | 8.00 | — |
 
 ### Severity bumps
 
@@ -173,15 +178,15 @@ synthetic input. Use this to sanity-check the UI.
 |---:|---:|---:|---:|
 | 0 | 0.0 | 0.0 | 0.0 |
 | 1 | 2.0 | 2.1 | 2.4 |
-| 2 | 3.2 | 3.5 | 4.0 |
-| 3 | 4.0 | 4.5 | 5.2 |
-| 4 | 4.6 | 5.2 | 6.1 |
-| 5 | 5.0 | 5.8 | 6.5 |
-| 6 | 5.3 | 6.2 | 6.8 |
-| 7 | 5.6 | 6.7 | 7.1 |
-| 8 | 5.8 | 7.0 | 7.3 |
-| 9 | 6.0 | 7.3 | 7.5 |
-| 10 | 6.2 | 7.7 | 7.7 |
+| 2 | 3.4 | 3.7 | 4.2 |
+| 3 | 4.5 | 5.0 | 5.7 |
+| 4 | 5.3 | 5.9 | 6.8 |
+| 5 | 6.0 | 6.8 | 7.5 |
+| 6 | 6.6 | 7.5 | 8.1 |
+| 7 | 7.0 | 8.1 | 8.5 |
+| 8 | 7.4 | 8.6 | 8.9 |
+| 9 | 7.7 | 9.1 | 9.2 |
+| 10 | 8.0 | 9.5 | 9.5 |
 
 ### Diversity at fixed count (5 medium flags)
 
@@ -200,31 +205,41 @@ synthetic input. Use this to sanity-check the UI.
 ### Clean Cochrane Review excerpt — 2 high flags, 2 bias types
 
 ```
-base       = 8.0 × (1 − 1/(1 + 2/3))   = 3.20
+base       = min(8, 12 × 2 / 7)         = 3.43
 severity   = 0.4 × 2                    = 0.80
 diversity  = 0.15 × (2 − 1)             = 0.15
 ─────────────────────────────────────
-score      = 4.15  →  4.2 / 10  →  "Moderate"
+score      = 4.38  →  4.4 / 10  →  "Moderate"
 ```
 
 ### Cochrane homeopathy review — 4 flags (2 high + 2 medium), 4 bias types
 
 ```
-base       = 8.0 × (1 − 1/(1 + 4/3))   = 4.57
+base       = min(8, 12 × 4 / 9)         = 5.33
 severity   = 0.4 × 2 + 0.15 × 2         = 1.10
 diversity  = 0.15 × (4 − 1)             = 0.45
 ─────────────────────────────────────
-score      = 6.12  →  6.1 / 10  →  "Concerning"
+score      = 6.88  →  6.9 / 10  →  "Concerning"
 ```
 
 The biased document scores **higher than the clean one even though both
 trigger the same model.** This is the trust contract: more flags ⇒ higher
 score, every time.
 
+### Heavily biased synthesis — 5 flags (3 high + 2 medium), 4 bias types
+
+```
+base       = min(8, 12 × 5 / 10)        = 6.00
+severity   = min(1.5, 0.4 × 3 + 0.15 × 2) = 1.50  (capped)
+diversity  = 0.15 × (4 − 1)             = 0.45
+─────────────────────────────────────
+score      = 7.95  →  8.0 / 10  →  "Severe"
+```
+
 ### Single weak finding — 1 medium flag, 1 bias type
 
 ```
-base       = 8.0 × (1 − 1/(1 + 1/3))   = 2.00
+base       = min(8, 12 × 1 / 6)         = 2.00
 severity   = 0.15
 diversity  = 0
 ─────────────────────────────────────
@@ -240,19 +255,33 @@ One flag is one issue. The score reflects that.
 The previous formula used max-pooling + top-k weighted average + a density
 multiplier. Two failure modes drove the rewrite:
 
-| Case | Old | New | Why old was wrong |
-|---|---:|---:|---|
-| 0 flags | 0.0 | 0.0 | — |
-| 1 medium flag | **4.0** | 2.2 | Y-intercept of 2.5 made the 0→1 transition a cliff |
-| 1 high flag | 4.3 | 2.4 | Same — single flag should not feel "Moderate" |
-| 2 high (clean Cochrane) | 5.7 | 4.2 | Density multiplier inflated short docs |
-| 4 mixed (homeopathy) | **6.6** | 6.1 | Top-5 weighted *average* let medium flags drag the score *down* — the biased doc with **more** flags scored *lower* than the clean one |
-| 3 medium | 5.7 | 4.5 | Same dilution problem |
-| 5 high, 5 types | 8.0 | 7.1 | — |
+The formula has gone through three iterations. The latest tuning was driven
+by a user observation: "5 flags only contribute +5.0 while 1 flag contributes
++2.0 — why doesn't 5 flags get +10?"
 
-The pathological case — fewer-but-stronger flags beating more-but-mixed
-flags — was the immediate bug. Removing the density multiplier and replacing
-the average with a count-driven curve fixes it.
+Honest answer: a bounded 0–10 score can't be perfectly linear. *Something*
+has to saturate. The earlier curve (`8 × n/(3+n)`) saturated too fast —
+flag #5 only added +0.43, which made the breakdown read like the score
+was cheating on additional flags.
+
+The current curve (`min(8, 12 × n/(5+n))`) stretches the linear region:
+the first 5 flags contribute roughly evenly (+2.0, +1.43, +1.07, +0.83,
++0.67), and the base only caps at n=10.
+
+| Case | v1 (max-pool + density) | v2 (8n/(3+n)) | **v3 (current)** |
+|---|---:|---:|---:|
+| 0 flags | 0.0 | 0.0 | 0.0 |
+| 1 medium flag | 4.0 | 2.2 | 2.2 |
+| 1 high flag | 4.3 | 2.4 | 2.4 |
+| 2 high (clean Cochrane) | 5.7 | 4.2 | 4.4 |
+| 4 mixed (homeopathy) | **6.6** | 6.1 | 6.9 |
+| 5 mixed (heavily biased) | — | 6.9 | **8.0** |
+| 3 medium | 5.7 | 4.5 | 5.0 |
+| 5 high, 5 types | 8.0 | 7.1 | 8.1 |
+
+v1 was wrong in the wrong direction (biased doc scored lower than clean
+doc). v2 fixed the direction but saturated too aggressively. v3 keeps the
+single-flag anchor of v2 while restoring meaningful per-flag growth.
 
 ---
 

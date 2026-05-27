@@ -50,7 +50,7 @@ export function ResultsPanel({ result }: Props) {
   // backend/app/agents/orchestrator.py. Count drives the score; severity
   // and diversity add small bumps.
   const n = result.annotations.length;
-  const flagCountPts = n === 0 ? 0 : 8.0 * (1 - 1 / (1 + n / 3));
+  const flagCountPts = n === 0 ? 0 : Math.min(8.0, (12.0 * n) / (5.0 + n));
   const severityPts = Math.min(
     1.5,
     0.4 * severityCounts.high + 0.15 * severityCounts.medium,
@@ -83,12 +83,12 @@ export function ResultsPanel({ result }: Props) {
               <span>
                 Flag count ({n} flag{n === 1 ? "" : "s"})
               </span>
-              <span className="breakdown-pts">+{flagCountPts.toFixed(2)}</span>
+              <span className="breakdown-pts">{flagCountPts.toFixed(2)}</span>
             </div>
             {severityPts > 0 && (
               <div className="breakdown-row">
                 <span>
-                  Severity ({severityCounts.high} high
+                  Severity bump ({severityCounts.high} high
                   {severityCounts.medium > 0 ? `, ${severityCounts.medium} medium` : ""})
                 </span>
                 <span className="breakdown-pts">+{severityPts.toFixed(2)}</span>
@@ -96,7 +96,7 @@ export function ResultsPanel({ result }: Props) {
             )}
             {diversityPts > 0 && (
               <div className="breakdown-row">
-                <span>Bias-type spread ({uniqueTypes} types)</span>
+                <span>Diversity bump ({uniqueTypes} types)</span>
                 <span className="breakdown-pts">+{diversityPts.toFixed(2)}</span>
               </div>
             )}
@@ -106,8 +106,9 @@ export function ResultsPanel({ result }: Props) {
             </div>
           </div>
           <p className="breakdown-note">
-            Flag count is the main signal. Severity and bias-type spread add
-            small bumps. Adding a flag never lowers the score.
+            Flag count is the base — it grows roughly evenly per flag until
+            saturating near 10 flags. Severity and bias-type spread add small
+            bumps on top. Adding a flag never lowers the score.
           </p>
         </details>
       )}

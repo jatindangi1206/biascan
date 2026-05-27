@@ -186,7 +186,7 @@ class Orchestrator:
 
         return AnalyzeResponse(
             document_id=f"doc_{uuid.uuid4().hex[:10]}",
-            mode=mode,
+            mode=effective_mode,
             overall_bias_score=score,
             annotations=merged,
             agents=infos,
@@ -346,7 +346,7 @@ class Orchestrator:
             "overall_bias_score": score,
             "annotations": [a.model_dump() for a in merged],
             "agents": list(agent_infos.values()),
-            "mode": mode,
+            "mode": effective_mode,
             "warnings": warnings,
             "provider": provider_config.model_dump_safe(),
         }
@@ -412,11 +412,16 @@ def _overall_score(annotations: Iterable[Annotation]) -> float:
     """Count-first score. Monotonic in flag count; severity and diversity
     add small bumps within a flag-count band.
 
-      base       = 8.0 × (1 − 1 / (1 + n/3))
-                   f(0)=0, f(1)=2.0, f(2)=3.2, f(3)=4.0, f(4)=4.6,
-                   f(8)=5.8, saturates near 8.
+      base       = min(8.0, 12 × n / (5 + n))
+                   f(0)=0, f(1)=2.0, f(2)=3.4, f(3)=4.5, f(5)=6.0,
+                   f(7)=7.0, hits cap of 8.0 at n≥10.
       severity   = +0.4 per high, +0.15 per medium, capped at +1.5
       diversity  = +0.15 per distinct bias_type beyond the first
+
+    Curve tuned so per-flag deltas stay roughly even at low counts (the
+    region most users sit in) and only saturate once a document already
+    looks broken. The score is bounded to 0–10, so perfect linearity is
+    mathematically impossible.
 
     Properties:
       - Adding any flag strictly increases the score (no dilution).
@@ -432,7 +437,7 @@ def _overall_score(annotations: Iterable[Annotation]) -> float:
     if n == 0:
         return 0.0
 
-    base = 8.0 * (1.0 - 1.0 / (1.0 + n / 3.0))
+    base = min(8.0, 12.0 * n / (5.0 + n))
 
     high = sum(1 for a in anns if a.severity == "high")
     medium = sum(1 for a in anns if a.severity == "medium")
