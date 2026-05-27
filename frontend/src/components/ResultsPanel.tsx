@@ -49,7 +49,7 @@ export function ResultsPanel({ result }: Props) {
   // backend/app/agents/orchestrator.py. Count drives the score; severity
   // and diversity add small bumps.
   const n = result.annotations.length;
-  const flagCountPts = n === 0 ? 0 : 2.5 + 5.5 * (1 - 1 / (1 + n / 3));
+  const flagCountPts = n === 0 ? 0 : 8.0 * (1 - 1 / (1 + n / 3));
   const severityPts = Math.min(
     1.5,
     0.4 * severityCounts.high + 0.15 * severityCounts.medium,
