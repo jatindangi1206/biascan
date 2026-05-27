@@ -15,28 +15,64 @@ interface Segment {
   anns: Annotation[];
 }
 
+// Known "why this is biased" reasoning keys, ordered by priority. These live
+// either directly on `extras` or one level down inside `extras.chain_of_thought`.
 const REASON_FIELDS = [
   "reasoning",
-  "linguistic_evidence",
-  "evidenced_scope",
+  "evidence_symmetry",              // ARGUS
+  "syntactic_context_of_boosters",  // LIBRA
+  "evidenced_scope",                // LENS
   "evidence_quality",
-  "alternative_frame",
-  "evidence_design",
+  "evidence_design",                // VIGIL
+  "alternative_frame",              // QUILL
+  "linguistic_evidence",
 ] as const;
 
 const TAG_FIELDS = ["mechanism", "frame_type"] as const;
 
-function pickString(extras: Record<string, unknown>, keys: readonly string[]): string | null {
+// Keys to ignore when falling back to "longest string in chain_of_thought" —
+// these echo the source claim, not the reasoning for flagging it.
+const CLAIM_KEY_RE = /claim|extract|present|acknowledged/i;
+
+function pickString(source: Record<string, unknown>, keys: readonly string[]): string | null {
   for (const k of keys) {
-    const v = extras[k];
+    const v = source[k];
     if (typeof v === "string" && v.trim()) return v.trim();
+  }
+  return null;
+}
+
+export function extractReasoning(extras: Record<string, unknown>): string | null {
+  const cot =
+    extras.chain_of_thought && typeof extras.chain_of_thought === "object"
+      ? (extras.chain_of_thought as Record<string, unknown>)
+      : null;
+
+  // Priority: known reasoning keys, top-level first, then inside chain_of_thought.
+  const direct = pickString(extras, REASON_FIELDS);
+  if (direct) return direct;
+  if (cot) {
+    const nested = pickString(cot, REASON_FIELDS);
+    if (nested) return nested;
+
+    // Fallback: longest non-claim string anywhere in chain_of_thought.
+    const candidates: string[] = [];
+    for (const [k, v] of Object.entries(cot)) {
+      if (typeof v !== "string" || !v.trim()) continue;
+      if (CLAIM_KEY_RE.test(k)) continue;
+      candidates.push(v.trim());
+    }
+    if (candidates.length > 0) {
+      candidates.sort((a, b) => b.length - a.length);
+      return candidates[0];
+    }
   }
   return null;
 }
 
 function succinctReason(annotation: Annotation): { tag: string | null; why: string | null } {
   const tag = pickString(annotation.extras, TAG_FIELDS);
-  let why = pickString(annotation.extras, REASON_FIELDS) ?? annotation.false_positive_check ?? null;
+  let why = extractReasoning(annotation.extras);
   if (why) {
     const firstStop = why.search(/(?<=[.!?])\s/);
     if (firstStop > 0 && firstStop < 160) why = why.slice(0, firstStop + 1);

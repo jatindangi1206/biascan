@@ -1,5 +1,6 @@
 import type { AnalyzeResponse, BiasType } from "../types";
 import { BIAS_COLORS, BIAS_LABELS } from "../types";
+import { extractReasoning } from "./AnnotatedOutput";
 
 interface Props {
   result: AnalyzeResponse;
@@ -165,20 +166,23 @@ export function ResultsPanel({ result }: Props) {
                   </span>
                 </div>
                 <p className="flag-card-quote">{annotation.flagged_text}</p>
+                {(() => {
+                  const reason = extractReasoning(annotation.extras);
+                  return reason ? (
+                    <p className="flag-card-copy">Why · {reason}</p>
+                  ) : null;
+                })()}
                 {annotation.clean_alternative && (
                   <p className="flag-card-copy">
                     Cleaner alternative · {annotation.clean_alternative}
                   </p>
                 )}
-                {annotation.false_positive_check && (
+                {annotation.rag_check_needed && (
                   <p className="flag-card-copy">
-                    False-positive check · {annotation.false_positive_check}
+                    RAG check needed
+                    {annotation.rag_query ? ` · ${annotation.rag_query}` : ""}
                   </p>
                 )}
-                <p className="flag-card-copy">
-                  RAG check · {annotation.rag_check_needed ? "needed" : "not needed"}
-                  {annotation.rag_query ? ` · ${annotation.rag_query}` : ""}
-                </p>
                 {Object.keys(annotation.extras).length > 0 && (
                   <details className="flag-card-extra">
                     <summary>Extra fields</summary>
