@@ -129,7 +129,7 @@ button {
 
 .app-shell {
   min-height: 100vh;
-  padding: 20px 36px 108px;
+  padding: 20px 36px 56px;
   position: relative;
   overflow: hidden;
 }
@@ -1543,34 +1543,14 @@ button {
 
 .app-footer {
   position: fixed;
-  left: 36px;
   right: 36px;
   bottom: 18px;
   display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 24px;
+  align-items: center;
+  gap: 14px;
   color: var(--muted);
   font-size: var(--text-xs);
   z-index: 5;
-}
-
-.footer-disclaimer {
-  max-width: min(760px, calc(100% - 220px));
-  color: var(--muted-warm);
-  font-size: var(--text-xs);
-  line-height: 1.5;
-}
-
-.footer-disclaimer-break {
-  display: block;
-}
-
-.footer-meta {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  flex-shrink: 0;
 }
 
 .footer-preview {
@@ -1595,7 +1575,7 @@ button {
 
 .stage-result .app-footer {
   position: static;
-  margin: 32px 36px 18px;
+  margin: 32px 36px 18px auto;
 }
 
 /* ── Responsive ── */
@@ -1619,7 +1599,7 @@ button {
 
 @media (max-width: 820px) {
   .app-shell {
-    padding: 16px 16px 28px;
+    padding: 16px 16px 60px;
   }
 
   .topbar {
@@ -1693,18 +1673,7 @@ button {
   }
 
   .app-footer {
-    position: static;
-    margin-top: 28px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .footer-disclaimer {
-    max-width: none;
-  }
-
-  .footer-meta {
-    gap: 12px;
+    left: 16px;
+    right: 16px;
   }
 }

@@ -42,9 +42,6 @@ const DEFAULT_CONFIG: ProviderConfig = {
 const SELECTION_KEY = "biasscan.agents";
 const EVALUATION_NOTICE =
   "Currently under active evaluation. Results may be experimental, or subject to change.";
-const RETENTION_NOTICE = "BiasScan does not retain submitted content.";
-const THIRD_PARTY_NOTICE =
-  "If you use external LLM APIs through your own credentials, submitted data is processed by those third-party providers and subject to their terms and privacy practices.";
 
 function loadStoredAgents(): AgentName[] {
   try {
@@ -522,20 +519,14 @@ export default function App() {
       </main>}
 
       <footer className="app-footer">
-        <p className="footer-disclaimer">
-          {RETENTION_NOTICE}
-          <span className="footer-disclaimer-break">{THIRD_PARTY_NOTICE}</span>
-        </p>
-        <div className="footer-meta">
-          <span className="footer-preview">Research Preview</span>
-          <button
-            type="button"
-            className="footer-link"
-            onClick={() => setShowHowItWorks(true)}
-          >
-            How it works
-          </button>
-        </div>
+        <span className="footer-preview">Research Preview</span>
+        <button
+          type="button"
+          className="footer-link"
+          onClick={() => setShowHowItWorks(true)}
+        >
+          How it works
+        </button>
       </footer>
     </div>
   );
