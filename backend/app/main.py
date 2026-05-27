@@ -62,7 +62,7 @@ async def health() -> dict:
     """
     from pathlib import Path
     from .config import PROMPTS_DIR
-    from .rag.evidence_rag import _SAMPLES_JSON
+    from .rag.evidence_rag import _SAMPLES_JSON, _CANDIDATE_PATHS
 
     prompts_present = len(list((PROMPTS_DIR / PROMPT_VERSION).glob("*.txt"))) if (PROMPTS_DIR / PROMPT_VERSION).is_dir() else 0
     corpus_path = Path(_SAMPLES_JSON)
@@ -76,11 +76,13 @@ async def health() -> dict:
         "prompts_present": prompts_present,
         "corpus_present": corpus_present,
         "corpus_size_mb": corpus_size_mb,
-        # Debug info — surfaces the actual path Python is checking and the
-        # function's working directory. Useful for diagnosing Vercel includeFiles
-        # bundling: if the corpus is missing, this tells us where Vercel placed it.
+        # Debug info for diagnosing Vercel bundling. `candidates` shows every
+        # location we search; `selected` is the path actually loaded.
         "debug": {
-            "corpus_path": str(corpus_path),
+            "selected": str(corpus_path),
+            "candidates": [
+                {"path": str(p), "exists": p.is_file()} for p in _CANDIDATE_PATHS
+            ],
             "cwd": str(Path.cwd()),
         },
     }

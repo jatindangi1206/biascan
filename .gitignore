@@ -9,3 +9,6 @@ __pycache__/
 backend/.venv/
 .env
 .vercel
+# Build-time copy of eval/output/samples.json — produced by vercel.json buildCommand
+# so the corpus lands inside the Python package tree for auto-bundling.
+backend/app/_corpus/
