@@ -166,7 +166,7 @@ class Orchestrator:
 
         infos: list[AgentRunInfo] = []
         all_annotations: list[Annotation] = []
-        for agent, (anns, err) in zip(chosen, results):
+        for agent, (anns, err, reasoning) in zip(chosen, results):
             # Cross-check FIRST so the evidence index can nudge borderline
             # confidence (±0.15) before the floor filters anything. A flag at
             # 0.48 with strong biased exemplar matches can survive at 0.55.
@@ -177,6 +177,7 @@ class Orchestrator:
                 agent=agent.name, bias_type=agent.bias_type,
                 prompt_version=agent.prompt_version,
                 raw_count=len(anns), kept_count=len(kept), error=err,
+                reasoning=reasoning,
             ))
             all_annotations.extend(kept)
             if err:
@@ -293,7 +294,7 @@ class Orchestrator:
                 "bias_type": agent.bias_type,
             })
             async with sem:
-                anns, err = await agent.run(
+                anns, err, reasoning = await agent.run(
                     text=agent_texts[agent.name],
                     source_text=text,
                     references=references,
@@ -310,6 +311,7 @@ class Orchestrator:
                 "raw_count": len(anns),
                 "kept_count": len(kept),
                 "error": err,
+                "reasoning": reasoning,
             }
             await queue.put({"kind": "done", "kept": kept, "info": info, "err": err})
 

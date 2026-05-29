@@ -79,8 +79,13 @@ class BaseAgent:
         mode: str,
         provider: LLMProvider,
         max_tokens: int = DEFAULT_MAX_TOKENS,
-    ) -> tuple[list[Annotation], str | None]:
-        """Returns (annotations, error_message). error is None on success.
+    ) -> tuple[list[Annotation], str | None, dict | None]:
+        """Returns (annotations, error_message, reasoning).
+
+        - error is None on success.
+        - reasoning is the wrapper-level chain_of_thought from the LLM
+          response, captured even when annotations is empty so callers can
+          surface "why did this agent return zero flags?" diagnostically.
 
         On total parse failure (no JSON found at all, or missing the
         'annotations' key), we retry exactly once with a follow-up message
@@ -104,13 +109,13 @@ class BaseAgent:
                 max_tokens=max_tokens,
             )
         except LLMError as e:
-            return [], str(e)
+            return [], str(e), None
         except Exception as e:  # defensive
-            return [], f"{type(e).__name__}: {e}"
+            return [], f"{type(e).__name__}: {e}", None
 
-        anns, parse_failed = self._parse(raw, anchor)
+        anns, parse_failed, reasoning = self._parse(raw, anchor)
         if not parse_failed:
-            return anns, None
+            return anns, None, reasoning
 
         # Total parse failure — one retry with explicit feedback.
         logger.warning(
@@ -131,38 +136,38 @@ class BaseAgent:
                 max_tokens=max_tokens,
             )
         except LLMError as e:
-            return anns, f"retry failed: {e}"
+            return anns, f"retry failed: {e}", reasoning
         except Exception as e:
-            return anns, f"retry failed: {type(e).__name__}: {e}"
+            return anns, f"retry failed: {type(e).__name__}: {e}", reasoning
 
-        anns_retry, parse_failed_retry = self._parse(raw, anchor)
+        anns_retry, parse_failed_retry, reasoning_retry = self._parse(raw, anchor)
         if parse_failed_retry:
             logger.warning("%s: retry also failed to parse — giving up", self.name)
-        return anns_retry, None
+        return anns_retry, None, reasoning_retry
 
-    def _parse(self, raw: str, source_text: str) -> tuple[list[Annotation], bool]:
-        """Parse the LLM response. Returns (annotations, total_parse_failed).
+    def _parse(self, raw: str, source_text: str) -> tuple[list[Annotation], bool, dict | None]:
+        """Parse the LLM response. Returns (annotations, total_parse_failed, wrapper_cot).
 
-        total_parse_failed is True only when nothing usable was extractable
-        (no JSON object found, or no 'annotations' key). Partial drops
-        (malformed individual items) are logged but do not flip the flag —
-        an LLM that returns 4 good annotations and 1 broken one shouldn't
-        cost us a retry.
+        - total_parse_failed is True only when nothing usable was extractable
+          (no JSON object found, or no 'annotations' key). Partial drops
+          (malformed individual items) are logged but do not flip the flag —
+          an LLM that returns 4 good annotations and 1 broken one shouldn't
+          cost us a retry.
+        - wrapper_cot is the top-level `chain_of_thought` dict from the LLM,
+          returned even when annotations is empty so callers can render the
+          agent's reasoning regardless of whether anything was flagged.
         """
         data = _extract_json(raw)
         if data is None:
             logger.warning("%s: no parseable JSON in response", self.name)
-            return [], True
+            return [], True, None
         items = data.get("annotations") if isinstance(data, dict) else None
         if not isinstance(items, list):
             logger.warning("%s: response missing 'annotations' list", self.name)
-            return [], True
+            return [], True, None
 
-        # Preserve the wrapper-level chain_of_thought so AEGIS can later
-        # evaluate the agent's reasoning during conflict resolution. The CoT
-        # is per-call, so we attach the same object to every annotation this
-        # call emits.
-        cot = data.get("chain_of_thought") if isinstance(data, dict) else None
+        cot_raw = data.get("chain_of_thought") if isinstance(data, dict) else None
+        cot = cot_raw if isinstance(cot_raw, dict) else None
 
         out: list[Annotation] = []
         drops: list[str] = []
@@ -190,7 +195,7 @@ class BaseAgent:
                 len(items),
                 "; ".join(drops[:3]),
             )
-        return out, False
+        return out, False, cot
 
     def _coerce(self, item: dict[str, Any], source_text: str) -> Annotation | None:
         flagged = (item.get("flagged_text") or "").strip()

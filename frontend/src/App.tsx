@@ -302,6 +302,7 @@ export default function App() {
               raw_count: a.raw_count,
               kept_count: a.kept_count,
               error: a.error,
+              reasoning: a.reasoning,
             })),
             warnings: e.warnings,
             provider: e.provider as AnalyzeResponse["provider"],

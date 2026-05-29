@@ -65,6 +65,9 @@ export interface AgentRunInfo {
   raw_count: number;
   kept_count: number;
   error: string | null;
+  // Wrapper-level chain_of_thought from the agent's LLM response. Captured
+  // even when raw_count is 0, so users can see why an agent decided not to flag.
+  reasoning: Record<string, unknown> | null;
 }
 
 export interface AnalyzeResponse {

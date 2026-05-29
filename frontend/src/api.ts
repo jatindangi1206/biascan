@@ -20,6 +20,7 @@ export interface AgentDoneEvent {
   kept_count: number;
   annotations: Annotation[];
   error: string | null;
+  reasoning: Record<string, unknown> | null;
 }
 
 export interface StreamStartEvent {
@@ -57,6 +58,7 @@ export interface StreamCompletePayload {
     raw_count: number;
     kept_count: number;
     error: string | null;
+    reasoning: Record<string, unknown> | null;
   }>;
   mode: Mode;
   warnings: string[];

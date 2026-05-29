@@ -156,6 +156,48 @@ export function ResultsPanel({ result }: Props) {
         </div>
       </details>
 
+      {result.agents.some((a) => a.reasoning || a.error) && (
+        <details className="run-details" open={result.annotations.length === 0}>
+          <summary>Agent reasoning</summary>
+          <div className="agent-reasoning-list">
+            {result.agents.map((agent) => (
+              <div key={agent.agent} className="agent-reasoning-card">
+                <div className="agent-reasoning-head">
+                  <span className="agent-reasoning-name">
+                    {agent.agent} · {BIAS_LABELS[agent.bias_type]}
+                  </span>
+                  <span className="agent-reasoning-status">
+                    {agent.error
+                      ? "error"
+                      : agent.kept_count === 0
+                        ? "no flags"
+                        : `${agent.kept_count} flag${agent.kept_count === 1 ? "" : "s"}`}
+                  </span>
+                </div>
+                {agent.error && (
+                  <p className="agent-reasoning-error">{agent.error}</p>
+                )}
+                {!agent.error && agent.reasoning && (
+                  <dl className="agent-reasoning-fields">
+                    {Object.entries(agent.reasoning).map(([key, value]) => (
+                      <div key={key} className="agent-reasoning-row">
+                        <dt>{key.replace(/_/g, " ")}</dt>
+                        <dd>{typeof value === "string" ? value : JSON.stringify(value)}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                )}
+                {!agent.error && !agent.reasoning && (
+                  <p className="agent-reasoning-empty">
+                    (no chain_of_thought returned by the model)
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        </details>
+      )}
+
       {result.annotations.length > 0 && (
         <details className="run-details">
           <summary>Flag details</summary>

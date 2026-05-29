@@ -57,6 +57,11 @@ class AgentRunInfo(BaseModel):
     raw_count: int
     kept_count: int
     error: Optional[str] = None
+    # The agent's wrapper-level chain_of_thought from its LLM response.
+    # Captured even when the agent returns zero annotations so users can see
+    # WHY a particular agent decided not to flag — turning the "0 flags"
+    # black box into something diagnosable.
+    reasoning: Optional[dict[str, Any]] = None
 
 
 class AnalyzeResponse(BaseModel):
