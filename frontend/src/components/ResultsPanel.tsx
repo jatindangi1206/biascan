@@ -4,6 +4,7 @@ import { extractReasoning } from "./AnnotatedOutput";
 
 interface Props {
   result: AnalyzeResponse;
+  text: string;
 }
 
 const BIAS_ORDER: BiasType[] = [
@@ -14,7 +15,7 @@ const BIAS_ORDER: BiasType[] = [
   "causal_inference_error",
 ];
 
-export function ResultsPanel({ result }: Props) {
+export function ResultsPanel({ result, text }: Props) {
   const scoreValue = result.overall_bias_score * 10;
   const scoreLabel =
     scoreValue >= 7.5
@@ -46,21 +47,19 @@ export function ResultsPanel({ result }: Props) {
     ? `${compositionParts.join(", ")} · ${uniqueTypes} bias ${uniqueTypes === 1 ? "type" : "types"}`
     : null;
 
-  // Score breakdown — must stay in sync with _overall_score in
-  // backend/app/agents/orchestrator.py. Count drives the score; severity
-  // and diversity add small bumps.
+  // Score breakdown — must stay in sync with Orchestrator._overall_score in
+  // backend/app/agents/orchestrator.py.
   const n = result.annotations.length;
-  const flagCountPts = n === 0 ? 0 : Math.min(8.0, (12.0 * n) / (5.0 + n));
-  // Severity bumps are now weighted by each flag's confidence — must stay in
-  // sync with _overall_score in backend/app/agents/orchestrator.py.
-  const highConfSum = result.annotations
-    .filter((a) => a.severity === "high")
-    .reduce((s, a) => s + a.confidence, 0);
-  const mediumConfSum = result.annotations
-    .filter((a) => a.severity === "medium")
-    .reduce((s, a) => s + a.confidence, 0);
-  const severityPts = Math.min(1.5, 0.4 * highConfSum + 0.15 * mediumConfSum);
-  const diversityPts = 0.15 * Math.max(0, uniqueTypes - 1);
+  const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
+  const effectiveWords = Math.max(50, wordCount);
+  const severityWeights = { high: 3, medium: 2, low: 1 } as const;
+  const expectedImpact = result.annotations.reduce(
+    (sum, annotation) => sum + annotation.confidence * severityWeights[annotation.severity],
+    0,
+  );
+  const diversityBump = 0.15 * Math.max(0, uniqueTypes - 1);
+  const totalImpact = expectedImpact + diversityBump;
+  const density = n === 0 ? 0 : (totalImpact / effectiveWords) * 100;
 
   return (
     <section className="summary-section">
@@ -86,34 +85,49 @@ export function ResultsPanel({ result }: Props) {
           <div className="breakdown-rows">
             <div className="breakdown-row">
               <span>
-                Flag count ({n} flag{n === 1 ? "" : "s"})
+                Expected impact ({n} flag{n === 1 ? "" : "s"})
               </span>
-              <span className="breakdown-pts">{flagCountPts.toFixed(2)}</span>
+              <span className="breakdown-pts">{expectedImpact.toFixed(2)}</span>
             </div>
-            {severityPts > 0 && (
-              <div className="breakdown-row">
-                <span>
-                  Severity bump ({severityCounts.high} high
-                  {severityCounts.medium > 0 ? `, ${severityCounts.medium} medium` : ""})
-                </span>
-                <span className="breakdown-pts">+{severityPts.toFixed(2)}</span>
-              </div>
-            )}
-            {diversityPts > 0 && (
+            {diversityBump > 0 && (
               <div className="breakdown-row">
                 <span>Diversity bump ({uniqueTypes} types)</span>
-                <span className="breakdown-pts">+{diversityPts.toFixed(2)}</span>
+                <span className="breakdown-pts">+{diversityBump.toFixed(2)}</span>
               </div>
             )}
+            <div className="breakdown-row">
+              <span>
+                Density normalization ({effectiveWords} effective words
+                {wordCount < 50 ? ", 50-word floor applied" : ""})
+              </span>
+              <span className="breakdown-pts">{density.toFixed(2)} / 100w</span>
+            </div>
+            <div className="breakdown-row">
+              <span>Final curve (1 - e^(-0.15 x density))</span>
+              <span className="breakdown-pts">{scoreValue.toFixed(1)} / 10</span>
+            </div>
+            <div className="breakdown-row">
+              <span>Total weighted impact</span>
+              <span className="breakdown-pts">{totalImpact.toFixed(2)}</span>
+            </div>
+            <div className="breakdown-row">
+              <span>
+                Severity weights ({severityCounts.high} high, {severityCounts.medium} medium,{" "}
+                {severityCounts.low} low)
+              </span>
+              <span className="breakdown-pts">H=3 · M=2 · L=1</span>
+            </div>
             <div className="breakdown-row breakdown-total">
               <span>Total</span>
               <span className="breakdown-pts">{scoreValue.toFixed(1)} / 10</span>
             </div>
           </div>
           <p className="breakdown-note">
-            Flag count is the base — it grows roughly evenly per flag until
-            saturating near 10 flags. Severity and bias-type spread add small
-            bumps on top. Adding a flag never lowers the score.
+            Expected impact sums `confidence × severity weight` for each flag
+            using High=3, Medium=2, and Low=1. That impact is normalized per
+            100 words with a 50-word minimum floor so longer documents are not
+            unfairly penalized, then mapped onto an exponential curve for the
+            final score.
           </p>
         </details>
       )}

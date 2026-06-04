@@ -1,8 +1,9 @@
 from __future__ import annotations
 import asyncio
 import logging
+import math
 import uuid
-from typing import AsyncIterator, Iterable
+from typing import AsyncIterator
 
 from ..config import CONFIDENCE_FLOOR, MAX_CONCURRENCY
 from ..providers import build_provider, LLMError, ProviderConfig
@@ -194,7 +195,7 @@ class Orchestrator:
             )
         else:
             merged = sorted(all_annotations, key=lambda a: (a.span_start, -a.confidence))
-        score = _overall_score(merged)
+        score = self._overall_score(merged, text)
 
         return AnalyzeResponse(
             document_id=f"doc_{uuid.uuid4().hex[:10]}",
@@ -362,7 +363,7 @@ class Orchestrator:
             yield {"event": "aegis_done", "resolved": len(clusters)}
         else:
             merged = sorted(all_kept, key=lambda a: (a.span_start, -a.confidence))
-        score = _overall_score(merged)
+        score = self._overall_score(merged, text)
 
         yield {
             "event": "complete",
@@ -374,6 +375,30 @@ class Orchestrator:
             "warnings": warnings,
             "provider": provider_config.model_dump_safe(),
         }
+
+    def _overall_score(self, final_annotations: list[Annotation], text: str) -> float:
+        """Severity-Weighted Defect Density (SWDD).
+
+        Score bias impact per 100 words instead of using a raw flag-count base
+        so longer documents are not automatically penalized for containing more
+        text. The score remains bounded to 0–1 for API output.
+        """
+        if not final_annotations:
+            return 0.0
+
+        w_eff = max(50, len(text.split()))
+        severity_weights = {"high": 3.0, "medium": 2.0, "low": 1.0}
+
+        total_impact = 0.0
+        for ann in final_annotations:
+            total_impact += ann.confidence * severity_weights[ann.severity]
+
+        unique_types = len({ann.bias_type for ann in final_annotations})
+        total_impact += 0.15 * max(0, unique_types - 1)
+
+        density = (total_impact / w_eff) * 100.0
+        score = 1.0 - math.exp(-0.15 * density)
+        return round(score, 3)
 
 
 def _evidence_crosscheck(
@@ -431,48 +456,3 @@ def _resolve_mode(mode: Mode, warnings: list[str]) -> tuple[Mode, list[str]]:
         return "lite", warnings
     return mode, warnings
 
-
-def _overall_score(annotations: Iterable[Annotation]) -> float:
-    """Count-first score. Monotonic in flag count; severity and diversity
-    add small bumps within a flag-count band.
-
-      base       = min(8.0, 12 × n / (5 + n))
-                   f(0)=0, f(1)=2.0, f(2)=3.4, f(3)=4.5, f(5)=6.0,
-                   f(7)=7.0, hits cap of 8.0 at n≥10.
-      severity   = min(1.5, 0.4 × Σconf(high) + 0.15 × Σconf(medium))
-                   Severity bumps are weighted by each flag's confidence —
-                   a confident high-severity flag contributes more than an
-                   uncertain one. A 'certain' (1.0) high flag adds +0.4;
-                   a 'suspected' (0.6) high flag adds +0.24.
-      diversity  = +0.15 per distinct bias_type beyond the first
-
-    Curve tuned so per-flag deltas stay roughly even at low counts (the
-    region most users sit in) and only saturate once a document already
-    looks broken. The score is bounded to 0–10, so perfect linearity is
-    mathematically impossible.
-
-    Properties:
-      - Adding any flag strictly increases the score (no dilution).
-      - Flag count is the dominant signal; severity is a secondary bump.
-      - No density factor — short and long docs are scored the same way.
-        Users trust flag count more than a length-normalised abstraction.
-
-    Keep this formula in sync with the breakdown displayed in
-    frontend/src/components/ResultsPanel.tsx so users see the same numbers.
-    """
-    anns = list(annotations)
-    n = len(anns)
-    if n == 0:
-        return 0.0
-
-    base = min(8.0, 12.0 * n / (5.0 + n))
-
-    high_conf_sum = sum(a.confidence for a in anns if a.severity == "high")
-    medium_conf_sum = sum(a.confidence for a in anns if a.severity == "medium")
-    severity_bump = min(1.5, 0.4 * high_conf_sum + 0.15 * medium_conf_sum)
-
-    unique_types = len({a.bias_type for a in anns})
-    diversity_bump = 0.15 * (unique_types - 1)
-
-    internal = base + severity_bump + diversity_bump
-    return round(min(10.0, internal) / 10.0, 3)

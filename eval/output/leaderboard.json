@@ -1,0 +1,4250 @@
+{
+  "papers": [
+    "Nu-OG",
+    "Nu-OG-GPT",
+    "Nu-Edit",
+    "Nu-bias-injected"
+  ],
+  "n_runs": 2,
+  "results": [
+    {
+      "model": "meta-llama/llama-4-maverick",
+      "tier": "Open Source",
+      "papers": {
+        "Nu-OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 5.779999999999999,
+              "n_flags": 4,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.95,
+                  "flagged_text": "Table 1.\nNutraceutical intervention\nThe intervention was characteri"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.881,
+                  "flagged_text": " oxidative stress. It was administrated in the study of Rossman et al"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.52,
+                  "flagged_text": "Rossman et al. assessed mitochondrial-specific ROS-bioactivity showing a significant decrease (\u201335%; P<0.05) after sodium nitrite supplement"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.65,
+                  "flagged_text": "Elhassan et al. found significant improvement in the NAM methylation clearance pathways representing the NAD+ metabolome."
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 5.709999999999999,
+              "n_flags": 4,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.95,
+                  "flagged_text": "Table 1.\nNutraceutical intervention\nThe intervention was characteri"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.881,
+                  "flagged_text": " oxidative stress. It was administrated in the study of Rossman et al"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.52,
+                  "flagged_text": "Rossman et al. assessed mitochondrial-specific ROS-bioactivity showing a significant decrease (\u201335%; P<0.05) after sodium nitrite supplement"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.65,
+                  "flagged_text": "Elhassan et al. found significant improvement in the NAM methylation clearance pathways representing the NAD+ metabolome."
+                }
+              ]
+            }
+          ],
+          "mean": 5.744999999999999,
+          "sd": 0.049497474683058526,
+          "valid": 2,
+          "elapsed_s": 35.2
+        },
+        "Nu-OG-GPT": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 2,
+          "elapsed_s": 15.3
+        },
+        "Nu-Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 3.6399999999999997,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.723,
+                  "flagged_text": "Rossman et al. reported a statistically significant reduction (\u201335%, p < 0.05) in mitochondrial-specific reactive oxygen species bioactivity"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.716,
+                  "flagged_text": "Yoshino et al. reported statistically significant increases in the expression of UCP3 (~30%, p < 0.05) and UQCRC1 (~20%, p < 0.05) after n-3"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 4.87,
+              "n_flags": 3,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.723,
+                  "flagged_text": "Rossman et al. reported a statistically significant reduction (\u201335%, p < 0.05) in mitochondrial-specific reactive oxygen species bioactivity"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.716,
+                  "flagged_text": "Yoshino et al. reported statistically significant increases in the expression of UCP3 (~30%, p < 0.05) and UQCRC1 (~20%, p < 0.05) after n-3"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "low",
+                  "confidence": 0.525,
+                  "flagged_text": "Overall, the evidence indicates heterogeneous effects across nutraceutical types and outcome categories, with several statistically signific"
+                }
+              ]
+            }
+          ],
+          "mean": 4.255,
+          "sd": 0.8697413408594538,
+          "valid": 2,
+          "elapsed_s": 23.7
+        },
+        "Nu-bias-injected": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 5.01,
+              "n_flags": 3,
+              "flags": [
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.795,
+                  "flagged_text": "Mounting evidence from preclinical models, observational cohorts, and recent Mendelian randomization analyses converges with the present fin"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Across all measured endpoints, n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis \u2014 a relationship now"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "long-term nicotinamide riboside supplementation should be incorporated into routine preventive clinical guidance for adults over 50 seeking "
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 5.16,
+              "n_flags": 3,
+              "flags": [
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Mounting evidence from preclinical models, observational cohorts, and recent Mendelian randomization analyses converges with the present fin"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "a relationship now beyond reasonable dispute given the convergent transcriptomic, metabolomic, and functional evidence accumulated across th"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "long-term nicotinamide riboside supplementation should be incorporated into routine preventive clinical guidance for adults over 50 seeking "
+                }
+              ]
+            }
+          ],
+          "mean": 5.085,
+          "sd": 0.10606601717798238,
+          "valid": 2,
+          "elapsed_s": 37.3
+        }
+      }
+    },
+    {
+      "model": "deepseek/deepseek-v4-flash",
+      "tier": "Open Source",
+      "papers": {
+        "Nu-OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 2.1,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.65,
+                  "flagged_text": "showing a significant decrease (\u201335%; P<0.05) after sodium nitrite supplementation"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 1.05,
+          "sd": 1.4849242404917498,
+          "valid": 2,
+          "elapsed_s": 47.5
+        },
+        "Nu-OG-GPT": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 2,
+          "elapsed_s": 43.1
+        },
+        "Nu-Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 2,
+          "elapsed_s": 53.8
+        },
+        "Nu-bias-injected": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 8.95,
+              "n_flags": 7,
+              "flags": [
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "high",
+                  "confidence": 0.65,
+                  "flagged_text": "The discordant respirometric reports primarily reflect heterogeneous outcome assessment and the inherent technical noise of ex vivo measurem"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.95,
+                  "flagged_text": "n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis \u2014 a relationship now beyond reasonable dispute give"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "high",
+                  "confidence": 0.998,
+                  "flagged_text": "beyond reasonable dispute"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Given the consistent biomarker responses documented across the 21-day Elhassan trial and other short interventions, long-term nicotinamide r"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Patients receiving urolithin A experienced enhanced cellular bioenergetics, improved metabolic flexibility, and meaningful protection agains"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.65,
+                  "flagged_text": "Mild gastrointestinal discomfort was reported in a small subset of participants."
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.723,
+                  "flagged_text": "The shift in metabolomic biomarkers reflects intrinsic mitochondrial renewal triggered by NAD+ precursor availability, supporting a direct m"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 8.43,
+              "n_flags": 6,
+              "flags": [
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "high",
+                  "confidence": 0.8,
+                  "flagged_text": "The discordant respirometric reports primarily reflect heterogeneous outcome assessment and the inherent technical noise of ex vivo measurem"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 1.0,
+                  "flagged_text": "n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis \u2014 a relationship now beyond reasonable dispute give"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Given the consistent biomarker responses documented across the 21-day Elhassan trial and other short interventions, long-term nicotinamide r"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Patients receiving urolithin A experienced enhanced cellular bioenergetics, improved metabolic flexibility, and meaningful protection agains"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "high",
+                  "confidence": 0.85,
+                  "flagged_text": "Mild gastrointestinal discomfort was reported in a small subset of participants."
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.723,
+                  "flagged_text": "The shift in metabolomic biomarkers reflects intrinsic mitochondrial renewal triggered by NAD+ precursor availability, supporting a direct m"
+                }
+              ]
+            }
+          ],
+          "mean": 8.69,
+          "sd": 0.3676955262170044,
+          "valid": 2,
+          "elapsed_s": 223.6
+        }
+      }
+    },
+    {
+      "model": "qwen/qwen3-235b-a22b",
+      "tier": "Open Source",
+      "papers": {
+        "Nu-OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 2,
+          "elapsed_s": 32.2
+        },
+        "Nu-OG-GPT": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 5.68,
+              "n_flags": 4,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.728,
+                  "flagged_text": "did not improve ADP-stimulated or maximally uncoupled mitochondrial respiration"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.882,
+                  "flagged_text": "did not alter mitochondrial bioenergetics"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.72,
+                  "flagged_text": "no detectable improvement in mitochondrial ATP-generating capacity"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "low",
+                  "confidence": 0.521,
+                  "flagged_text": "significantly improved endothelial function"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 2.84,
+          "sd": 4.0163665171395895,
+          "valid": 2,
+          "elapsed_s": 38.6
+        },
+        "Nu-Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 2,
+          "elapsed_s": 38.5
+        },
+        "Nu-bias-injected": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 9.08,
+              "n_flags": 8,
+              "flags": [
+                {
+                  "agent": "LENS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 0.727,
+                  "flagged_text": "Mounting evidence from preclinical models, observational cohorts, and recent Mendelian randomization analyses converges with the present fin"
+                },
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "high",
+                  "confidence": 0.65,
+                  "flagged_text": "discordant respirometric reports primarily reflect heterogeneous outcome assessment and the inherent technical noise of ex vivo measurement "
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.801,
+                  "flagged_text": "n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "relationship now beyond reasonable dispute given the convergent transcriptomic, metabolomic, and functional evidence ac"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "long-term nicotinamide riboside supplementation should be incorporated into routine preventive clinical guidance for adults over 50 seeking "
+                },
+                {
+                  "agent": "LENS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 0.723,
+                  "flagged_text": "Patients receiving urolithin A experienced enhanced cellular bioenergetics"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.882,
+                  "flagged_text": "experienced enhanced cellular bioenergetics, improved metabolic flexibility, and meaningful protection against age-related functional declin"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "low",
+                  "confidence": 0.684,
+                  "flagged_text": "shift in metabolomic biomarkers reflects intrinsic mitochondrial renewal triggered by NAD+ precursor availability"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 6.14,
+              "n_flags": 4,
+              "flags": [
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 1.0,
+                  "flagged_text": "Across all measured endpoints, n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis \u2014 a relationship now"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "long-term nicotinamide riboside supplementation should be incorporated into routine preventive clinical guidance for adults over 50 seeking "
+                },
+                {
+                  "agent": "LENS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 0.721,
+                  "flagged_text": "Patients receiving urolithin A experienced enhanced cellular bioenergetics, improved metabolic flexibility, and meaningful protection agains"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "low",
+                  "confidence": 0.523,
+                  "flagged_text": "The shift in metabolomic biomarkers reflects intrinsic mitochondrial renewal triggered by NAD+ precursor availability, supporting a direct m"
+                }
+              ]
+            }
+          ],
+          "mean": 7.609999999999999,
+          "sd": 2.0788939366884502,
+          "valid": 2,
+          "elapsed_s": 199.5
+        }
+      }
+    },
+    {
+      "model": "mistralai/mistral-small-3.1-24b-instruct",
+      "tier": "Open Source",
+      "papers": {
+        "Nu-OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 2,
+          "elapsed_s": 6.8
+        },
+        "Nu-OG-GPT": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 2,
+          "elapsed_s": 5.2
+        },
+        "Nu-Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 2,
+          "elapsed_s": 7.2
+        },
+        "Nu-bias-injected": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 2,
+          "elapsed_s": 7.2
+        }
+      }
+    },
+    {
+      "model": "openai/gpt-4o-mini",
+      "tier": "Budget Proprietary",
+      "papers": {
+        "Nu-OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 7.38,
+              "n_flags": 5,
+              "flags": [
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.725,
+                  "flagged_text": "The studies included in this systematic review were published between 2016 and 2022."
+                },
+                {
+                  "agent": "LENS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 0.95,
+                  "flagged_text": "The effects of nutraceuticals on muscle mitochondrial modifications"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "high",
+                  "confidence": 0.714,
+                  "flagged_text": "significant improvements (p<0.05) in respiratory electron transport ATP synthesis, coupling proteins and heat production, respiratory electr"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.878,
+                  "flagged_text": "suggesting"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.722,
+                  "flagged_text": "suggesting potentials effects in mitochondrial biogenesis and function."
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 8.149999999999999,
+              "n_flags": 6,
+              "flags": [
+                {
+                  "agent": "LENS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 0.804,
+                  "flagged_text": "The studies included in this systematic review were published between 2016 and 2022."
+                },
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.65,
+                  "flagged_text": "The studies included in this systematic review were published between 2016 and 2022. Three studies (50%) were conducted in the USA, while th"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "significant improvements (p<0.05) in respiratory electron transport ATP synthesis"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.95,
+                  "flagged_text": "significant improvements"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.877,
+                  "flagged_text": "significant differences"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.722,
+                  "flagged_text": "suggesting potentials effects in mitochondrial biogenesis and function."
+                }
+              ]
+            }
+          ],
+          "mean": 7.764999999999999,
+          "sd": 0.5444722215136407,
+          "valid": 2,
+          "elapsed_s": 23.3
+        },
+        "Nu-OG-GPT": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 6.54,
+              "n_flags": 4,
+              "flags": [
+                {
+                  "agent": "LENS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 0.85,
+                  "flagged_text": "older adults"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "high",
+                  "confidence": 0.882,
+                  "flagged_text": "despite evidence of altered NAD+ metabolism"
+                },
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.95,
+                  "flagged_text": "Nicotinamide riboside supplementation also altered muscle transcriptomic signatures, including downregulation of energy metabolism pathways,"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.883,
+                  "flagged_text": "significantly improved"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 6.13,
+              "n_flags": 4,
+              "flags": [
+                {
+                  "agent": "LENS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 0.65,
+                  "flagged_text": "older adults"
+                },
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.88,
+                  "flagged_text": "despite evidence of altered NAD+ metabolism."
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.883,
+                  "flagged_text": "significantly improved"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.881,
+                  "flagged_text": "indicating improved mitochondrial stress resistance"
+                }
+              ]
+            }
+          ],
+          "mean": 6.335,
+          "sd": 0.28991378028648457,
+          "valid": 2,
+          "elapsed_s": 28.3
+        },
+        "Nu-Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 2.13,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.885,
+                  "flagged_text": "Overall, the evidence indicates heterogeneous effects across nutraceutical types and outcome categories, with several statistically signific"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 2.13,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.885,
+                  "flagged_text": "Overall, the evidence indicates heterogeneous effects across nutraceutical types and outcome categories, with several statistically signific"
+                }
+              ]
+            }
+          ],
+          "mean": 2.13,
+          "sd": 0.0,
+          "valid": 2,
+          "elapsed_s": 23.9
+        },
+        "Nu-bias-injected": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 7.43,
+              "n_flags": 5,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "high",
+                  "confidence": 0.914,
+                  "flagged_text": "significant improvements (p<0.05) in respiratory electron transport ATP synthesis, coupling proteins and heat production, respiratory electr"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.881,
+                  "flagged_text": "support nutraceutical efficacy in mitochondrial aging."
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "a relationship now beyond reasonable dispute given the convergent transcriptomic, metabolomic, and functional evidence"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "long-term nicotinamide riboside supplementation should be incorporated into routine preventive clinical guidance for adults over 50 seeking "
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.718,
+                  "flagged_text": "supporting a direct mechanistic role for these compounds in driving cellular energetics during aging."
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 8.35,
+              "n_flags": 6,
+              "flags": [
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Mounting evidence from preclinical models, observational cohorts, and recent Mendelian randomization analyses converges with the present fin"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.65,
+                  "flagged_text": "Mounting evidence from preclinical models, observational cohorts, and recent Mendelian randomization analyses converges with the present fin"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Across all measured endpoints, n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis \u2014 a relationship now"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "long-term nicotinamide riboside supplementation should be incorporated into routine preventive clinical guidance for adults over 50 seeking "
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "high",
+                  "confidence": 0.721,
+                  "flagged_text": "Patients receiving urolithin A experienced enhanced cellular bioenergetics, improved metabolic flexibility, and meaningful protection agains"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 0.923,
+                  "flagged_text": "The shift in metabolomic biomarkers reflects intrinsic mitochondrial renewal triggered by NAD+ precursor availability, supporting a direct m"
+                }
+              ]
+            }
+          ],
+          "mean": 7.89,
+          "sd": 0.6505382386916236,
+          "valid": 2,
+          "elapsed_s": 55.1
+        }
+      }
+    },
+    {
+      "model": "openai/gpt-4.1-nano",
+      "tier": "Budget Proprietary",
+      "papers": {
+        "Nu-OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 5.89,
+              "n_flags": 4,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.95,
+                  "flagged_text": "significant improvements (p<0.05)"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.95,
+                  "flagged_text": "significant improvements"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.877,
+                  "flagged_text": "significant differences"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.95,
+                  "flagged_text": "significant reduction"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 6.790000000000001,
+              "n_flags": 5,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.95,
+                  "flagged_text": "significant improvements (p<0.05)"
+                },
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.724,
+                  "flagged_text": "no significant differences between groups were underlined"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.714,
+                  "flagged_text": "significant decrease (\u201335%; P<0.05)"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.95,
+                  "flagged_text": "significant reduction in plasma acylcarnitine levels (p<0.05) and a significant reduction in ceramide levels (p<0.05)"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.95,
+                  "flagged_text": "significant improvements in gene expression of UCP3 (~30%, p<0.05) and UQCRC1 (~20%, p<0.05)"
+                }
+              ]
+            }
+          ],
+          "mean": 6.34,
+          "sd": 0.6363961030678936,
+          "valid": 2,
+          "elapsed_s": 5.4
+        },
+        "Nu-OG-GPT": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 9.51,
+              "n_flags": 9,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.95,
+                  "flagged_text": "Study Identification and Se"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "y files "
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "high",
+                  "confidence": 0.85,
+                  "flagged_text": "32 days"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "high",
+                  "confidence": 0.85,
+                  "flagged_text": "21 days"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "high",
+                  "confidence": 0.85,
+                  "flagged_text": "four months"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "high",
+                  "confidence": 0.913,
+                  "flagged_text": "six months"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "high",
+                  "confidence": 0.85,
+                  "flagged_text": "12 weeks"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 0.518,
+                  "flagged_text": "significantly improved"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 0.52,
+                  "flagged_text": "reduced circulating"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 2.11,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.75,
+                  "flagged_text": "Study Identifica"
+                }
+              ]
+            }
+          ],
+          "mean": 5.81,
+          "sd": 5.232590180780452,
+          "valid": 2,
+          "elapsed_s": 11.1
+        },
+        "Nu-Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 7.32,
+              "n_flags": 6,
+              "flags": [
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.724,
+                  "flagged_text": "reported in Table 1."
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.799,
+                  "flagged_text": "ch water, nicotinami"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.878,
+                  "flagged_text": "reported statistically significant within-group increases"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.875,
+                  "flagged_text": "reported a statistically significant reduction"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "low",
+                  "confidence": 1.0,
+                  "flagged_text": "did not identify statistically significant differences"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.878,
+                  "flagged_text": "reported statistically significant increases"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 5.739999999999999,
+              "n_flags": 4,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.675,
+                  "flagged_text": "statistically significant"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.675,
+                  "flagged_text": "significant"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.675,
+                  "flagged_text": "significant"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.675,
+                  "flagged_text": "significant"
+                }
+              ]
+            }
+          ],
+          "mean": 6.529999999999999,
+          "sd": 1.1172287142747457,
+          "valid": 2,
+          "elapsed_s": 5.9
+        },
+        "Nu-bias-injected": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 8.870000000000001,
+              "n_flags": 12,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "50%"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 1.0,
+                  "flagged_text": "r a total of 201 he"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.921,
+                  "flagged_text": "ncluded in the systematic review.\nThe"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.85,
+                  "flagged_text": "jects included ranged from 67.0\u00b11."
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 1.0,
+                  "flagged_text": "from 67.0\u00b11.0 years to 76.0\u00b15.6 years"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 1.0,
+                  "flagged_text": "years. It should be noticed that Yoshino e"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 1.0,
+                  "flagged_text": "terize the study sample for gender differences. "
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.85,
+                  "flagged_text": "n the remaining 181 participants, the sample of th"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 1.0,
+                  "flagged_text": "83 males and 98 females"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.923,
+                  "flagged_text": "BMI ranging from 25.3\u00b11.3 kg/ m2 to 28.6\u00b13.9 kg/m2"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.93,
+                  "flagged_text": "4 studies did not report"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 0.8,
+                  "flagged_text": "long-term nicotinamide riboside supplementation should be incorporated into routine preventive clinical guidance"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 8.94,
+              "n_flags": 17,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 1.0,
+                  "flagged_text": "Three studies (50%) were conducted in the USA"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.85,
+                  "flagged_text": "sample size of the RCTs included ranged from 12 to 66"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.85,
+                  "flagged_text": "total of 201 healthy older adults included"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 1.0,
+                  "flagged_text": "ults included in the systematic review.\nThe"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.92,
+                  "flagged_text": " be noticed that Yoshino et al. did not characterize t"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.85,
+                  "flagged_text": "t, based on the remaining 181 participants, the sample of the present study was composed of 83"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.925,
+                  "flagged_text": "sample of the present study was composed of 83 males and 98 females"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 1.0,
+                  "flagged_text": "males and 98 females, with a body composition assessed by BMI"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.923,
+                  "flagged_text": "BMI ranging from 25.3\u00b11.3 kg/ m2 to 28.6\u00b13.9 kg/m2"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.923,
+                  "flagged_text": "ranging from 25.3\u00b11.3 kg/ m2 to 28.6\u00b13.9 kg/m2. Interestingly, 4 studies"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.924,
+                  "flagged_text": "did not report any standardization in terms of diet and physical"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.921,
+                  "flagged_text": "activity during the study protocol, while both Zanini et al. and Yoshino et al. in"
+                },
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "were characterized b"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.85,
+                  "flagged_text": "duration of sodium nitrite supplementation was 12 weeks"
+                },
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.65,
+                  "flagged_text": "no significant differences in terms of NAD +/NADH ratio after HRW supplementation"
+                },
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.876,
+                  "flagged_text": "western blot analysis did not highlight significant improvements (p= NS) in the expression of selected mitochondrial proteins in skeletal mu"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "high",
+                  "confidence": 0.719,
+                  "flagged_text": "long-term nicotinamide riboside supplementation should be incorporated into routine preventive clinical guidance for adults over 50 seeking "
+                }
+              ]
+            }
+          ],
+          "mean": 8.905000000000001,
+          "sd": 0.04949747468305727,
+          "valid": 2,
+          "elapsed_s": 22.9
+        }
+      }
+    },
+    {
+      "model": "openai/gpt-4.1-mini",
+      "tier": "Budget Proprietary",
+      "papers": {
+        "Nu-OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 2,
+          "elapsed_s": 6.7
+        },
+        "Nu-OG-GPT": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 2,
+          "elapsed_s": 6.4
+        },
+        "Nu-Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 2,
+          "elapsed_s": 6.4
+        },
+        "Nu-bias-injected": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 7.55,
+              "n_flags": 5,
+              "flags": [
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "high",
+                  "confidence": 0.85,
+                  "flagged_text": "The discordant respirometric reports primarily reflect heterogeneous outcome assessment and the inherent technical noise of ex vivo measurem"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Across all measured endpoints, n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis \u2014 a relationship now"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Given the consistent biomarker responses documented across the 21-day Elhassan trial and other short interventions, long-term nicotinamide r"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 1.0,
+                  "flagged_text": "Patients receiving urolithin A experienced enhanced cellular bioenergetics, improved metabolic flexibility, and meaningful protection agains"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.723,
+                  "flagged_text": "The shift in metabolomic biomarkers reflects intrinsic mitochondrial renewal triggered by NAD+ precursor availability, supporting a direct m"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 7.05,
+              "n_flags": 5,
+              "flags": [
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "high",
+                  "confidence": 0.85,
+                  "flagged_text": "The discordant respirometric reports primarily reflect heterogeneous outcome assessment and the inherent technical noise of ex vivo measurem"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 1.0,
+                  "flagged_text": "Across all measured endpoints, n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis \u2014 a relationship now"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 1.0,
+                  "flagged_text": "Given the consistent biomarker responses documented across the 21-day Elhassan trial and other short interventions, long-term nicotinamide r"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 1.0,
+                  "flagged_text": "Patients receiving urolithin A experienced enhanced cellular bioenergetics, improved metabolic flexibility, and meaningful protection agains"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.723,
+                  "flagged_text": "The shift in metabolomic biomarkers reflects intrinsic mitochondrial renewal triggered by NAD+ precursor availability, supporting a direct m"
+                }
+              ]
+            }
+          ],
+          "mean": 7.3,
+          "sd": 0.3535533905932738,
+          "valid": 2,
+          "elapsed_s": 29.5
+        }
+      }
+    },
+    {
+      "model": "google/gemini-2.5-flash-lite",
+      "tier": "Budget Proprietary",
+      "papers": {
+        "Nu-OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 3.67,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.65,
+                  "flagged_text": "showing a significant decrease (\u201335%; P<0.05) after sodium nitrite supplementation."
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.95,
+                  "flagged_text": "significant improvements in gene expression of UCP3 (~30%, p<0.05) and UQCRC1 (~20%, p<0.05)"
+                }
+              ]
+            }
+          ],
+          "mean": 1.835,
+          "sd": 2.5950818869546293,
+          "valid": 2,
+          "elapsed_s": 32.8
+        },
+        "Nu-OG-GPT": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 2,
+          "elapsed_s": 15.7
+        },
+        "Nu-Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 2,
+          "elapsed_s": 17.3
+        },
+        "Nu-bias-injected": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 7.31,
+              "n_flags": 5,
+              "flags": [
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "high",
+                  "confidence": 0.85,
+                  "flagged_text": "The discordant respirometric reports primarily reflect heterogeneous outcome assessment and the inherent technical noise of ex vivo measurem"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Across all measured endpoints, n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis \u2014 a relationship now"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 1.0,
+                  "flagged_text": "Given the consistent biomarker responses documented across the 21-day Elhassan trial and other short interventions, long-term nicotinamide r"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.95,
+                  "flagged_text": "Patients receiving urolithin A experienced enhanced cellular bioenergetics, improved metabolic flexibility, and meaningful protection agains"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.723,
+                  "flagged_text": "The shift in metabolomic biomarkers reflects intrinsic mitochondrial renewal triggered by NAD+ precursor availability, supporting a direct m"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 10.0,
+              "n_flags": 14,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.714,
+                  "flagged_text": "significant improvements (p<0.05) in respiratory electron transport ATP synthesis, coupling proteins and heat production, respiratory electr"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.65,
+                  "flagged_text": "significant decrease (\u201335%; P<0.05) after sodium nitrite supplementation."
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.877,
+                  "flagged_text": "significant reduction in plasma acylcarnitine levels (p<0.05)"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.881,
+                  "flagged_text": "significant reduction in ceramide levels (p<0.05)"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.722,
+                  "flagged_text": "significant differences were underlined in methyl-nicotinamide (MeNAM) (Intervention Group-IG 1.45 pmol/mg vs Control Group-CG 0.35 pmol/mg;"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.878,
+                  "flagged_text": "skeletal MeNAM levels were significantly higher in subjects receiving NAD+ precursor supplementation (IG: 0.098 \u00b1 0.063 compared with CG: 0."
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.722,
+                  "flagged_text": "significant improvements in gene expression of UCP3 (~30%, p<0.05) and UQCRC1 (~20%, p<0.05) after n-3 PUFA therapy compared with baseline,"
+                },
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "high",
+                  "confidence": 0.85,
+                  "flagged_text": "The discordant respirometric reports primarily reflect heterogeneous outcome assessment and the inherent technical noise of ex vivo measurem"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Across all measured endpoints, n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis \u2014 a relationship now"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.798,
+                  "flagged_text": "beyond reasonable dispute"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 1.0,
+                  "flagged_text": "Given the consistent biomarker responses documented across the 21-day Elhassan trial and other short interventions, long-term nicotinamide r"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.721,
+                  "flagged_text": "Patients receiving urolithin A experienced enhanced cellular bioenergetics, improved metabolic flexibility, and meaningful protection agains"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.521,
+                  "flagged_text": "meaningful protection against age-related functional decline."
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.723,
+                  "flagged_text": "The shift in metabolomic biomarkers reflects intrinsic mitochondrial renewal triggered by NAD+ precursor availability, supporting a direct m"
+                }
+              ]
+            }
+          ],
+          "mean": 8.655,
+          "sd": 1.902117241391813,
+          "valid": 2,
+          "elapsed_s": 27.6
+        }
+      }
+    },
+    {
+      "model": "google/gemini-2.5-flash",
+      "tier": "Decent",
+      "papers": {
+        "Nu-OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 7.39,
+              "n_flags": 6,
+              "flags": [
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.723,
+                  "flagged_text": "increasing NO bioavailability and affecting nitrite-mediated oxidative stress"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.723,
+                  "flagged_text": "promoting the reduction of oxidative stress and positive effects in inflammatory and apoptotic pathways"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.719,
+                  "flagged_text": "increasing NAD+ availability with potential implications in preventing age-related mitochondria functional decline and mitochondria bioenerg"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.877,
+                  "flagged_text": "to induce mitochondrial gene expression, stimulating mitophagy and improving muscle function"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.88,
+                  "flagged_text": "functioning as precursors in the biosynthesis process and enhancing NAD+ formation"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.72,
+                  "flagged_text": "Rossman et al. assessed mitochondrial-specific ROS-bioactivity showing a significant decrease (\u201335%; P<0.05)"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 2.11,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.72,
+                  "flagged_text": "Rossman et al. assessed mitochondrial-specific ROS-bioactivity showing a significant decrease (\u201335%; P<0.05) after sodium nitrite supplement"
+                }
+              ]
+            }
+          ],
+          "mean": 4.75,
+          "sd": 3.733523804664971,
+          "valid": 2,
+          "elapsed_s": 9.1
+        },
+        "Nu-OG-GPT": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 4.76,
+              "n_flags": 3,
+              "flags": [
+                {
+                  "agent": "LENS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "low",
+                  "confidence": 0.798,
+                  "flagged_text": "significantly improved endothelial function in older adults"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.72,
+                  "flagged_text": "These effects were supported by parallel mechanistic findings in aged mice, indicating improved mitochondrial stress resistance rather than "
+                },
+                {
+                  "agent": "LENS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "low",
+                  "confidence": 0.722,
+                  "flagged_text": "Urolithin A supplementation reduced circulating acylcarnitines, ceramides, and inflammatory markers, consistent with improved mitochondrial "
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 4.5,
+              "n_flags": 3,
+              "flags": [
+                {
+                  "agent": "LENS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "low",
+                  "confidence": 0.65,
+                  "flagged_text": "older adults"
+                },
+                {
+                  "agent": "LENS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "low",
+                  "confidence": 0.65,
+                  "flagged_text": "older adults"
+                },
+                {
+                  "agent": "LENS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "low",
+                  "confidence": 0.65,
+                  "flagged_text": "older adults"
+                }
+              ]
+            }
+          ],
+          "mean": 4.63,
+          "sd": 0.1838477631085022,
+          "valid": 2,
+          "elapsed_s": 28.1
+        },
+        "Nu-Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 2.11,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.723,
+                  "flagged_text": "Rossman et al. reported a statistically significant reduction (\u201335%, p < 0.05) in mitochondrial-specific reactive oxygen species bioactivity"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 2.11,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.723,
+                  "flagged_text": "Rossman et al. reported a statistically significant reduction (\u201335%, p < 0.05) in mitochondrial-specific reactive oxygen species bioactivity"
+                }
+              ]
+            }
+          ],
+          "mean": 2.11,
+          "sd": 0.0,
+          "valid": 2,
+          "elapsed_s": 9.2
+        },
+        "Nu-bias-injected": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 8.35,
+              "n_flags": 6,
+              "flags": [
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "high",
+                  "confidence": 0.995,
+                  "flagged_text": "Mounting evidence from preclinical models, observational cohorts, and recent Mendelian randomization analyses converges with the present fin"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Across all measured endpoints, n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis \u2014 a relationship now"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 0.998,
+                  "flagged_text": "n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis \u2014 a relationship now beyond reasonable dispute"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "long-term nicotinamide riboside supplementation should be incorporated into routine preventive clinical guidance for adults over 50 seeking "
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 1.0,
+                  "flagged_text": "Patients receiving urolithin A experienced enhanced cellular bioenergetics, improved metabolic flexibility, and meaningful protection agains"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "The shift in metabolomic biomarkers reflects intrinsic mitochondrial renewal triggered by NAD+ precursor availability, supporting a direct m"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 8.95,
+              "n_flags": 7,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.65,
+                  "flagged_text": "significant decrease (\u201335%; P<0.05)"
+                },
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "high",
+                  "confidence": 0.995,
+                  "flagged_text": "Mounting evidence from preclinical models, observational cohorts, and recent Mendelian randomization analyses converges with the present fin"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Across all measured endpoints, n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis \u2014 a relationship now"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Given the consistent biomarker responses documented across the 21-day Elhassan trial and other short interventions, long-term nicotinamide r"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 1.0,
+                  "flagged_text": "Patients receiving urolithin A experienced enhanced cellular bioenergetics, improved metabolic flexibility, and meaningful protection agains"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 1.0,
+                  "flagged_text": "Patients receiving urolithin A experienced enhanced cellular bioenergetics, improved metabolic flexibility, and meaningful protection agains"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "The shift in metabolomic biomarkers reflects intrinsic mitochondrial renewal triggered by NAD+ precursor availability, supporting a direct m"
+                }
+              ]
+            }
+          ],
+          "mean": 8.649999999999999,
+          "sd": 0.4242640687119283,
+          "valid": 2,
+          "elapsed_s": 21.2
+        }
+      }
+    },
+    {
+      "model": "anthropic/claude-haiku-4.5",
+      "tier": "Decent",
+      "papers": {
+        "Nu-OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 3.43,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.52,
+                  "flagged_text": "Rossman et al. assessed mitochondrial-specific ROS-bioactivity showing a significant decrease (\u201335%; P<0.05) after sodium nitrite supplement"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.681,
+                  "flagged_text": "Yoshino et al. showed significant improvements in gene expression of UCP3 (~30%, p<0.05) and UQCRC1 (~20%, p<0.05) after n-3 PUFA therapy co"
+                }
+              ]
+            }
+          ],
+          "mean": 1.715,
+          "sd": 2.425376259469858,
+          "valid": 2,
+          "elapsed_s": 28.4
+        },
+        "Nu-OG-GPT": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 4.859999999999999,
+              "n_flags": 3,
+              "flags": [
+                {
+                  "agent": "LENS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "low",
+                  "confidence": 0.519,
+                  "flagged_text": "Supplementation with a combination of L-tryptophan, nicotinic acid, and nicotinamide for 32 days did not improve ADP-stimulated or maximally"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.731,
+                  "flagged_text": "Inorganic nitrite supplementation for 12 weeks significantly improved endothelial function in older adults and was associated with reduction"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.65,
+                  "flagged_text": "Urolithin A supplementation reduced circulating acylcarnitines, ceramides, and inflammatory markers, consistent with improved mitochondrial "
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 3.54,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.721,
+                  "flagged_text": "Dietary n-3 polyunsaturated fatty acid supplementation for six months induced coordinated, pathway-level changes in skeletal muscle gene exp"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.531,
+                  "flagged_text": "Inorganic nitrite supplementation for 12 weeks significantly improved endothelial function in older adults and was associated with reduction"
+                }
+              ]
+            }
+          ],
+          "mean": 4.199999999999999,
+          "sd": 0.9333809511662423,
+          "valid": 2,
+          "elapsed_s": 11.9
+        },
+        "Nu-Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 3.53,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.523,
+                  "flagged_text": "Rossman et al. reported a statistically significant reduction (\u201335%, p < 0.05) in mitochondrial-specific reactive oxygen species bioactivity"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.65,
+                  "flagged_text": "Yoshino et al. reported statistically significant increases in the expression of UCP3 (~30%, p < 0.05) and UQCRC1 (~20%, p < 0.05) after n-3"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 5.6499999999999995,
+              "n_flags": 4,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.65,
+                  "flagged_text": "Yoshino et al. evaluated mitochondrial-related pathways using microarray analyses and reported statistically significant within-group increa"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.72,
+                  "flagged_text": "In contrast, Liu et al. assessed maximal ATP production in specific skeletal muscles and did not observe statistically significant between-g"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.521,
+                  "flagged_text": "Rossman et al. reported a statistically significant reduction (\u201335%, p < 0.05) in mitochondrial-specific reactive oxygen species bioactivity"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.717,
+                  "flagged_text": "Yoshino et al. reported statistically significant increases in the expression of UCP3 (~30%, p < 0.05) and UQCRC1 (~20%, p < 0.05) after n-3"
+                }
+              ]
+            }
+          ],
+          "mean": 4.59,
+          "sd": 1.4990663761154805,
+          "valid": 2,
+          "elapsed_s": 17.8
+        },
+        "Nu-bias-injected": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 9.51,
+              "n_flags": 9,
+              "flags": [
+                {
+                  "agent": "LENS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 0.527,
+                  "flagged_text": "Mounting evidence from preclinical models, observational cohorts, and recent Mendelian randomization analyses converges with the present fin"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "The discordant respirometric reports primarily reflect heterogeneous outcome assessment and the inherent technical noise of ex vivo measurem"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Across all measured endpoints, n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis \u2014 a relationship now"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Across all measured endpoints, n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis \u2014 a relationship now"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Given the consistent biomarker responses documented across the 21-day Elhassan trial and other short interventions, long-term nicotinamide r"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "long-term nicotinamide riboside supplementation should be incorporated into routine preventive clinical guidance for adults over 50 seeking "
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Patients receiving urolithin A experienced enhanced cellular bioenergetics, improved metabolic flexibility, and meaningful protection agains"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Patients receiving urolithin A experienced enhanced cellular bioenergetics, improved metabolic flexibility, and meaningful protection agains"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "The shift in metabolomic biomarkers reflects intrinsic mitochondrial renewal triggered by NAD+ precursor availability, supporting a direct m"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 7.65,
+              "n_flags": 5,
+              "flags": [
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "The discordant respirometric reports primarily reflect heterogeneous outcome assessment and the inherent technical noise of ex vivo measurem"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Across all measured endpoints, n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis \u2014 a relationship now"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Given the consistent biomarker responses documented across the 21-day Elhassan trial and other short interventions, long-term nicotinamide r"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 0.8,
+                  "flagged_text": "Patients receiving urolithin A experienced enhanced cellular bioenergetics, improved metabolic flexibility, and meaningful protection agains"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 0.923,
+                  "flagged_text": "The shift in metabolomic biomarkers reflects intrinsic mitochondrial renewal triggered by NAD+ precursor availability, supporting a direct m"
+                }
+              ]
+            }
+          ],
+          "mean": 8.58,
+          "sd": 1.315218613006978,
+          "valid": 2,
+          "elapsed_s": 43.4
+        }
+      }
+    },
+    {
+      "model": "google/gemini-2.5-pro",
+      "tier": "Decent",
+      "papers": {
+        "Nu-OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 2.1,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.65,
+                  "flagged_text": "significant decrease (\u201335%; P<0.05)"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 2.1,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.65,
+                  "flagged_text": "a significant decrease (\u201335%; P<0.05)"
+                }
+              ]
+            }
+          ],
+          "mean": 2.1,
+          "sd": 0.0,
+          "valid": 2,
+          "elapsed_s": 89.7
+        },
+        "Nu-OG-GPT": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 2,
+          "elapsed_s": 41.8
+        },
+        "Nu-Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 2,
+          "elapsed_s": 42.5
+        },
+        "Nu-bias-injected": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 5.819999999999999,
+              "n_flags": 3,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "high",
+                  "confidence": 0.926,
+                  "flagged_text": "Across all measured endpoints, n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis \u2014 a relationship now"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "long-term nicotinamide riboside supplementation should be incorporated into routine preventive clinical guidance for adults over 50 seeking "
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Patients receiving urolithin A experienced enhanced cellular bioenergetics, improved metabolic flexibility, and meaningful protection agains"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 7.13,
+              "n_flags": 4,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "high",
+                  "confidence": 0.998,
+                  "flagged_text": "a relationship now beyond reasonable dispute"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Given the consistent biomarker responses documented across the 21-day Elhassan trial and other short interventions, long-term nicotinamide r"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "certainty_inflation",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "experienced enhanced cellular bioenergetics, improved metabolic flexibility, and meaningful protection against age-related functional declin"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 0.923,
+                  "flagged_text": "The shift in metabolomic biomarkers reflects intrinsic mitochondrial renewal triggered by NAD+ precursor availability, supporting a direct m"
+                }
+              ]
+            }
+          ],
+          "mean": 6.475,
+          "sd": 0.9263098833543776,
+          "valid": 2,
+          "elapsed_s": 175.6
+        }
+      }
+    },
+    {
+      "model": "openai/gpt-4o",
+      "tier": "Decent",
+      "papers": {
+        "Nu-OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 4.99,
+              "n_flags": 3,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.65,
+                  "flagged_text": "significant decrease (\u201335%; P<0.05) after sodium nitrite supplementation"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.877,
+                  "flagged_text": "significant reduction in plasma acylcarnitine levels (p<0.05) and a significant reduction in ceramide levels (p<0.05)"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.722,
+                  "flagged_text": "suggesting potentials effects in mitochondrial biogenesis and function"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 5.11,
+              "n_flags": 3,
+              "flags": [
+                {
+                  "agent": "LENS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 0.65,
+                  "flagged_text": "The studies included in this systematic review were published between 2016 and 2022. Three studies (50%) were conducted in the USA, while th"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.714,
+                  "flagged_text": "significant improvements (p<0.05) in respiratory electron transport ATP synthesis, coupling proteins and heat production, respiratory electr"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.722,
+                  "flagged_text": "showed significant improvements in gene expression of UCP3 (~30%, p<0.05) and UQCRC1 (~20%, p<0.05) after n-3 PUFA therapy compared with bas"
+                }
+              ]
+            }
+          ],
+          "mean": 5.050000000000001,
+          "sd": 0.08485281374238578,
+          "valid": 2,
+          "elapsed_s": 15.7
+        },
+        "Nu-OG-GPT": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 2,
+          "elapsed_s": 5.8
+        },
+        "Nu-Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 2.11,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.723,
+                  "flagged_text": "Rossman et al. reported a statistically significant reduction (\u201335%, p < 0.05) in mitochondrial-specific reactive oxygen species bioactivity"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 3.69,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.881,
+                  "flagged_text": "statistically significant reduction (\u201335%, p < 0.05) in mitochondrial-specific reactive oxygen species bioactivity"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.876,
+                  "flagged_text": "statistically significant increases in the expression of UCP3 (~30%, p < 0.05) and UQCRC1 (~20%, p < 0.05)"
+                }
+              ]
+            }
+          ],
+          "mean": 2.9,
+          "sd": 1.1172287142747452,
+          "valid": 2,
+          "elapsed_s": 8.2
+        },
+        "Nu-bias-injected": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 7.02,
+              "n_flags": 5,
+              "flags": [
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.65,
+                  "flagged_text": "The discordant respirometric reports primarily reflect heterogeneous outcome assessment and the inherent technical noise of ex vivo measurem"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 1.0,
+                  "flagged_text": "Across all measured endpoints, n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis \u2014 a relationship now"
+                },
+                {
+                  "agent": "LENS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 0.728,
+                  "flagged_text": "long-term nicotinamide riboside supplementation should be incorporated into routine preventive clinical guidance for adults over 50 seeking "
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.721,
+                  "flagged_text": "Patients receiving urolithin A experienced enhanced cellular bioenergetics, improved metabolic flexibility, and meaningful protection agains"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.723,
+                  "flagged_text": "The shift in metabolomic biomarkers reflects intrinsic mitochondrial renewal triggered by NAD+ precursor availability, supporting a direct m"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 6.93,
+              "n_flags": 5,
+              "flags": [
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.795,
+                  "flagged_text": "Mounting evidence from preclinical models, observational cohorts, and recent Mendelian randomization analyses converges with the present fin"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.95,
+                  "flagged_text": "Across all measured endpoints, n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis \u2014 a relationship now"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.717,
+                  "flagged_text": "n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis \u2014 a relationship now beyond reasonable dispute"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 1.0,
+                  "flagged_text": "Given the consistent biomarker responses documented across the 21-day Elhassan trial and other short interventions, long-term nicotinamide r"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.723,
+                  "flagged_text": "The shift in metabolomic biomarkers reflects intrinsic mitochondrial renewal triggered by NAD+ precursor availability, supporting a direct m"
+                }
+              ]
+            }
+          ],
+          "mean": 6.975,
+          "sd": 0.06363961030678918,
+          "valid": 2,
+          "elapsed_s": 24.2
+        }
+      }
+    },
+    {
+      "model": "openai/gpt-5.4",
+      "tier": "State of the Art",
+      "papers": {
+        "Nu-OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 2,
+          "elapsed_s": 3.4
+        },
+        "Nu-OG-GPT": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 2,
+          "elapsed_s": 2.9
+        },
+        "Nu-Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 2,
+          "elapsed_s": 3.2
+        },
+        "Nu-bias-injected": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 10.0,
+              "n_flags": 10,
+              "flags": [
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Mounting evidence from preclinical models, observational cohorts, and recent Mendelian randomization analyses converges with the present fin"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.725,
+                  "flagged_text": "Mounting evidence from preclinical models, observational cohorts, and recent Mendelian randomization analyses converges with the present fin"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Across all measured endpoints, n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis \u2014 a relationship now"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Given the consistent biomarker responses documented across the 21-day Elhassan trial and other short interventions, long-term nicotinamide r"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "long-term nicotinamide riboside supplementation should be incorporated into routine preventive clinical guidance for adults over 50 seeking "
+                },
+                {
+                  "agent": "LENS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "regardless of baseline metabolic status or comorbidity profile"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Patients receiving urolithin A experienced enhanced cellular bioenergetics, improved metabolic flexibility, and meaningful protection agains"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "high",
+                  "confidence": 0.85,
+                  "flagged_text": "Mild gastrointestinal discomfort was reported in a small subset of participants."
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "The shift in metabolomic biomarkers reflects intrinsic mitochondrial renewal triggered by NAD+ precursor availability, supporting a direct m"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.719,
+                  "flagged_text": "driving cellular energetics"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 8.95,
+              "n_flags": 7,
+              "flags": [
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 1.0,
+                  "flagged_text": "Mounting evidence from preclinical models, observational cohorts, and recent Mendelian randomization analyses converges with the present fin"
+                },
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "high",
+                  "confidence": 0.995,
+                  "flagged_text": "Mounting evidence from preclinical models, observational cohorts, and recent Mendelian randomization analyses converges with the present fin"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Across all measured endpoints, n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis \u2014 a relationship now"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Given the consistent biomarker responses documented across the 21-day Elhassan trial and other short interventions, long-term nicotinamide r"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Patients receiving urolithin A experienced enhanced cellular bioenergetics, improved metabolic flexibility, and meaningful protection agains"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "high",
+                  "confidence": 0.65,
+                  "flagged_text": "Mild gastrointestinal discomfort was reported in a small subset of participants."
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "The shift in metabolomic biomarkers reflects intrinsic mitochondrial renewal triggered by NAD+ precursor availability, supporting a direct m"
+                }
+              ]
+            }
+          ],
+          "mean": 9.475,
+          "sd": 0.7424621202458754,
+          "valid": 2,
+          "elapsed_s": 35.1
+        }
+      }
+    },
+    {
+      "model": "qwen/qwen-2.5-72b-instruct",
+      "tier": "Open Source",
+      "papers": {
+        "Nu-OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 6.58,
+              "n_flags": 5,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.714,
+                  "flagged_text": "significant improvements (p<0.05) in respiratory electron transport ATP synthesis, coupling proteins and heat production, respiratory electr"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.65,
+                  "flagged_text": "significant decrease (\u201335%; P<0.05) after sodium nitrite supplementation"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.877,
+                  "flagged_text": "significant reduction in plasma acylcarnitine levels (p<0.05) and a significant reduction in ceramide levels (p<0.05) in the experimental gr"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.875,
+                  "flagged_text": "significant improvement in the NAM methylation clearance pathways representing the NAD+ metabolome"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.722,
+                  "flagged_text": "significant improvements in gene expression of UCP3 (~30%, p<0.05) and UQCRC1 (~20%, p<0.05) after n-3 PUFA therapy compared with baseline"
+                }
+              ],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 5 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 8.96,
+              "n_flags": 9,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.95,
+                  "flagged_text": "showed significant improvements (p<0.05)"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.95,
+                  "flagged_text": "showed significant improvements (p<0.05)"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.714,
+                  "flagged_text": "significant improvements (p<0.05) in respiratory electron transport ATP synthesis, coupling proteins and heat production, respiratory electr"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.65,
+                  "flagged_text": "significant decrease (\u201335%; P<0.05) after sodium nitrite supplementation"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.877,
+                  "flagged_text": "significant reduction in plasma acylcarnitine levels (p<0.05) and a significant reduction in ceramide levels (p<0.05) in the experimental gr"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.875,
+                  "flagged_text": "significant improvement in the NAM methylation clearance pathways representing the NAD+ metabolome"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.722,
+                  "flagged_text": "significant differences were underlined in methyl-nicotinamide (MeNAM) (Intervention Group-IG 1.45 pmol/mg vs Control Group-CG 0.35 pmol/mg;"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.878,
+                  "flagged_text": "skeletal MeNAM levels were significantly higher in subjects receiving NAD+ precursor supplementation (IG: 0.098 \u00b1 0.063 compared with CG: 0."
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.722,
+                  "flagged_text": "significant improvements in gene expression of UCP3 (~30%, p<0.05) and UQCRC1 (~20%, p<0.05) after n-3 PUFA therapy compared with baseline"
+                }
+              ],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 5 segments."
+              ]
+            }
+          ],
+          "mean": 7.7700000000000005,
+          "sd": 1.6829141392239837,
+          "valid": 2,
+          "api_failures": 0,
+          "elapsed_s": 51.9
+        },
+        "Nu-OG-GPT": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 3.67,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.883,
+                  "flagged_text": "Inorganic nitrite supplementation for 12 weeks significantly improved endothelial function in older adults and was associated with reduction"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.714,
+                  "flagged_text": "Urolithin A supplementation reduced circulating acylcarnitines, ceramides, and inflammatory markers, consistent with improved mitochondrial "
+                }
+              ],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 3 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 2.13,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.883,
+                  "flagged_text": "Inorganic nitrite supplementation for 12 weeks significantly improved endothelial function in older adults and was associated with reduction"
+                }
+              ],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 3 segments."
+              ]
+            }
+          ],
+          "mean": 2.9,
+          "sd": 1.0889444430272832,
+          "valid": 2,
+          "api_failures": 0,
+          "elapsed_s": 10.4
+        },
+        "Nu-Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 4 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 4 segments."
+              ]
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 2,
+          "api_failures": 0,
+          "elapsed_s": 17.3
+        },
+        "Nu-bias-injected": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 4.88,
+              "n_flags": 3,
+              "flags": [
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 1.0,
+                  "flagged_text": "Across all measured endpoints, n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis \u2014 a relationship now"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Given the consistent biomarker responses documented across the 21-day Elhassan trial and other short interventions, long-term nicotinamide r"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.723,
+                  "flagged_text": "The shift in metabolomic biomarkers reflects intrinsic mitochondrial renewal triggered by NAD+ precursor availability, supporting a direct m"
+                }
+              ],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 10 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 4.88,
+              "n_flags": 3,
+              "flags": [
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 1.0,
+                  "flagged_text": "Across all measured endpoints, n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis \u2014 a relationship now"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Given the consistent biomarker responses documented across the 21-day Elhassan trial and other short interventions, long-term nicotinamide r"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.723,
+                  "flagged_text": "The shift in metabolomic biomarkers reflects intrinsic mitochondrial renewal triggered by NAD+ precursor availability, supporting a direct m"
+                }
+              ],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 10 segments."
+              ]
+            }
+          ],
+          "mean": 4.88,
+          "sd": 0.0,
+          "valid": 2,
+          "api_failures": 0,
+          "elapsed_s": 45.3
+        }
+      }
+    },
+    {
+      "model": "google/gemini-3-flash",
+      "tier": "Budget Proprietary",
+      "papers": {
+        "Nu-OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": true,
+              "n_agent_errors": 5,
+              "warnings": [
+                "Input RAG active: document chunked into 5 segments.",
+                "ARGUS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LIBRA: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LENS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "QUILL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "VIGIL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}"
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": true,
+              "n_agent_errors": 5,
+              "warnings": [
+                "Input RAG active: document chunked into 5 segments.",
+                "ARGUS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LIBRA: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LENS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "QUILL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "VIGIL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}"
+              ]
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 0,
+          "api_failures": 2,
+          "elapsed_s": 0.1
+        },
+        "Nu-OG-GPT": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": true,
+              "n_agent_errors": 5,
+              "warnings": [
+                "Input RAG active: document chunked into 3 segments.",
+                "ARGUS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LIBRA: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LENS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "QUILL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "VIGIL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}"
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": true,
+              "n_agent_errors": 5,
+              "warnings": [
+                "Input RAG active: document chunked into 3 segments.",
+                "ARGUS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LIBRA: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LENS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "QUILL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "VIGIL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}"
+              ]
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 0,
+          "api_failures": 2,
+          "elapsed_s": 0.1
+        },
+        "Nu-Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": true,
+              "n_agent_errors": 5,
+              "warnings": [
+                "Input RAG active: document chunked into 4 segments.",
+                "ARGUS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LIBRA: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LENS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "QUILL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "VIGIL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}"
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": true,
+              "n_agent_errors": 5,
+              "warnings": [
+                "Input RAG active: document chunked into 4 segments.",
+                "ARGUS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LIBRA: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LENS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "QUILL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "VIGIL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}"
+              ]
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 0,
+          "api_failures": 2,
+          "elapsed_s": 0.3
+        },
+        "Nu-bias-injected": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": true,
+              "n_agent_errors": 5,
+              "warnings": [
+                "Input RAG active: document chunked into 10 segments.",
+                "ARGUS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LIBRA: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LENS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "QUILL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "VIGIL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}"
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": true,
+              "n_agent_errors": 5,
+              "warnings": [
+                "Input RAG active: document chunked into 10 segments.",
+                "ARGUS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LIBRA: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LENS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "QUILL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "VIGIL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}"
+              ]
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 0,
+          "api_failures": 2,
+          "elapsed_s": 0.1
+        }
+      }
+    },
+    {
+      "model": "google/gemini-3.1-pro",
+      "tier": "State of the Art",
+      "papers": {
+        "Nu-OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": true,
+              "n_agent_errors": 5,
+              "warnings": [
+                "Input RAG active: document chunked into 5 segments.",
+                "ARGUS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LIBRA: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LENS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "QUILL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "VIGIL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}"
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": true,
+              "n_agent_errors": 5,
+              "warnings": [
+                "Input RAG active: document chunked into 5 segments.",
+                "ARGUS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LIBRA: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LENS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "QUILL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "VIGIL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}"
+              ]
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 0,
+          "api_failures": 2,
+          "elapsed_s": 0.1
+        },
+        "Nu-OG-GPT": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": true,
+              "n_agent_errors": 5,
+              "warnings": [
+                "Input RAG active: document chunked into 3 segments.",
+                "ARGUS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LIBRA: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LENS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "QUILL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "VIGIL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}"
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": true,
+              "n_agent_errors": 5,
+              "warnings": [
+                "Input RAG active: document chunked into 3 segments.",
+                "ARGUS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LIBRA: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LENS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "QUILL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "VIGIL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}"
+              ]
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 0,
+          "api_failures": 2,
+          "elapsed_s": 0.0
+        },
+        "Nu-Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": true,
+              "n_agent_errors": 5,
+              "warnings": [
+                "Input RAG active: document chunked into 4 segments.",
+                "ARGUS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LIBRA: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LENS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "QUILL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "VIGIL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}"
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": true,
+              "n_agent_errors": 5,
+              "warnings": [
+                "Input RAG active: document chunked into 4 segments.",
+                "ARGUS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LIBRA: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LENS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "QUILL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "VIGIL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}"
+              ]
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 0,
+          "api_failures": 2,
+          "elapsed_s": 0.1
+        },
+        "Nu-bias-injected": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": true,
+              "n_agent_errors": 5,
+              "warnings": [
+                "Input RAG active: document chunked into 10 segments.",
+                "ARGUS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LIBRA: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LENS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "QUILL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "VIGIL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}"
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": true,
+              "n_agent_errors": 5,
+              "warnings": [
+                "Input RAG active: document chunked into 10 segments.",
+                "ARGUS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LIBRA: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LENS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "QUILL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "VIGIL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}"
+              ]
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 0,
+          "api_failures": 2,
+          "elapsed_s": 0.1
+        }
+      }
+    },
+    {
+      "model": "anthropic/claude-sonnet-4.6",
+      "tier": "State of the Art",
+      "papers": {
+        "Nu-OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 5 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 3.63,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.65,
+                  "flagged_text": "Rossman et al. assessed mitochondrial-specific ROS-bioactivity showing a significant decrease (\u201335%; P<0.05) after sodium nitrite supplement"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.681,
+                  "flagged_text": "Yoshino et al. showed significant improvements in gene expression of UCP3 (~30%, p<0.05) and UQCRC1 (~20%, p<0.05) after n-3 PUFA therapy co"
+                }
+              ],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 5 segments."
+              ]
+            }
+          ],
+          "mean": 1.815,
+          "sd": 2.5667976157071677,
+          "valid": 2,
+          "api_failures": 0,
+          "elapsed_s": 22.4
+        },
+        "Nu-OG-GPT": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 3 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 3.6399999999999997,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.731,
+                  "flagged_text": "Inorganic nitrite supplementation for 12 weeks significantly improved endothelial function in older adults and was associated with reduction"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.65,
+                  "flagged_text": "Urolithin A supplementation reduced circulating acylcarnitines, ceramides, and inflammatory markers, consistent with improved mitochondrial "
+                }
+              ],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 3 segments."
+              ]
+            }
+          ],
+          "mean": 1.8199999999999998,
+          "sd": 2.5738686835190325,
+          "valid": 2,
+          "api_failures": 0,
+          "elapsed_s": 21.1
+        },
+        "Nu-Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 4 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 4 segments."
+              ]
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 2,
+          "api_failures": 0,
+          "elapsed_s": 11.5
+        },
+        "Nu-bias-injected": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 8.8,
+              "n_flags": 7,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.725,
+                  "flagged_text": "Mounting evidence from preclinical models, observational cohorts, and recent Mendelian randomization analyses converges with the present fin"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "The discordant respirometric reports primarily reflect heterogeneous outcome assessment and the inherent technical noise of ex vivo measurem"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Across all measured endpoints, n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis \u2014 a relationship now"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Across all measured endpoints, n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis \u2014 a relationship now"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Given the consistent biomarker responses documented across the 21-day Elhassan trial and other short interventions, long-term nicotinamide r"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Patients receiving urolithin A experienced enhanced cellular bioenergetics, improved metabolic flexibility, and meaningful protection agains"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "The shift in metabolomic biomarkers reflects intrinsic mitochondrial renewal triggered by NAD+ precursor availability, supporting a direct m"
+                }
+              ],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 10 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 8.65,
+              "n_flags": 7,
+              "flags": [
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Mounting evidence from preclinical models, observational cohorts, and recent Mendelian randomization analyses converges with the present fin"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "The discordant respirometric reports primarily reflect heterogeneous outcome assessment and the inherent technical noise of ex vivo measurem"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Across all measured endpoints, n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis \u2014 a relationship now"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Given the consistent biomarker responses documented across the 21-day Elhassan trial and other short interventions, long-term nicotinamide r"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Given the consistent biomarker responses documented across the 21-day Elhassan trial and other short interventions, long-term nicotinamide r"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Patients receiving urolithin A experienced enhanced cellular bioenergetics, improved metabolic flexibility, and meaningful protection agains"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "The shift in metabolomic biomarkers reflects intrinsic mitochondrial renewal triggered by NAD+ precursor availability, supporting a direct m"
+                }
+              ],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 10 segments."
+              ]
+            }
+          ],
+          "mean": 8.725000000000001,
+          "sd": 0.10606601717798238,
+          "valid": 2,
+          "api_failures": 0,
+          "elapsed_s": 98.5
+        }
+      }
+    },
+    {
+      "model": "anthropic/claude-opus-4.6",
+      "tier": "State of the Art",
+      "papers": {
+        "Nu-OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 5 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 5 segments."
+              ]
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 2,
+          "api_failures": 0,
+          "elapsed_s": 26.3
+        },
+        "Nu-OG-GPT": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 3 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 3 segments."
+              ]
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 2,
+          "api_failures": 0,
+          "elapsed_s": 26.1
+        },
+        "Nu-Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 4 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 4 segments."
+              ]
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 2,
+          "api_failures": 0,
+          "elapsed_s": 28.4
+        },
+        "Nu-bias-injected": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 9.18,
+              "n_flags": 8,
+              "flags": [
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "The discordant respirometric reports primarily reflect heterogeneous outcome assessment and the inherent technical noise of ex vivo measurem"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Across all measured endpoints, n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis \u2014 a relationship now"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis \u2014 a relationship now beyond reasonable dispute give"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Given the consistent biomarker responses documented across the 21-day Elhassan trial and other short interventions, long-term nicotinamide r"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Given the consistent biomarker responses documented across the 21-day Elhassan trial and other short interventions, long-term nicotinamide r"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Patients receiving urolithin A experienced enhanced cellular bioenergetics, improved metabolic flexibility, and meaningful protection agains"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 0.8,
+                  "flagged_text": "Patients receiving urolithin A experienced enhanced cellular bioenergetics, improved metabolic flexibility, and meaningful protection agains"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "The shift in metabolomic biomarkers reflects intrinsic mitochondrial renewal triggered by NAD+ precursor availability, supporting a direct m"
+                }
+              ],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 10 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 10.0,
+              "n_flags": 12,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.52,
+                  "flagged_text": "Rossman et al. assessed mitochondrial-specific ROS-bioactivity showing a significant decrease (\u201335%; P<0.05) after sodium nitrite supplement"
+                },
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.881,
+                  "flagged_text": "Mounting evidence from preclinical models, observational cohorts, and recent Mendelian randomization analyses converges with the present fin"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "The discordant respirometric reports primarily reflect heterogeneous outcome assessment and the inherent technical noise of ex vivo measurem"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "certainty_inflation",
+                  "severity": "high",
+                  "confidence": 0.8,
+                  "flagged_text": "The discordant respirometric reports primarily reflect heterogeneous outcome assessment and the inherent technical noise of ex vivo measurem"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Across all measured endpoints, n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis \u2014 a relationship now"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Across all measured endpoints, n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis \u2014 a relationship now"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Given the consistent biomarker responses documented across the 21-day Elhassan trial and other short interventions, long-term nicotinamide r"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Given the consistent biomarker responses documented across the 21-day Elhassan trial and other short interventions, long-term nicotinamide r"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Patients receiving urolithin A experienced enhanced cellular bioenergetics, improved metabolic flexibility, and meaningful protection agains"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Patients receiving urolithin A experienced enhanced cellular bioenergetics, improved metabolic flexibility, and meaningful protection agains"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "The shift in metabolomic biomarkers reflects intrinsic mitochondrial renewal triggered by NAD+ precursor availability, supporting a direct m"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "The shift in metabolomic biomarkers reflects intrinsic mitochondrial renewal triggered by NAD+ precursor availability, supporting a direct m"
+                }
+              ],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 10 segments."
+              ]
+            }
+          ],
+          "mean": 9.59,
+          "sd": 0.5798275605729691,
+          "valid": 2,
+          "api_failures": 0,
+          "elapsed_s": 88.2
+        }
+      }
+    }
+  ],
+  "completed": 18,
+  "total": 18
+}

@@ -497,7 +497,7 @@ export default function App() {
                 )}
 
                 {/* Results panel — shown once complete */}
-                {displayResult && <ResultsPanel result={displayResult} />}
+                {displayResult && <ResultsPanel result={displayResult} text={text} />}
 
                 {/* Annotations — accumulate live during streaming */}
                 {displayAnnotations.length > 0 && (

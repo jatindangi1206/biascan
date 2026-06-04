@@ -329,7 +329,11 @@ def _find_in_source(flagged: str, source: str) -> int:
 _FENCED = re.compile(r"```(?:json)?\s*(\{.*?\})\s*```", re.DOTALL)
 
 
-def _extract_json(raw: str) -> dict | None:
+def _extract_json(raw: str | None) -> dict | None:
+    # Providers occasionally return None (empty body, content filter, etc.).
+    # Treat any non-string input as a parse failure so the retry path fires.
+    if not isinstance(raw, str):
+        return None
     raw = raw.strip()
     if not raw:
         return None

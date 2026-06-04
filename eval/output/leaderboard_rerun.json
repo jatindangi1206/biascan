@@ -1,0 +1,1182 @@
+{
+  "papers": [
+    "Nu-OG",
+    "Nu-OG-GPT",
+    "Nu-Edit",
+    "Nu-bias-injected"
+  ],
+  "n_runs": 2,
+  "results": [
+    {
+      "model": "qwen/qwen-2.5-72b-instruct",
+      "tier": "Open Source",
+      "papers": {
+        "Nu-OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 6.58,
+              "n_flags": 5,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.714,
+                  "flagged_text": "significant improvements (p<0.05) in respiratory electron transport ATP synthesis, coupling proteins and heat production, respiratory electr"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.65,
+                  "flagged_text": "significant decrease (\u201335%; P<0.05) after sodium nitrite supplementation"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.877,
+                  "flagged_text": "significant reduction in plasma acylcarnitine levels (p<0.05) and a significant reduction in ceramide levels (p<0.05) in the experimental gr"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.875,
+                  "flagged_text": "significant improvement in the NAM methylation clearance pathways representing the NAD+ metabolome"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.722,
+                  "flagged_text": "significant improvements in gene expression of UCP3 (~30%, p<0.05) and UQCRC1 (~20%, p<0.05) after n-3 PUFA therapy compared with baseline"
+                }
+              ],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 5 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 8.96,
+              "n_flags": 9,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.95,
+                  "flagged_text": "showed significant improvements (p<0.05)"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.95,
+                  "flagged_text": "showed significant improvements (p<0.05)"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.714,
+                  "flagged_text": "significant improvements (p<0.05) in respiratory electron transport ATP synthesis, coupling proteins and heat production, respiratory electr"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.65,
+                  "flagged_text": "significant decrease (\u201335%; P<0.05) after sodium nitrite supplementation"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.877,
+                  "flagged_text": "significant reduction in plasma acylcarnitine levels (p<0.05) and a significant reduction in ceramide levels (p<0.05) in the experimental gr"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.875,
+                  "flagged_text": "significant improvement in the NAM methylation clearance pathways representing the NAD+ metabolome"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.722,
+                  "flagged_text": "significant differences were underlined in methyl-nicotinamide (MeNAM) (Intervention Group-IG 1.45 pmol/mg vs Control Group-CG 0.35 pmol/mg;"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.878,
+                  "flagged_text": "skeletal MeNAM levels were significantly higher in subjects receiving NAD+ precursor supplementation (IG: 0.098 \u00b1 0.063 compared with CG: 0."
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.722,
+                  "flagged_text": "significant improvements in gene expression of UCP3 (~30%, p<0.05) and UQCRC1 (~20%, p<0.05) after n-3 PUFA therapy compared with baseline"
+                }
+              ],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 5 segments."
+              ]
+            }
+          ],
+          "mean": 7.7700000000000005,
+          "sd": 1.6829141392239837,
+          "valid": 2,
+          "api_failures": 0,
+          "elapsed_s": 51.9
+        },
+        "Nu-OG-GPT": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 3.67,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.883,
+                  "flagged_text": "Inorganic nitrite supplementation for 12 weeks significantly improved endothelial function in older adults and was associated with reduction"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.714,
+                  "flagged_text": "Urolithin A supplementation reduced circulating acylcarnitines, ceramides, and inflammatory markers, consistent with improved mitochondrial "
+                }
+              ],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 3 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 2.13,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.883,
+                  "flagged_text": "Inorganic nitrite supplementation for 12 weeks significantly improved endothelial function in older adults and was associated with reduction"
+                }
+              ],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 3 segments."
+              ]
+            }
+          ],
+          "mean": 2.9,
+          "sd": 1.0889444430272832,
+          "valid": 2,
+          "api_failures": 0,
+          "elapsed_s": 10.4
+        },
+        "Nu-Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 4 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 4 segments."
+              ]
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 2,
+          "api_failures": 0,
+          "elapsed_s": 17.3
+        },
+        "Nu-bias-injected": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 4.88,
+              "n_flags": 3,
+              "flags": [
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 1.0,
+                  "flagged_text": "Across all measured endpoints, n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis \u2014 a relationship now"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Given the consistent biomarker responses documented across the 21-day Elhassan trial and other short interventions, long-term nicotinamide r"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.723,
+                  "flagged_text": "The shift in metabolomic biomarkers reflects intrinsic mitochondrial renewal triggered by NAD+ precursor availability, supporting a direct m"
+                }
+              ],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 10 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 4.88,
+              "n_flags": 3,
+              "flags": [
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 1.0,
+                  "flagged_text": "Across all measured endpoints, n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis \u2014 a relationship now"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Given the consistent biomarker responses documented across the 21-day Elhassan trial and other short interventions, long-term nicotinamide r"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.723,
+                  "flagged_text": "The shift in metabolomic biomarkers reflects intrinsic mitochondrial renewal triggered by NAD+ precursor availability, supporting a direct m"
+                }
+              ],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 10 segments."
+              ]
+            }
+          ],
+          "mean": 4.88,
+          "sd": 0.0,
+          "valid": 2,
+          "api_failures": 0,
+          "elapsed_s": 45.3
+        }
+      }
+    },
+    {
+      "model": "google/gemini-3-flash",
+      "tier": "Budget Proprietary",
+      "papers": {
+        "Nu-OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": true,
+              "n_agent_errors": 5,
+              "warnings": [
+                "Input RAG active: document chunked into 5 segments.",
+                "ARGUS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LIBRA: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LENS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "QUILL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "VIGIL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}"
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": true,
+              "n_agent_errors": 5,
+              "warnings": [
+                "Input RAG active: document chunked into 5 segments.",
+                "ARGUS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LIBRA: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LENS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "QUILL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "VIGIL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}"
+              ]
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 0,
+          "api_failures": 2,
+          "elapsed_s": 0.1
+        },
+        "Nu-OG-GPT": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": true,
+              "n_agent_errors": 5,
+              "warnings": [
+                "Input RAG active: document chunked into 3 segments.",
+                "ARGUS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LIBRA: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LENS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "QUILL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "VIGIL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}"
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": true,
+              "n_agent_errors": 5,
+              "warnings": [
+                "Input RAG active: document chunked into 3 segments.",
+                "ARGUS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LIBRA: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LENS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "QUILL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "VIGIL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}"
+              ]
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 0,
+          "api_failures": 2,
+          "elapsed_s": 0.1
+        },
+        "Nu-Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": true,
+              "n_agent_errors": 5,
+              "warnings": [
+                "Input RAG active: document chunked into 4 segments.",
+                "ARGUS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LIBRA: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LENS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "QUILL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "VIGIL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}"
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": true,
+              "n_agent_errors": 5,
+              "warnings": [
+                "Input RAG active: document chunked into 4 segments.",
+                "ARGUS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LIBRA: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LENS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "QUILL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "VIGIL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}"
+              ]
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 0,
+          "api_failures": 2,
+          "elapsed_s": 0.3
+        },
+        "Nu-bias-injected": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": true,
+              "n_agent_errors": 5,
+              "warnings": [
+                "Input RAG active: document chunked into 10 segments.",
+                "ARGUS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LIBRA: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LENS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "QUILL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "VIGIL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}"
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": true,
+              "n_agent_errors": 5,
+              "warnings": [
+                "Input RAG active: document chunked into 10 segments.",
+                "ARGUS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LIBRA: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LENS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "QUILL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "VIGIL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3-flash is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}"
+              ]
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 0,
+          "api_failures": 2,
+          "elapsed_s": 0.1
+        }
+      }
+    },
+    {
+      "model": "google/gemini-3.1-pro",
+      "tier": "State of the Art",
+      "papers": {
+        "Nu-OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": true,
+              "n_agent_errors": 5,
+              "warnings": [
+                "Input RAG active: document chunked into 5 segments.",
+                "ARGUS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LIBRA: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LENS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "QUILL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "VIGIL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}"
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": true,
+              "n_agent_errors": 5,
+              "warnings": [
+                "Input RAG active: document chunked into 5 segments.",
+                "ARGUS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LIBRA: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LENS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "QUILL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "VIGIL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}"
+              ]
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 0,
+          "api_failures": 2,
+          "elapsed_s": 0.1
+        },
+        "Nu-OG-GPT": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": true,
+              "n_agent_errors": 5,
+              "warnings": [
+                "Input RAG active: document chunked into 3 segments.",
+                "ARGUS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LIBRA: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LENS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "QUILL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "VIGIL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}"
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": true,
+              "n_agent_errors": 5,
+              "warnings": [
+                "Input RAG active: document chunked into 3 segments.",
+                "ARGUS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LIBRA: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LENS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "QUILL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "VIGIL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}"
+              ]
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 0,
+          "api_failures": 2,
+          "elapsed_s": 0.0
+        },
+        "Nu-Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": true,
+              "n_agent_errors": 5,
+              "warnings": [
+                "Input RAG active: document chunked into 4 segments.",
+                "ARGUS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LIBRA: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LENS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "QUILL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "VIGIL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}"
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": true,
+              "n_agent_errors": 5,
+              "warnings": [
+                "Input RAG active: document chunked into 4 segments.",
+                "ARGUS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LIBRA: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LENS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "QUILL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "VIGIL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}"
+              ]
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 0,
+          "api_failures": 2,
+          "elapsed_s": 0.1
+        },
+        "Nu-bias-injected": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": true,
+              "n_agent_errors": 5,
+              "warnings": [
+                "Input RAG active: document chunked into 10 segments.",
+                "ARGUS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LIBRA: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LENS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "QUILL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "VIGIL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}"
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": true,
+              "n_agent_errors": 5,
+              "warnings": [
+                "Input RAG active: document chunked into 10 segments.",
+                "ARGUS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LIBRA: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "LENS: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "QUILL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}",
+                "VIGIL: OpenRouter error 400: {\"error\":{\"message\":\"google/gemini-3.1-pro is not a valid model ID\",\"code\":400},\"user_id\":\"user_3Di8e8p2QVeo45fToLmkRcYZpJZ\"}"
+              ]
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 0,
+          "api_failures": 2,
+          "elapsed_s": 0.1
+        }
+      }
+    },
+    {
+      "model": "anthropic/claude-sonnet-4.6",
+      "tier": "State of the Art",
+      "papers": {
+        "Nu-OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 5 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 3.63,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.65,
+                  "flagged_text": "Rossman et al. assessed mitochondrial-specific ROS-bioactivity showing a significant decrease (\u201335%; P<0.05) after sodium nitrite supplement"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.681,
+                  "flagged_text": "Yoshino et al. showed significant improvements in gene expression of UCP3 (~30%, p<0.05) and UQCRC1 (~20%, p<0.05) after n-3 PUFA therapy co"
+                }
+              ],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 5 segments."
+              ]
+            }
+          ],
+          "mean": 1.815,
+          "sd": 2.5667976157071677,
+          "valid": 2,
+          "api_failures": 0,
+          "elapsed_s": 22.4
+        },
+        "Nu-OG-GPT": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 3 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 3.6399999999999997,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.731,
+                  "flagged_text": "Inorganic nitrite supplementation for 12 weeks significantly improved endothelial function in older adults and was associated with reduction"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.65,
+                  "flagged_text": "Urolithin A supplementation reduced circulating acylcarnitines, ceramides, and inflammatory markers, consistent with improved mitochondrial "
+                }
+              ],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 3 segments."
+              ]
+            }
+          ],
+          "mean": 1.8199999999999998,
+          "sd": 2.5738686835190325,
+          "valid": 2,
+          "api_failures": 0,
+          "elapsed_s": 21.1
+        },
+        "Nu-Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 4 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 4 segments."
+              ]
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 2,
+          "api_failures": 0,
+          "elapsed_s": 11.5
+        },
+        "Nu-bias-injected": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 8.8,
+              "n_flags": 7,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.725,
+                  "flagged_text": "Mounting evidence from preclinical models, observational cohorts, and recent Mendelian randomization analyses converges with the present fin"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "The discordant respirometric reports primarily reflect heterogeneous outcome assessment and the inherent technical noise of ex vivo measurem"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Across all measured endpoints, n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis \u2014 a relationship now"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Across all measured endpoints, n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis \u2014 a relationship now"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Given the consistent biomarker responses documented across the 21-day Elhassan trial and other short interventions, long-term nicotinamide r"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Patients receiving urolithin A experienced enhanced cellular bioenergetics, improved metabolic flexibility, and meaningful protection agains"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "The shift in metabolomic biomarkers reflects intrinsic mitochondrial renewal triggered by NAD+ precursor availability, supporting a direct m"
+                }
+              ],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 10 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 8.65,
+              "n_flags": 7,
+              "flags": [
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Mounting evidence from preclinical models, observational cohorts, and recent Mendelian randomization analyses converges with the present fin"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "The discordant respirometric reports primarily reflect heterogeneous outcome assessment and the inherent technical noise of ex vivo measurem"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Across all measured endpoints, n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis \u2014 a relationship now"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Given the consistent biomarker responses documented across the 21-day Elhassan trial and other short interventions, long-term nicotinamide r"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Given the consistent biomarker responses documented across the 21-day Elhassan trial and other short interventions, long-term nicotinamide r"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Patients receiving urolithin A experienced enhanced cellular bioenergetics, improved metabolic flexibility, and meaningful protection agains"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "The shift in metabolomic biomarkers reflects intrinsic mitochondrial renewal triggered by NAD+ precursor availability, supporting a direct m"
+                }
+              ],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 10 segments."
+              ]
+            }
+          ],
+          "mean": 8.725000000000001,
+          "sd": 0.10606601717798238,
+          "valid": 2,
+          "api_failures": 0,
+          "elapsed_s": 98.5
+        }
+      }
+    },
+    {
+      "model": "anthropic/claude-opus-4.6",
+      "tier": "State of the Art",
+      "papers": {
+        "Nu-OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 5 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 5 segments."
+              ]
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 2,
+          "api_failures": 0,
+          "elapsed_s": 26.3
+        },
+        "Nu-OG-GPT": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 3 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 3 segments."
+              ]
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 2,
+          "api_failures": 0,
+          "elapsed_s": 26.1
+        },
+        "Nu-Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 4 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 4 segments."
+              ]
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 2,
+          "api_failures": 0,
+          "elapsed_s": 28.4
+        },
+        "Nu-bias-injected": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 9.18,
+              "n_flags": 8,
+              "flags": [
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "The discordant respirometric reports primarily reflect heterogeneous outcome assessment and the inherent technical noise of ex vivo measurem"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Across all measured endpoints, n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis \u2014 a relationship now"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis \u2014 a relationship now beyond reasonable dispute give"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Given the consistent biomarker responses documented across the 21-day Elhassan trial and other short interventions, long-term nicotinamide r"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Given the consistent biomarker responses documented across the 21-day Elhassan trial and other short interventions, long-term nicotinamide r"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Patients receiving urolithin A experienced enhanced cellular bioenergetics, improved metabolic flexibility, and meaningful protection agains"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 0.8,
+                  "flagged_text": "Patients receiving urolithin A experienced enhanced cellular bioenergetics, improved metabolic flexibility, and meaningful protection agains"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "The shift in metabolomic biomarkers reflects intrinsic mitochondrial renewal triggered by NAD+ precursor availability, supporting a direct m"
+                }
+              ],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 10 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 10.0,
+              "n_flags": 12,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.52,
+                  "flagged_text": "Rossman et al. assessed mitochondrial-specific ROS-bioactivity showing a significant decrease (\u201335%; P<0.05) after sodium nitrite supplement"
+                },
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.881,
+                  "flagged_text": "Mounting evidence from preclinical models, observational cohorts, and recent Mendelian randomization analyses converges with the present fin"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "The discordant respirometric reports primarily reflect heterogeneous outcome assessment and the inherent technical noise of ex vivo measurem"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "certainty_inflation",
+                  "severity": "high",
+                  "confidence": 0.8,
+                  "flagged_text": "The discordant respirometric reports primarily reflect heterogeneous outcome assessment and the inherent technical noise of ex vivo measurem"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Across all measured endpoints, n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis \u2014 a relationship now"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Across all measured endpoints, n-3 PUFA supplementation produces a reproducible enhancement of mitochondrial biogenesis \u2014 a relationship now"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Given the consistent biomarker responses documented across the 21-day Elhassan trial and other short interventions, long-term nicotinamide r"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Given the consistent biomarker responses documented across the 21-day Elhassan trial and other short interventions, long-term nicotinamide r"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Patients receiving urolithin A experienced enhanced cellular bioenergetics, improved metabolic flexibility, and meaningful protection agains"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "Patients receiving urolithin A experienced enhanced cellular bioenergetics, improved metabolic flexibility, and meaningful protection agains"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "The shift in metabolomic biomarkers reflects intrinsic mitochondrial renewal triggered by NAD+ precursor availability, supporting a direct m"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "The shift in metabolomic biomarkers reflects intrinsic mitochondrial renewal triggered by NAD+ precursor availability, supporting a direct m"
+                }
+              ],
+              "api_failure": false,
+              "n_agent_errors": 0,
+              "warnings": [
+                "Input RAG active: document chunked into 10 segments."
+              ]
+            }
+          ],
+          "mean": 9.59,
+          "sd": 0.5798275605729691,
+          "valid": 2,
+          "api_failures": 0,
+          "elapsed_s": 88.2
+        }
+      }
+    }
+  ],
+  "completed": 5,
+  "total": 5
+}
