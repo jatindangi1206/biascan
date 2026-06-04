@@ -1,7 +1,7 @@
 from __future__ import annotations
 import asyncio
 import logging
-import math
+import re
 import uuid
 from typing import AsyncIterator
 
@@ -377,17 +377,21 @@ class Orchestrator:
         }
 
     def _overall_score(self, final_annotations: list[Annotation], text: str) -> float:
-        """Severity-Weighted Defect Density (SWDD).
+        """Span Coverage Ratio score.
 
-        Score bias impact per 100 words instead of using a raw flag-count base
-        so longer documents are not automatically penalized for containing more
-        text. The score remains bounded to 0–1 for API output.
+        The score grows with both the severity-weighted impact of the final
+        annotations and the proportion of the document they actually cover.
+        This keeps a short fully-biased passage high while preventing a very
+        long document with one small flagged sentence from scoring as if the
+        whole document were problematic.
         """
         if not final_annotations:
             return 0.0
 
-        w_eff = max(50, len(text.split()))
+        total_words = max(1, len(text.split()))
         severity_weights = {"high": 3.0, "medium": 2.0, "low": 1.0}
+        flagged_words = _count_covered_words(text, final_annotations)
+        coverage = min(1.0, flagged_words / total_words)
 
         total_impact = 0.0
         for ann in final_annotations:
@@ -396,9 +400,28 @@ class Orchestrator:
         unique_types = len({ann.bias_type for ann in final_annotations})
         total_impact += 0.15 * max(0, unique_types - 1)
 
-        density = (total_impact / w_eff) * 100.0
-        score = 1.0 - math.exp(-0.15 * density)
+        internal = total_impact * coverage * 3.33
+        score = min(10.0, internal) / 10.0
         return round(score, 3)
+
+
+def _count_covered_words(text: str, annotations: list[Annotation]) -> int:
+    """Count unique document words covered by any annotation span."""
+    if not text or not annotations:
+        return 0
+
+    word_spans = [(m.start(), m.end()) for m in re.finditer(r"\S+", text)]
+    if not word_spans:
+        return 0
+
+    covered = 0
+    for word_start, word_end in word_spans:
+        if any(
+            ann.span_start < word_end and ann.span_end > word_start
+            for ann in annotations
+        ):
+            covered += 1
+    return covered
 
 
 def _evidence_crosscheck(
@@ -455,4 +478,3 @@ def _resolve_mode(mode: Mode, warnings: list[str]) -> tuple[Mode, list[str]]:
         warnings.append("Adaptive mode requested; running Lite first pass.")
         return "lite", warnings
     return mode, warnings
-

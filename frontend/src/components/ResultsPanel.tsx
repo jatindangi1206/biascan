@@ -15,6 +15,33 @@ const BIAS_ORDER: BiasType[] = [
   "causal_inference_error",
 ];
 
+function countCoveredWords(
+  text: string,
+  annotations: AnalyzeResponse["annotations"],
+): number {
+  if (!text || annotations.length === 0) {
+    return 0;
+  }
+
+  const wordMatches = Array.from(text.matchAll(/\S+/g));
+  if (wordMatches.length === 0) {
+    return 0;
+  }
+
+  let covered = 0;
+  for (const match of wordMatches) {
+    const start = match.index ?? 0;
+    const end = start + match[0].length;
+    const overlaps = annotations.some(
+      (annotation) => annotation.span_start < end && annotation.span_end > start,
+    );
+    if (overlaps) {
+      covered += 1;
+    }
+  }
+  return covered;
+}
+
 export function ResultsPanel({ result, text }: Props) {
   const scoreValue = result.overall_bias_score * 10;
   const scoreLabel =
@@ -50,16 +77,17 @@ export function ResultsPanel({ result, text }: Props) {
   // Score breakdown — must stay in sync with Orchestrator._overall_score in
   // backend/app/agents/orchestrator.py.
   const n = result.annotations.length;
-  const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
-  const effectiveWords = Math.max(50, wordCount);
+  const totalWords = Math.max(1, text.trim() ? text.trim().split(/\s+/).length : 0);
   const severityWeights = { high: 3, medium: 2, low: 1 } as const;
+  const flaggedWords = countCoveredWords(text, result.annotations);
+  const coverage = Math.min(1, flaggedWords / totalWords);
   const expectedImpact = result.annotations.reduce(
     (sum, annotation) => sum + annotation.confidence * severityWeights[annotation.severity],
     0,
   );
   const diversityBump = 0.15 * Math.max(0, uniqueTypes - 1);
   const totalImpact = expectedImpact + diversityBump;
-  const density = n === 0 ? 0 : (totalImpact / effectiveWords) * 100;
+  const internalScore = totalImpact * coverage * 3.33;
 
   return (
     <section className="summary-section">
@@ -97,14 +125,13 @@ export function ResultsPanel({ result, text }: Props) {
             )}
             <div className="breakdown-row">
               <span>
-                Density normalization ({effectiveWords} effective words
-                {wordCount < 50 ? ", 50-word floor applied" : ""})
+                Span coverage ({flaggedWords} of {totalWords} words flagged)
               </span>
-              <span className="breakdown-pts">{density.toFixed(2)} / 100w</span>
+              <span className="breakdown-pts">{(coverage * 100).toFixed(1)}%</span>
             </div>
             <div className="breakdown-row">
-              <span>Final curve (1 - e^(-0.15 x density))</span>
-              <span className="breakdown-pts">{scoreValue.toFixed(1)} / 10</span>
+              <span>Internal score (impact × coverage × 3.33)</span>
+              <span className="breakdown-pts">{Math.min(10, internalScore).toFixed(2)}</span>
             </div>
             <div className="breakdown-row">
               <span>Total weighted impact</span>
@@ -124,10 +151,11 @@ export function ResultsPanel({ result, text }: Props) {
           </div>
           <p className="breakdown-note">
             Expected impact sums `confidence × severity weight` for each flag
-            using High=3, Medium=2, and Low=1. That impact is normalized per
-            100 words with a 50-word minimum floor so longer documents are not
-            unfairly penalized, then mapped onto an exponential curve for the
-            final score.
+            using High=3, Medium=2, and Low=1. Span coverage measures exactly
+            what percentage of the document is flagged as biased. The final
+            score multiplies severity impact by span coverage, so a fully
+            biased sentence can score high while a long document with one small
+            biased segment stays low.
           </p>
         </details>
       )}
