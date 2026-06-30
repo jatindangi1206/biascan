@@ -1,4 +1,5 @@
 export type Mode = "lite" | "premium" | "adaptive";
+export type AnalysisMode = "systematic_review" | "general_research";
 export type Severity = "low" | "medium" | "high";
 export type BiasType =
   | "confirmation_bias"
@@ -24,6 +25,9 @@ export interface ProviderInfo {
 export interface HealthResponse {
   status: string;
   prompt_version: string;
+  default_analysis_mode: AnalysisMode;
+  analysis_modes: AnalysisMode[];
+  prompt_families: Record<AnalysisMode, { prompt_version: string; prompts_present: number }>;
   key_storage: string;
 }
 
@@ -39,6 +43,11 @@ export interface AgentInfo {
   bias_type: BiasType;
   prompt_version: string;
   prompt_filename: string;
+  prompt_variants?: Array<{
+    analysis_mode: AnalysisMode;
+    prompt_version: string;
+    prompt_filename: string;
+  }>;
 }
 
 export interface Annotation {
@@ -73,6 +82,7 @@ export interface AgentRunInfo {
 export interface AnalyzeResponse {
   document_id: string;
   mode: Mode;
+  analysis_mode: AnalysisMode;
   overall_bias_score: number;
   annotations: Annotation[];
   agents: AgentRunInfo[];
@@ -87,6 +97,11 @@ export const DEFAULT_AGENT_NAMES: AgentName[] = [
   "QUILL",
   "VIGIL",
 ];
+
+export const ANALYSIS_MODE_LABELS: Record<AnalysisMode, string> = {
+  general_research: "General research",
+  systematic_review: "Systematic review",
+};
 
 export const ALL_AGENTS: { name: AgentName; bias_type: BiasType; difficulty: string; tier: string }[] = [
   { name: "ARGUS", bias_type: "confirmation_bias",      difficulty: "High",   tier: "Tier 1+RAG" },

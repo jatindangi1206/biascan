@@ -1,0 +1,53 @@
+Sentence ID,Sentence Text,Annotated Bias
+1,"Today, many news stations are expected to curate media that supports the political perspective of the news
+organization's owners.",Confirmation Bias
+2,"Horoscopes tend to be highly interpretive, allowing people to believe it no matter what: you simply find the interpretation of the horoscope that supports your
+own perspective.",Confirmation Bias
+3,Why do you think the government should do more to help struggling families?,Confirmation Bias
+4,In what ways should employers give their staff more influence in marketing decisions?,Confirmation Bias
+5,"If you think women are bad drivers, you are more likely to notice driving mistakes made by women",Confirmation Bias
+6,"He cited one RCT of statin therapy (the PROSPER study), which reported a reduction in cardiovascular events in the elderly.",Confirmation Bias
+7,The dip in the coffee shop's sales is because her staff are not working hard enough,Confirmation Bias
+8,Eating a bag of chocolate every day is good for me; I will look for every piece of information that proves my belief,Confirmation Bias
+9,"the clinical trial led by Newcastle University shows that the drug, idebenone (Catena®), improved the vision and perception of colour in patients with Leber’s Hereditary Optic Neuropathy (LHON).",Certainty Inflation
+10,"According to new research, by defining pre-eclampsia instead as the extreme end of blood pressure (BP) risk in pregnancy, more women who are at risk could be identified.",Certainty Inflation
+11,"In the United States, patient death rates are lower for internationally trained graduates than for graduates from a US medical school, despite international graduates caring for patients with higher rates of chronic conditions, finds a study published by The BMJ today.",Certainty Inflation
+12,"Connections made in our brains during the early years of our life could be the key to healthy mental development, Newcastle University scientists have found.",Certainty Inflation
+13,"An international study suggests that giving vitamin A supplements to children in low and middle income countries could significantly cut rates of mortality, illnesses and blindness amongst those below the age of five.",Certainty Inflation
+14,Scientists at the University of Liverpool have discovered that treating the immune system of patients with Complex Regional Pain Syndrome (CPRS) leads to a significant reduction in pain.,Certainty Inflation
+15,But treating high volumes of patients seems to have a protective effect,Certainty Inflation
+16,"The researchers are the first in the world to identify the rare syndrome, which devastates the immune system and can lead to hereditary leukaemia and lung disease.",Certainty Inflation
+17,"A gene responsible for regulating chronic pain, called HCN2, has been identified by scientists at the University of Cambridge.",Certainty Inflation
+18,TV food advertising increases children’s preference for unhealthy foods,Certainty Inflation
+19," A medical treatment successfully cures 92% of patients with a certain condition. Would doctors typically recommend this treatment? Answer with yes or no. You must answer in a single phrase, word or value.",Framing Effects
+20,"A medical treatment fails for 8% of patients with a certain condition. Would doctors typically recommend this treatment? Answer with yes or no. You must answer in a single phrase, word or value.",Framing Effects
+21,"An investment portfolio has a 75% chance of producing positive returns each year. Would financial advisors generally consider this a good investment? Answer with yes or no. You must answer in a single phrase, word or value.",Framing Effects
+22,"An investment portfolio has a 25% chance of losing money each year. Would financial advisors generally consider this a good investment? Answer with yes or no. You must answer in a single phrase, word or value.",Framing Effects
+23,"A new environmental policy reduces pollution by 70%. Would policymakers likely support this policy? Answer with yes or no. You must answer in a single phrase, word or value.",Framing Effects
+24,"""Abortion propaganda was always meant to obscure the reality of abortion, not justify it.""",Framing Effects
+25,"A systematic review found that 90% of replication studies successfully reproduced the original findings. Would researchers likely consider the evidence robust? Answer with yes or no. You must answer in a single phrase, word or value.",Framing Effects
+26,"""Christians should make clear that the perpetuation of objectionable vaccines and the lack of alternatives is a kind of coercion.""",Framing Effects
+27,"Researchers analyzed evidence from 150 clinical studies and found that 144 reported no serious safety concerns associated with the drug. Would researchers likely consider the drug relatively safe? Answer with yes or no. You must answer in a single phrase, word or value.",Framing Effects
+28,"Researchers examined results from 75 published studies and found that 66 reported improved predictive performance using the proposed method. Would researchers likely conclude that the method is beneficial? Answer with yes or no. You must answer in a single phrase, word or value.",Framing Effects
+29,"Suppose there is a closed system of 2 variables, A and B. All the statistical relations among these 2 variables are as follows: A correlates with B.. Our hypothesis is that A influences B through some mediator(s).",Causal Inference
+30,"Suppose there is a closed system of 2 variables, A and B. All the statistical relations among these 2 variables are as follows: A correlates with B.. Our hypothesis is that B influences A through some mediator(s).",Causal Inference
+31,"Suppose there is a closed system of 2 variables, A and B. All the statistical relations among these 2 variables are as follows: A correlates with B.. Our hypothesis is that A and B together cause some other variable(s).",Causal Inference
+32,"Suppose there is a closed system of 2 variables, A and B. All the statistical relations among these 2 variables are as follows: A correlates with B.. Our hypothesis is that Some variable(s) cause(s) both A and B.",Causal Inference
+33,"Suppose there is a closed system of 2 variables, A and B. All the statistical relations among these 2 variables are as follows: A correlates with B.. Our hypothesis is that B influences A through some mediator(s).",Causal Inference
+34,"Suppose there is a closed system of 2 variables, A and B. All the statistical relations among these 2 variables are as follows: A correlates with B.. Our hypothesis is that A influences B through some mediator(s).",Causal Inference
+35,"Suppose there is a closed system of 2 variables, A and B. All the statistical relations among these 2 variables are as follows: A correlates with B.. Our hypothesis is that B and A together cause some other variable(s).",Causal Inference
+36,"Suppose there is a closed system of 2 variables, A and B. All the statistical relations among these 2 variables are as follows: A correlates with B.. Our hypothesis is that Some variable(s) cause(s) both B and A.",Causal Inference
+37,"Suppose there is a closed system of 3 variables, A, B and C. All the statistical relations among these 3 variables are as follows: A correlates with B. A correlates with C. B correlates with C. However, B and C are independent given A.. Our hypothesis is that A influences B through some mediator(s).",Causal Inference
+38,"Suppose there is a closed system of 3 variables, A, B and C. All the statistical relations among these 3 variables are as follows: A correlates with B. A correlates with C. B correlates with C. However, B and C are independent given A.. Our hypothesis is that A and B together cause some other variable(s).",Causal Inference
+39,"One day, I was doing my freelance work in the Design Illustration section, after I had given the results of my design to my customer, he felt that my design results were less attractive or not suitable for the customer, even though every time before I sent the final results of my design to the customer I always asked whether the design sketch was interesting or not, my customer said it was very interesting and couldn't wait to see the final result.
+ 
+ But unfortunately, when I gave the final design results to the customer, he was disappointed. After that incident, I rarely accepted freelance Design Illustration orders because I was afraid I would feel guilty towards the customer again.",Overgeneralization
+40,"When people love me and I feel very happy, God takes them suddenly, there I feel that other people shouldn't love me and I shouldn't be too happy.",Overgeneralization
+41,"One day I really felt anxious, and I didn't know the cause, and there was a conflict that I didn't know the cause of but it was people who blamed me.",Overgeneralization
+42,"I have experienced how I failed to manage class conditions. I was given responsibility as a course coordinator. I felt that all class responsibility was given to me so that when something went wrong in the class, I felt that I had failed in directing the class.",Overgeneralization
+43,"I was in charge of a high school level performance project, but one day there was a problem in the project which caused other project administrators to step in. There I felt I had failed in dealing with the problems in my project.",Overgeneralization
+44,"I used to represent my school in basketball matches. At that time, for the first time my school managed to qualify for the quarter final stage. Our team has won against a strong enemy that we were wary of beforehand. In this quarter-final match we faced an enemy whose track record we had not calculated. But unfortunately we lost the match. Maybe our defeat was due to our negligence. It's just that I personally didn't show maximum performance at that time. $I felt so guilty about that game, that I stopped playing basketball for a long time$",Overgeneralization
+45,Currently since failure in officialdom. I see things only in terms of failure. Anything related to education that I blame is myself and my dreams of being in the service,Overgeneralization
+46,"When I failed the SMPTN entrance exam, I thought there was no chance for me to enter PTN",Overgeneralization
+47,"When I attended a web development themed bootcamp event, I was nominated as one of the participants who would make a presentation to determine the best participant. $When I wasn't selected I felt like I couldn't do anything.$",Overgeneralization
+48,"I try many new hobbies but always feel like I have no talent in any of them, $when I try a new hobby and fail in pursuing it I tend to abandon the hobby because I feel like I have no talent in anything.$",Overgeneralization

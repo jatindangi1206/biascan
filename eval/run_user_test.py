@@ -53,6 +53,7 @@ async def main() -> int:
     print("\nRunning analyze()…")
     resp = await orch.analyze(
         text=TEXT, references=None, mode="lite",
+        analysis_mode="systematic_review",
         provider_config=cfg, agents=None,
     )
     print(fmt("USER TEXT", resp.overall_bias_score, resp.annotations))

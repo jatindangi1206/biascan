@@ -4,6 +4,7 @@ from pydantic import BaseModel, Field
 from .providers.base import ProviderConfig
 
 Mode = Literal["lite", "premium", "adaptive"]
+AnalysisMode = Literal["systematic_review", "general_research"]
 Severity = Literal["low", "medium", "high"]
 BiasType = Literal[
     "confirmation_bias",
@@ -37,6 +38,7 @@ class AnalyzeRequest(BaseModel):
     text: str
     references: Optional[str] = None
     mode: Mode = "lite"
+    analysis_mode: AnalysisMode = "systematic_review"
     provider: ProviderConfig
     # If empty / None, all 5 agents run.
     agents: Optional[list[AgentName]] = None
@@ -67,6 +69,7 @@ class AgentRunInfo(BaseModel):
 class AnalyzeResponse(BaseModel):
     document_id: str
     mode: Mode
+    analysis_mode: AnalysisMode
     overall_bias_score: float
     annotations: list[Annotation]
     agents: list[AgentRunInfo]

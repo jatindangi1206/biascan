@@ -7,7 +7,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 
 from .agents.orchestrator import Orchestrator
-from .config import PROMPT_VERSION
+from .config import (
+    AVAILABLE_ANALYSIS_MODES,
+    DEFAULT_ANALYSIS_MODE,
+    PROMPTS_DIR,
+    resolve_prompt_filename,
+    resolve_prompt_version,
+)
 from .providers import LLMError, SUPPORTED_PROVIDERS, build_provider, get_word_cap
 from .schemas import AnalyzeRequest, AnalyzeResponse, PingRequest
 
@@ -52,39 +58,26 @@ def get_orchestrator() -> Orchestrator:
 
 @app.get("/api/health")
 async def health() -> dict:
-    """Health probe with deployment diagnostics.
-
-    Reports whether the agent prompts and Evidence RAG corpus are actually
-    bundled with this build — both are non-Python static files that Vercel
-    only ships when listed in `includeFiles` in vercel.json. If
-    `prompts_present` < 5 or `corpus_present` is false, the relevant
-    feature degrades silently in production.
-    """
+    """Health probe with deployment diagnostics."""
     from pathlib import Path
-    from .config import PROMPTS_DIR
-    from .rag.evidence_rag import _SAMPLES_JSON, _CANDIDATE_PATHS
 
-    prompts_present = len(list((PROMPTS_DIR / PROMPT_VERSION).glob("*.txt"))) if (PROMPTS_DIR / PROMPT_VERSION).is_dir() else 0
-    corpus_path = Path(_SAMPLES_JSON)
-    corpus_present = corpus_path.is_file()
-    corpus_size_mb = round(corpus_path.stat().st_size / 1_048_576, 1) if corpus_present else 0
+    prompt_families = {}
+    for analysis_mode in AVAILABLE_ANALYSIS_MODES:
+        prompt_version = resolve_prompt_version(analysis_mode)
+        prompt_dir = PROMPTS_DIR / prompt_version
+        prompt_families[analysis_mode] = {
+            "prompt_version": prompt_version,
+            "prompts_present": len(list(prompt_dir.glob("*.txt"))) if prompt_dir.is_dir() else 0,
+        }
 
     return {
         "status": "ok",
-        "prompt_version": PROMPT_VERSION,
+        "default_analysis_mode": DEFAULT_ANALYSIS_MODE,
+        "analysis_modes": list(AVAILABLE_ANALYSIS_MODES),
+        "prompt_version": resolve_prompt_version(DEFAULT_ANALYSIS_MODE),
+        "prompt_families": prompt_families,
         "key_storage": "none - keys are accepted per-request and never persisted",
-        "prompts_present": prompts_present,
-        "corpus_present": corpus_present,
-        "corpus_size_mb": corpus_size_mb,
-        # Debug info for diagnosing Vercel bundling. `candidates` shows every
-        # location we search; `selected` is the path actually loaded.
-        "debug": {
-            "selected": str(corpus_path),
-            "candidates": [
-                {"path": str(p), "exists": p.is_file()} for p in _CANDIDATE_PATHS
-            ],
-            "cwd": str(Path.cwd()),
-        },
+        "cwd": str(Path.cwd()),
     }
 
 
@@ -97,12 +90,25 @@ async def list_providers() -> dict:
 async def list_agents() -> dict:
     orch = get_orchestrator()
     return {
+        "default_analysis_mode": DEFAULT_ANALYSIS_MODE,
+        "analysis_modes": list(AVAILABLE_ANALYSIS_MODES),
         "agents": [
             {
                 "name": a.name,
                 "bias_type": a.bias_type,
-                "prompt_version": a.prompt_version,
-                "prompt_filename": a.prompt_filename,
+                "prompt_version": a.prompt_version_for(DEFAULT_ANALYSIS_MODE),
+                "prompt_filename": a.prompt_filename_for(DEFAULT_ANALYSIS_MODE),
+                "prompt_variants": [
+                    {
+                        "analysis_mode": analysis_mode,
+                        "prompt_version": a.prompt_version_for(analysis_mode),
+                        "prompt_filename": resolve_prompt_filename(
+                            a.prompt_filename,
+                            a.prompt_version_for(analysis_mode),
+                        ),
+                    }
+                    for analysis_mode in AVAILABLE_ANALYSIS_MODES
+                ],
             }
             for a in orch.agents
         ]
@@ -154,6 +160,7 @@ async def analyze(req: AnalyzeRequest) -> AnalyzeResponse:
         text=text,
         references=req.references,
         mode=req.mode,
+        analysis_mode=req.analysis_mode,
         provider_config=req.provider,
         agents=req.agents,
         extra_warnings=extra_warnings,
@@ -188,6 +195,7 @@ async def analyze_stream(req: AnalyzeRequest) -> StreamingResponse:
             text=text,
             references=req.references,
             mode=req.mode,
+            analysis_mode=req.analysis_mode,
             provider_config=req.provider,
             agents=req.agents,
             extra_warnings=extra_warnings,

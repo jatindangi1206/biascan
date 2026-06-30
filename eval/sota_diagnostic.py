@@ -65,6 +65,7 @@ async def main() -> int:
     orch = Orchestrator()
     resp = await orch.analyze(
         text=text, references=None, mode="lite",
+        analysis_mode="systematic_review",
         provider_config=cfg, agents=None,
     )
     print(fmt(label, model, resp.overall_bias_score, resp.annotations, resp.warnings))

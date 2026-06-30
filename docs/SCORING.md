@@ -3,7 +3,8 @@
 How a piece of text becomes a bias score, end to end. This is the user-facing
 contract; the implementation lives in
 [`backend/app/agents/orchestrator.py`](../backend/app/agents/orchestrator.py)
-and [`frontend/src/components/ResultsPanel.tsx`](../frontend/src/components/ResultsPanel.tsx).
+(`_overall_score`) and is mirrored in
+[`frontend/src/components/ResultsPanel.tsx`](../frontend/src/components/ResultsPanel.tsx).
 
 ---
 
@@ -17,146 +18,163 @@ and [`frontend/src/components/ResultsPanel.tsx`](../frontend/src/components/Resu
         └── VIGIL  (causal_inference)     ──┘
                           │
                           ▼
-            confidence floor (drop weak flags)
-                          │
-                          ▼
-            Evidence RAG cross-check  (±0.15 to confidence)
+            confidence floor (drop weak flags, < 0.5)
                           │
                           ▼
             AEGIS — conflict resolution    (only if overlapping spans
                                             with different bias types)
                           │
                           ▼
-            _overall_score(flags) → 0.0 – 1.0
+            _overall_score(flags, text) → 0.0 – 1.0
                           │
                           ▼
             scoreValue = score × 10, mapped to a label
 ```
-
-Each stage is described below.
 
 ---
 
 ## 1. Flag generation (the five agents)
 
 Five specialised agents run in parallel against the chosen LLM provider. Each
-asks the model to find one specific kind of bias and return JSON. Every
-returned flag carries:
+asks the model to find one specific kind of bias and return JSON. Every flag
+carries:
 
 | Field | Source | Notes |
 |---|---|---|
 | `bias_type` | Agent class | Fixed per agent (e.g. ARGUS → `confirmation_bias`) |
 | `flagged_text`, `span_start`, `span_end` | LLM | Re-anchored against source if offsets drift |
 | `confidence` | LLM | 0.0 – 1.0 |
-| `severity` | LLM | `low` / `medium` / `high` — model's judgment per flag |
+| `severity` | LLM | `low` / `medium` / `high` — the model's judgment per flag |
 | `clean_alternative`, `false_positive_check`, … | LLM | Optional context |
 
-**Important:** severity is decided by the LLM per flag. The orchestrator
-never overrides it.
-
-Flags whose `confidence < CONFIDENCE_FLOOR` (default 0.5, env-overridable)
-are dropped before scoring.
+Severity is decided by the LLM per flag; the orchestrator never overrides it.
+Flags whose `confidence < CONFIDENCE_FLOOR` (default 0.5, env-overridable) are
+dropped before scoring.
 
 ---
 
-## 2. Evidence RAG cross-check
+## 2. AEGIS — conflict resolution
 
-Every surviving flag's `flagged_text` is queried against an evidence index
-built from the eleven hand-written `BIAS_PATTERNS` plus dataset exemplars in
-`eval/output/samples.json`. Each match adjusts confidence:
-
-| Match label | Effect on confidence |
-|---|---|
-| `biased` | + up to 0.08 per strong match |
-| `neutral` / `control` | − up to 0.08 per strong match |
-
-Total adjustment is clamped to **±0.15** — the cross-check refines, never
-overrides, the LLM's judgment.
+AEGIS only fires when **two or more flags overlap (IoU ≥ 0.5) with different
+`bias_type`s** ([`meta_evaluator.py`](../backend/app/agents/meta_evaluator.py)).
+Most flags never see it. When it does fire, union-find groups all
+transitively-overlapping flags into one cluster, AEGIS reads the source span
+plus every candidate flag (and each agent's reasoning) and returns **one**
+consolidated annotation per cluster. If AEGIS fails, the highest-confidence
+original is kept.
 
 ---
 
-## 3. AEGIS — conflict resolution
+## 3. The score formula
 
-AEGIS only fires when **two or more flags overlap (IoU ≥ 0.3) with different
-`bias_type`s**. Most flags never see AEGIS. When it does fire:
-
-1. Union-find groups all transitively-overlapping flags into a single cluster.
-2. AEGIS reads the source span + every candidate flag (including each agent's
-   chain-of-thought) and returns **one** consolidated annotation per cluster.
-3. If AEGIS fails, the highest-confidence original is kept as a fallback.
-
----
-
-## 4. Overall score formula
+The score is a single product of two factors — **how much** of the text is
+biased and **how strongly** — calibrated onto a 0–10 scale.
 
 ```
-n           = number of surviving flags
-base        = min(8.0,  12 × n / (5 + n))
-severity    = min(1.5,  0.4 × high_count  +  0.15 × medium_count)
-diversity   = 0.15 × (unique_bias_types − 1)
-
-score (0–10) = min(10, base + severity + diversity)
+coverage = min(1, flagged_words / total_words)
+impact   = Σᵢ (confidenceᵢ × severity_weightᵢ)   +   0.15 × (unique_types − 1)
+                                                       severity: high=3, medium=2, low=1
+score (0–10) = min(10,  impact × coverage × 3.33)
 ```
 
-Four properties this guarantees:
+Below is each piece, and why it's there.
 
-1. **Monotonic in flag count.** Adding a flag can never lower the score.
-2. **Count dominates.** `base` ranges 0 – 8; severity adds at most +1.5;
-   diversity adds at most +0.6 (5 types). Most of the score is "how many
-   things were flagged."
-3. **Continuous at zero.** No flags → 0.0. One flag never jumps into the
-   "Moderate" band.
-4. **Roughly even per-flag deltas at low counts.** Because the score is
-   bounded 0–10, perfect linearity is impossible — something has to give.
-   The curve is tuned so the first 5 flags contribute fairly evenly
-   (+2.00, +1.43, +1.07, +0.83, +0.67) and only saturates aggressively
-   past 10 flags (where the document is already clearly broken).
+### Coverage — *how much of the text is biased*
 
-### Base curve (purely a function of flag count)
+```
+coverage = min(1, flagged_words / total_words)
+```
 
-| Flags | Base | Δ from previous |
-|---:|---:|---:|
-| 0 | 0.00 | — |
-| 1 | 2.00 | +2.00 |
-| 2 | 3.43 | +1.43 |
-| 3 | 4.50 | +1.07 |
-| 4 | 5.33 | +0.83 |
-| 5 | 6.00 | +0.67 |
-| 6 | 6.55 | +0.55 |
-| 7 | 7.00 | +0.45 |
-| 8 | 7.38 | +0.38 |
-| 10 | **8.00 (cap)** | |
-| 20+ | 8.00 | — |
+**Why.** A bias score has to answer "how much of this document is affected?"
+Counting flagged words against total words is the standard length
+normalisation: the same two biased sentences should weigh far more in a
+50-word abstract than in a 5,000-word report. Each document word is counted
+**once** even when several flags overlap it (a union, not a sum), so coverage
+is an honest fraction that can never exceed 100% — the `min(1, ·)` is just a
+safety clamp. There is no length floor, so a short, fully-biased snippet
+legitimately gets `coverage = 1.0`.
 
-### Severity bumps
+### Impact — *how strongly biased it is*
 
-| Composition | Bump |
-|---|---:|
-| 1 medium | +0.15 |
-| 1 high | +0.40 |
-| 2 medium | +0.30 |
-| 2 high | +0.80 |
-| 3 high | +1.20 |
-| 4 high (or many mediums) | **+1.50 (capped)** |
+```
+impact = Σᵢ confidenceᵢ × severity_weightᵢ
+```
 
-Low-severity flags contribute nothing to this bump.
+**Why.** Two things make a flag matter: how sure the model is (confidence) and
+how bad the issue is (severity). Multiplying them per flag and summing gives an
+"expected severity" — a flag the model is only 50% sure about counts half.
+Summing across flags means more issues raise the score, which is the trust
+contract: more flags ⇒ higher score.
 
-### Diversity bump
+### Severity weights — 3 / 2 / 1
 
-| Distinct bias types | Bump |
-|---:|---:|
-| 1 | 0.00 |
-| 2 | +0.15 |
-| 3 | +0.30 |
-| 4 | +0.45 |
-| 5 | +0.60 |
+```
+high = 3.0   medium = 2.0   low = 1.0
+```
+
+**Why.** A simple, readable ladder: a high-severity issue counts three times a
+low one. Integers keep it auditable — the UI shows `H=3 · M=2 · L=1` so a user
+can recompute the number by hand. The exact ratio isn't a psychometric claim;
+it's the simplest monotone weighting that preserves ordering.
+
+### Confidence floor — 0.5
+
+Flags below 0.5 confidence are dropped *before* scoring. 0.5 = "more likely
+than not." So every flag that reaches the formula contributes between
+`0.5 × weight` and `1.0 × weight` — weak guesses are gone, surviving flags are
+still discounted by remaining uncertainty.
+
+### Diversity bump — +0.15 per extra bias type
+
+```
+impact += 0.15 × max(0, unique_types − 1)
+```
+
+**Why.** A document tripping four *different* kinds of bias is more
+systemically biased than one tripping the same kind four times. This is a small
+additive nudge — at most +0.6 when all five types fire — so it breaks ties
+without overpowering coverage or impact. The `−1` means a single-type document
+gets nothing extra (that's the baseline), and it's added to `impact` before the
+coverage multiply, so it too gets length-scaled.
+
+### Why a product, and why × 3.33
+
+```
+score (0–10) = min(10,  impact × coverage × 3.33)
+```
+
+**Why a product (not a sum).** A document should score high only if it is both
+strongly biased (`impact`) **and** substantially affected (`coverage`). One
+severe flag buried in a long clean report has tiny coverage, so the product
+stays low — it can't pretend the whole document is biased. That AND-behaviour
+is the central design property, and only a product gives it.
+
+**Why 3.33.** It is a calibration constant, ≈ 10/3, that sets where the score
+saturates. We want the worst realistic document — fully covered
+(`coverage = 1`) with `impact ≈ 3` (e.g. one confident high-severity flag,
+`1.0 × 3 = 3`) — to land at the top of the scale, 10. Solve for the constant
+`k`:
+
+```
+impact × coverage × k = 10
+      3   ×    1    × k = 10
+                      k = 3.33
+```
+
+So 3.33 makes the score climb **fast** — a thoroughly biased passage reaches
+the "Severe" band quickly — while `min(10, ·)` caps it so it **never crosses**
+the 0–10 range. Without the multiplier you would need `impact × coverage = 10`
+to max out, which is practically unreachable, and almost every biased document
+would cluster near zero.
+
+The final value is divided by 10 to return a `0.0–1.0` score from the API; the
+UI multiplies back by 10 for display.
 
 ---
 
-## 5. Score → label
+## 4. Score → label
 
-The frontend ([ResultsPanel.tsx](../frontend/src/components/ResultsPanel.tsx))
-maps the 0–10 score to one of four bands:
+The frontend maps the 0–10 score to one of four bands:
 
 | Score | Label |
 |---|---|
@@ -167,131 +185,48 @@ maps the 0–10 score to one of four bands:
 
 ---
 
-## 6. Score lookup tables
+## 5. Worked examples
 
-All values computed by running the live `_overall_score` function on
-synthetic input. Use this to sanity-check the UI.
+**Short biased sentence** — 1 high flag (conf 0.9), whole sentence flagged:
 
-### Pure severity (single bias type)
+```
+coverage = 1.0
+impact   = 0.9 × 3                     = 2.70
+score    = min(10, 2.70 × 1.0 × 3.33)  = 9.0 / 10  →  "Severe"
+```
 
-| Flags | All low | All medium | All high |
-|---:|---:|---:|---:|
-| 0 | 0.0 | 0.0 | 0.0 |
-| 1 | 2.0 | 2.1 | 2.4 |
-| 2 | 3.4 | 3.7 | 4.2 |
-| 3 | 4.5 | 5.0 | 5.7 |
-| 4 | 5.3 | 5.9 | 6.8 |
-| 5 | 6.0 | 6.8 | 7.5 |
-| 6 | 6.6 | 7.5 | 8.1 |
-| 7 | 7.0 | 8.1 | 8.5 |
-| 8 | 7.4 | 8.6 | 8.9 |
-| 9 | 7.7 | 9.1 | 9.2 |
-| 10 | 8.0 | 9.5 | 9.5 |
+**Long report, one small flag** — 200 words, one 10-word medium flag (conf 0.7):
 
-### Diversity at fixed count (5 medium flags)
+```
+coverage = 10 / 200                    = 0.05
+impact   = 0.7 × 2                     = 1.40
+score    = min(10, 1.40 × 0.05 × 3.33) = 0.2 / 10  →  "Low"
+```
 
-| Bias types | Score |
-|---:|---:|
-| 1 | 5.8 |
-| 2 | 5.9 |
-| 3 | 6.1 |
-| 4 | 6.2 |
-| 5 | 6.4 |
+Same flag, very different score — because coverage says the rest of the
+document is clean.
+
+**Moderately biased** — 3 flags over 2 types, ~40% of the text covered
+(high @0.8, medium @0.7, medium @0.6):
+
+```
+impact   = (0.8×3 + 0.7×2 + 0.6×2) + 0.15×(2−1)  = 5.00 + 0.15 = 5.15
+coverage = 0.40
+score    = min(10, 5.15 × 0.40 × 3.33)            = 6.9 / 10  →  "Concerning"
+```
 
 ---
 
-## 7. Worked examples
-
-### Clean Cochrane Review excerpt — 2 high flags, 2 bias types
-
-```
-base       = min(8, 12 × 2 / 7)         = 3.43
-severity   = 0.4 × 2                    = 0.80
-diversity  = 0.15 × (2 − 1)             = 0.15
-─────────────────────────────────────
-score      = 4.38  →  4.4 / 10  →  "Moderate"
-```
-
-### Cochrane homeopathy review — 4 flags (2 high + 2 medium), 4 bias types
-
-```
-base       = min(8, 12 × 4 / 9)         = 5.33
-severity   = 0.4 × 2 + 0.15 × 2         = 1.10
-diversity  = 0.15 × (4 − 1)             = 0.45
-─────────────────────────────────────
-score      = 6.88  →  6.9 / 10  →  "Concerning"
-```
-
-The biased document scores **higher than the clean one even though both
-trigger the same model.** This is the trust contract: more flags ⇒ higher
-score, every time.
-
-### Heavily biased synthesis — 5 flags (3 high + 2 medium), 4 bias types
-
-```
-base       = min(8, 12 × 5 / 10)        = 6.00
-severity   = min(1.5, 0.4 × 3 + 0.15 × 2) = 1.50  (capped)
-diversity  = 0.15 × (4 − 1)             = 0.45
-─────────────────────────────────────
-score      = 7.95  →  8.0 / 10  →  "Severe"
-```
-
-### Single weak finding — 1 medium flag, 1 bias type
-
-```
-base       = min(8, 12 × 1 / 6)         = 2.00
-severity   = 0.15
-diversity  = 0
-─────────────────────────────────────
-score      = 2.15  →  2.2 / 10  →  "Low"
-```
-
-One flag is one issue. The score reflects that.
-
----
-
-## 8. Before/after — why this formula replaced the old one
-
-The previous formula used max-pooling + top-k weighted average + a density
-multiplier. Two failure modes drove the rewrite:
-
-The formula has gone through three iterations. The latest tuning was driven
-by a user observation: "5 flags only contribute +5.0 while 1 flag contributes
-+2.0 — why doesn't 5 flags get +10?"
-
-Honest answer: a bounded 0–10 score can't be perfectly linear. *Something*
-has to saturate. The earlier curve (`8 × n/(3+n)`) saturated too fast —
-flag #5 only added +0.43, which made the breakdown read like the score
-was cheating on additional flags.
-
-The current curve (`min(8, 12 × n/(5+n))`) stretches the linear region:
-the first 5 flags contribute roughly evenly (+2.0, +1.43, +1.07, +0.83,
-+0.67), and the base only caps at n=10.
-
-| Case | v1 (max-pool + density) | v2 (8n/(3+n)) | **v3 (current)** |
-|---|---:|---:|---:|
-| 0 flags | 0.0 | 0.0 | 0.0 |
-| 1 medium flag | 4.0 | 2.2 | 2.2 |
-| 1 high flag | 4.3 | 2.4 | 2.4 |
-| 2 high (clean Cochrane) | 5.7 | 4.2 | 4.4 |
-| 4 mixed (homeopathy) | **6.6** | 6.1 | 6.9 |
-| 5 mixed (heavily biased) | — | 6.9 | **8.0** |
-| 3 medium | 5.7 | 4.5 | 5.0 |
-| 5 high, 5 types | 8.0 | 7.1 | 8.1 |
-
-v1 was wrong in the wrong direction (biased doc scored lower than clean
-doc). v2 fixed the direction but saturated too aggressively. v3 keeps the
-single-flag anchor of v2 while restoring meaningful per-flag growth.
-
----
-
-## 9. Keeping it in sync
+## 6. Keeping it in sync
 
 Two places implement the same formula and must agree:
 
 - [`backend/app/agents/orchestrator.py`](../backend/app/agents/orchestrator.py) — `_overall_score`
-- [`frontend/src/components/ResultsPanel.tsx`](../frontend/src/components/ResultsPanel.tsx) — the breakdown rendered under "How is this calculated?"
+- [`frontend/src/components/ResultsPanel.tsx`](../frontend/src/components/ResultsPanel.tsx) — the breakdown under "How is this calculated?"
 
-If you change the formula in one place, change it in the other. The frontend
-recomputes the breakdown locally (rather than relying on the backend to send
-it back) so users see the same numbers the score was built from.
+The frontend recomputes the breakdown locally so users see the same numbers the
+score was built from. Change one, change the other.
+
+To re-tune the constants empirically, [`eval/calibrate_score.py`](../eval/calibrate_score.py)
+grid-searches scoring constants against the labelled biased/control corpus to
+maximise ROC AUC of `biased_score > control_score`.

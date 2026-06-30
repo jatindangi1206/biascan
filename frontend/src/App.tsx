@@ -16,12 +16,14 @@ import type { AgentStatus } from "./components/ProgressPanel";
 import { AnalysisLog, nowStamp } from "./components/AnalysisLog";
 import type { LogEntry } from "./components/AnalysisLog";
 import { HowItWorks } from "./components/HowItWorks";
+import { Leaderboard } from "./components/Leaderboard";
 import {
   SettingsPanel,
   loadStoredConfig,
   storeConfig,
 } from "./components/SettingsPanel";
 import type {
+  AnalysisMode,
   AgentInfo,
   AgentName,
   AnalyzeResponse,
@@ -31,6 +33,10 @@ import type {
   ProviderInfo,
 } from "./types";
 import { DEFAULT_AGENT_NAMES } from "./types";
+
+// Systematic review (v1) is the product. The general_research/v2 path is no
+// longer user-selectable.
+const ANALYSIS_MODE: AnalysisMode = "systematic_review";
 
 const DEFAULT_CONFIG: ProviderConfig = {
   provider: "ollama",
@@ -85,12 +91,14 @@ export default function App() {
   const [text, setText] = useState("");
   const [references, setReferences] = useState("");
   const [mode, setMode] = useState<Mode>("lite");
+  const analysisMode = ANALYSIS_MODE;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<AnalyzeResponse | null>(null);
   const [entered, setEntered] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [showHowItWorks, setShowHowItWorks] = useState(false);
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [providers, setProviders] = useState<ProviderInfo[]>([]);
   const [agents, setAgents] = useState<AgentInfo[]>([]);
   const [bootWarning, setBootWarning] = useState<string | null>(null);
@@ -207,6 +215,7 @@ export default function App() {
       text,
       references,
       mode,
+      analysisMode,
       config,
       agentList,
       {
@@ -293,6 +302,7 @@ export default function App() {
           const finalResult: AnalyzeResponse = {
             document_id: e.document_id,
             mode: e.mode as Mode,
+            analysis_mode: e.analysis_mode,
             overall_bias_score: e.overall_bias_score,
             annotations: e.annotations,
             agents: e.agents.map((a) => ({
@@ -407,7 +417,16 @@ export default function App() {
         </div>
 
           <div className="topbar-right">
-            {!showHowItWorks && stage !== "landing" && (
+            {!showLeaderboard && (
+              <button
+                type="button"
+                className="nav-link"
+                onClick={() => { setShowHowItWorks(false); setShowLeaderboard(true); }}
+              >
+                Leaderboard
+              </button>
+            )}
+            {!showHowItWorks && !showLeaderboard && stage !== "landing" && (
               <button
                 type="button"
                 className="nav-link"
@@ -420,21 +439,27 @@ export default function App() {
       </header>
 
       <div className="research-banner">{EVALUATION_NOTICE}</div>
-      {bootWarning && !showHowItWorks && <div className="boot-banner">{bootWarning}</div>}
-      {error && !showHowItWorks && <div className="error-banner">{error}</div>}
+      {bootWarning && !showHowItWorks && !showLeaderboard && <div className="boot-banner">{bootWarning}</div>}
+      {error && !showHowItWorks && !showLeaderboard && <div className="error-banner">{error}</div>}
 
-      {showHowItWorks && (
+      {showLeaderboard && (
+        <main className="main-stage">
+          <Leaderboard onBack={() => setShowLeaderboard(false)} />
+        </main>
+      )}
+
+      {showHowItWorks && !showLeaderboard && (
         <main className="main-stage">
           <HowItWorks onBack={() => setShowHowItWorks(false)} />
         </main>
       )}
 
-      {!showHowItWorks && <main className="main-stage">
+      {!showHowItWorks && !showLeaderboard && <main className="main-stage">
         {stage === "landing" && (
           <section className="landing-stage">
             <p className="eyebrow">A focused thinking tool</p>
             <h1 className="landing-title">BiasScan</h1>
-            <p className="landing-copy">Detect cognitive bias in scientific synthesis</p>
+            <p className="landing-copy">Detect cognitive bias in research writing</p>
             <button type="button" className="hero-button" onClick={startCompose}>
               Try Now
             </button>

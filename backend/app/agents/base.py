@@ -6,9 +6,15 @@ import unicodedata
 from pathlib import Path
 from typing import Any
 
-from ..config import DEFAULT_MAX_TOKENS, PROMPT_VERSION, PROMPTS_DIR
+from ..config import (
+    DEFAULT_ANALYSIS_MODE,
+    DEFAULT_MAX_TOKENS,
+    resolve_prompt_filename,
+    resolve_prompt_path,
+    resolve_prompt_version,
+)
 from ..providers import LLMError, LLMProvider
-from ..schemas import Annotation, BiasType
+from ..schemas import AnalysisMode, Annotation, BiasType
 
 logger = logging.getLogger(__name__)
 
@@ -47,27 +53,54 @@ class BaseAgent:
     prompt_filename: str = ""
 
     def __init__(self) -> None:
-        self._system_prompt: str | None = None
+        self._system_prompts: dict[str, str] = {}
 
     @property
     def prompt_version(self) -> str:
-        return PROMPT_VERSION
+        return self.prompt_version_for(DEFAULT_ANALYSIS_MODE)
 
-    def load_prompt(self) -> str:
-        if self._system_prompt is not None:
-            return self._system_prompt
-        path: Path = PROMPTS_DIR / PROMPT_VERSION / self.prompt_filename
-        self._system_prompt = path.read_text(encoding="utf-8")
-        return self._system_prompt
+    def prompt_version_for(self, analysis_mode: AnalysisMode) -> str:
+        return resolve_prompt_version(analysis_mode)
 
-    def build_user_message(self, text: str, references: str | None, mode: str) -> str:
+    def prompt_filename_for(self, analysis_mode: AnalysisMode) -> str:
+        return resolve_prompt_filename(
+            self.prompt_filename,
+            self.prompt_version_for(analysis_mode),
+        )
+
+    def load_prompt(self, analysis_mode: AnalysisMode) -> str:
+        cache_key = self.prompt_version_for(analysis_mode)
+        cached = self._system_prompts.get(cache_key)
+        if cached is not None:
+            return cached
+        path: Path = resolve_prompt_path(self.prompt_filename, analysis_mode)
+        prompt = path.read_text(encoding="utf-8")
+        self._system_prompts[cache_key] = prompt
+        return prompt
+
+    def build_user_message(
+        self,
+        text: str,
+        references: str | None,
+        mode: str,
+        analysis_mode: AnalysisMode,
+    ) -> str:
         ref_block = (references or "").strip() or "[No reference list provided.]"
+        if analysis_mode == "systematic_review":
+            return (
+                f"=== MODE === {mode}\n\n"
+                f"=== SYNTHESIS TEXT (analyse this) ===\n{text}\n\n"
+                f"=== REFERENCE LIST (for context) ===\n{ref_block}\n\n"
+                f"Apply your reasoning protocol. Return ONLY the JSON object with key "
+                f"'annotations'. Character offsets must index into the SYNTHESIS TEXT exactly as given."
+            )
         return (
             f"=== MODE === {mode}\n\n"
-            f"=== SYNTHESIS TEXT (analyse this) ===\n{text}\n\n"
+            f"=== ANALYSIS MODE === {analysis_mode}\n\n"
+            f"=== RESEARCH TEXT (analyse this) ===\n{text}\n\n"
             f"=== REFERENCE LIST (for context) ===\n{ref_block}\n\n"
             f"Apply your reasoning protocol. Return ONLY the JSON object with key "
-            f"'annotations'. Character offsets must index into the SYNTHESIS TEXT exactly as given."
+            f"'annotations'. Character offsets must index into the RESEARCH TEXT exactly as given."
         )
 
     async def run(
@@ -77,6 +110,7 @@ class BaseAgent:
         source_text: str | None = None,
         references: str | None,
         mode: str,
+        analysis_mode: AnalysisMode,
         provider: LLMProvider,
         max_tokens: int = DEFAULT_MAX_TOKENS,
     ) -> tuple[list[Annotation], str | None, dict | None]:
@@ -99,8 +133,8 @@ class BaseAgent:
                          If None, defaults to ``text`` (no RAG path).
         """
         anchor = source_text if source_text is not None else text
-        system_prompt = self.load_prompt()
-        user_message = self.build_user_message(text, references, mode)
+        system_prompt = self.load_prompt(analysis_mode)
+        user_message = self.build_user_message(text, references, mode, analysis_mode)
 
         try:
             raw = await provider.complete(

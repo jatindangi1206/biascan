@@ -52,6 +52,7 @@ async def one_run(orch: Orchestrator, text: str, cfg: ProviderConfig) -> dict:
     try:
         resp = await orch.analyze(
             text=text, references=None, mode="lite",
+            analysis_mode="systematic_review",
             provider_config=cfg, agents=None,
         )
         flags = [

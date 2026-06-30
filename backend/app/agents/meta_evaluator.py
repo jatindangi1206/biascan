@@ -17,7 +17,7 @@ import logging
 from typing import Iterable
 
 from ..providers import LLMProvider
-from ..schemas import Annotation
+from ..schemas import AnalysisMode, Annotation
 from .aegis import AegisAgent
 
 logger = logging.getLogger(__name__)
@@ -78,6 +78,7 @@ async def aegis_resolve_clusters(
     source_text: str,
     provider: LLMProvider,
     aegis: AegisAgent,
+    analysis_mode: AnalysisMode,
     *,
     context_pad: int = 80,
 ) -> list[Annotation]:
@@ -98,6 +99,7 @@ async def aegis_resolve_clusters(
             span_text=span_text,
             candidates=cluster,
             source_text=source_text,
+            analysis_mode=analysis_mode,
             provider=provider,
         )
         return indices, resolved

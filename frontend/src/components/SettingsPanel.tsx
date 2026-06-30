@@ -314,9 +314,7 @@ export function SettingsPanel({
                   <span className="agent-bullet" />
                   <span className="agent-copy">
                     <strong>{BIAS_LABELS[agent.bias_type]}</strong>
-                    <small>
-                      {agent.name} · {agent.prompt_version}
-                    </small>
+                    <small>{agent.name}</small>
                   </span>
                   <span className="agent-state">{isOn ? "On" : "Off"}</span>
                 </button>

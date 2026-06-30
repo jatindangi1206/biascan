@@ -24,6 +24,7 @@ async def one_run(orch: Orchestrator, text: str, cfg: ProviderConfig) -> tuple[f
     try:
         resp = await orch.analyze(
             text=text, references=None, mode="lite",
+            analysis_mode="systematic_review",
             provider_config=cfg, agents=None,
         )
         return resp.overall_bias_score * 10, len(resp.annotations)

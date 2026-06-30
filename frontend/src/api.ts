@@ -1,4 +1,5 @@
 import type {
+  AnalysisMode,
   AgentInfo,
   AgentName,
   AnalyzeResponse,
@@ -27,6 +28,7 @@ export interface StreamStartEvent {
   document_id: string;
   total_agents: number;
   agent_names: AgentName[];
+  analysis_mode?: AnalysisMode;
 }
 
 export interface StreamPipelineMetaEvent {
@@ -61,6 +63,7 @@ export interface StreamCompletePayload {
     reasoning: Record<string, unknown> | null;
   }>;
   mode: Mode;
+  analysis_mode: AnalysisMode;
   warnings: string[];
   provider: { provider: string; model: string; base_url: string | null };
 }
@@ -71,6 +74,7 @@ export function analyzeStream(
   text: string,
   references: string,
   mode: Mode,
+  analysisMode: AnalysisMode,
   provider: ProviderConfig,
   agents: AgentName[],
   callbacks: {
@@ -96,6 +100,7 @@ export function analyzeStream(
           text,
           references: references || null,
           mode,
+          analysis_mode: analysisMode,
           provider,
           agents: agents.length === 0 ? null : agents,
         }),
@@ -166,6 +171,7 @@ export async function analyze(
   text: string,
   references: string,
   mode: Mode,
+  analysisMode: AnalysisMode,
   provider: ProviderConfig,
   agents: AgentName[]
 ): Promise<AnalyzeResponse> {
@@ -176,6 +182,7 @@ export async function analyze(
       text,
       references: references || null,
       mode,
+      analysis_mode: analysisMode,
       provider,
       agents: agents.length === 0 ? null : agents,
     }),

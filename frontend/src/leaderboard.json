@@ -1,0 +1,64 @@
+{
+  "updated": "2026-06",
+  "mode": "systematic_review",
+  "n_runs": 5,
+  "n_models": 8,
+  "rows": [
+    {
+      "model": "Gemini 2.5 Flash",
+      "overall": 0.745,
+      "ms_gut": 1.163,
+      "nutra": 0.327,
+      "rank": 1
+    },
+    {
+      "model": "Claude Haiku 4.5",
+      "overall": 0.505,
+      "ms_gut": 0.367,
+      "nutra": 0.643,
+      "rank": 2
+    },
+    {
+      "model": "Claude Sonnet 4.5",
+      "overall": 0.422,
+      "ms_gut": 0.255,
+      "nutra": 0.589,
+      "rank": 3
+    },
+    {
+      "model": "Llama 4 Maverick",
+      "overall": 0.338,
+      "ms_gut": 0.07,
+      "nutra": 0.606,
+      "rank": 4
+    },
+    {
+      "model": "GPT-4.1",
+      "overall": 0.324,
+      "ms_gut": 0.204,
+      "nutra": 0.444,
+      "rank": 5
+    },
+    {
+      "model": "DeepSeek R1",
+      "overall": 0.29,
+      "ms_gut": 0.464,
+      "nutra": 0.117,
+      "rank": 6
+    },
+    {
+      "model": "Gemini 2.5 Pro",
+      "overall": 0.132,
+      "ms_gut": 0.242,
+      "nutra": 0.022,
+      "rank": 7
+    },
+    {
+      "model": "GPT-4.1 Mini",
+      "overall": 0.078,
+      "ms_gut": 0.156,
+      "nutra": 0.0,
+      "rank": 8
+    }
+  ]
+}

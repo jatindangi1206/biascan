@@ -12,12 +12,17 @@ fixed class attribute, and it returns at most one annotation.
 from __future__ import annotations
 
 import json
-from pathlib import Path
 from typing import Any
 
-from ..config import DEFAULT_MAX_TOKENS, PROMPT_VERSION, PROMPTS_DIR
+from ..config import (
+    DEFAULT_ANALYSIS_MODE,
+    DEFAULT_MAX_TOKENS,
+    resolve_prompt_filename,
+    resolve_prompt_path,
+    resolve_prompt_version,
+)
 from ..providers import LLMError, LLMProvider
-from ..schemas import Annotation, BiasType
+from ..schemas import AnalysisMode, Annotation, BiasType
 from .base import _extract_json, _find_in_source, _resolve_confidence
 
 _VALID_BIAS_TYPES = {
@@ -34,18 +39,31 @@ class AegisAgent:
     prompt_filename = "aegis_v1.0.txt"
 
     def __init__(self) -> None:
-        self._system_prompt: str | None = None
+        self._system_prompts: dict[str, str] = {}
 
     @property
     def prompt_version(self) -> str:
-        return PROMPT_VERSION
+        return self.prompt_version_for(DEFAULT_ANALYSIS_MODE)
 
-    def load_prompt(self) -> str:
-        if self._system_prompt is not None:
-            return self._system_prompt
-        path: Path = PROMPTS_DIR / PROMPT_VERSION / self.prompt_filename
-        self._system_prompt = path.read_text(encoding="utf-8")
-        return self._system_prompt
+    def prompt_version_for(self, analysis_mode: AnalysisMode) -> str:
+        return resolve_prompt_version(analysis_mode)
+
+    def prompt_filename_for(self, analysis_mode: AnalysisMode) -> str:
+        return resolve_prompt_filename(
+            self.prompt_filename,
+            self.prompt_version_for(analysis_mode),
+        )
+
+    def load_prompt(self, analysis_mode: AnalysisMode) -> str:
+        cache_key = self.prompt_version_for(analysis_mode)
+        cached = self._system_prompts.get(cache_key)
+        if cached is not None:
+            return cached
+        prompt = resolve_prompt_path(self.prompt_filename, analysis_mode).read_text(
+            encoding="utf-8"
+        )
+        self._system_prompts[cache_key] = prompt
+        return prompt
 
     def build_user_message(self, span_text: str, candidates: list[Annotation]) -> str:
         cand_data = [_annotation_for_aegis(a) for a in candidates]
@@ -61,6 +79,7 @@ class AegisAgent:
         span_text: str,
         candidates: list[Annotation],
         source_text: str,
+        analysis_mode: AnalysisMode,
         provider: LLMProvider,
         max_tokens: int = DEFAULT_MAX_TOKENS,
     ) -> list[Annotation]:
@@ -68,8 +87,9 @@ class AegisAgent:
         cognitive error AEGIS identifies on the span), or [] on failure.
         Caller is responsible for fallback behaviour when the list is empty."""
         try:
+            prompt_version = self.prompt_version_for(analysis_mode)
             raw = await provider.complete(
-                system_prompt=self.load_prompt(),
+                system_prompt=self.load_prompt(analysis_mode),
                 user_message=self.build_user_message(span_text, candidates),
                 max_tokens=max_tokens,
             )
@@ -77,13 +97,14 @@ class AegisAgent:
             return []
         except Exception:
             return []
-        return self._parse(raw, source_text, candidates)
+        return self._parse(raw, source_text, candidates, prompt_version)
 
     def _parse(
         self,
         raw: str,
         source_text: str,
         candidates: list[Annotation],
+        prompt_version: str,
     ) -> list[Annotation]:
         data = _extract_json(raw)
         if not isinstance(data, dict):
@@ -97,7 +118,7 @@ class AegisAgent:
             if not isinstance(item, dict):
                 continue
             try:
-                ann = self._coerce(item, source_text, data, candidates)
+                ann = self._coerce(item, source_text, data, candidates, prompt_version)
             except Exception:
                 continue
             if ann is None:
@@ -116,6 +137,7 @@ class AegisAgent:
         source_text: str,
         wrapper: dict[str, Any],
         candidates: list[Annotation],
+        prompt_version: str,
     ) -> Annotation | None:
         # bias_type comes from the AEGIS output, validated against the literal.
         bias_type = item.get("bias_type")
@@ -177,7 +199,7 @@ class AegisAgent:
             severity=severity,  # type: ignore[arg-type]
             clean_alternative=item.get("clean_alternative"),
             agent_name=self.name,
-            prompt_version=self.prompt_version,
+            prompt_version=prompt_version,
             extras=extras,
         )
 

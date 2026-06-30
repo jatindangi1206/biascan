@@ -20,34 +20,30 @@ from app.providers.base import ProviderConfig  # noqa: E402
 
 SYNTHESIS_DIR = ROOT / "backend" / "app" / "synthesis"
 OUT_PATH = ROOT / "eval" / "output" / "leaderboard.json"
-PAPERS = ["Nu-OG", "Nu-OG-GPT", "Nu-Edit", "Nu-bias-injected"]
-N_RUNS = 2
+PAPERS = [
+    "MS_GUT_OG", "MS_GUT_GPT_Made", "MS_GUT_GPT_Edit",
+    "Nu_OG",     "Nu_GPT_OG",       "Nu_GPT_Edit",
+]
+N_RUNS = 5
 
 # Ordered by tier so cheap models run first; if something explodes we don't
-# waste TIER 4 money. Tier metadata is preserved in output for the leaderboard.
+# waste State-of-the-Art budget. Tier metadata is preserved in output.
 MODELS: list[dict] = [
-    # TIER 1 — Open Source
-    {"id": "qwen/qwen-2.5-72b-instruct",                 "tier": "Open Source"},
-    {"id": "meta-llama/llama-4-maverick",                "tier": "Open Source"},
-    {"id": "deepseek/deepseek-v4-flash",                 "tier": "Open Source"},
-    {"id": "qwen/qwen3-235b-a22b",                       "tier": "Open Source"},
-    {"id": "mistralai/mistral-small-3.1-24b-instruct",   "tier": "Open Source"},
-    # TIER 2 — Budget Proprietary
-    {"id": "openai/gpt-4o-mini",                         "tier": "Budget Proprietary"},
-    {"id": "openai/gpt-4.1-nano",                        "tier": "Budget Proprietary"},
-    {"id": "openai/gpt-4.1-mini",                        "tier": "Budget Proprietary"},
-    {"id": "google/gemini-2.5-flash-lite",               "tier": "Budget Proprietary"},
-    {"id": "google/gemini-3-flash",                      "tier": "Budget Proprietary"},
-    # TIER 3 — Decent
-    {"id": "google/gemini-2.5-flash",                    "tier": "Decent"},
-    {"id": "anthropic/claude-haiku-4.5",                 "tier": "Decent"},
-    {"id": "google/gemini-2.5-pro",                      "tier": "Decent"},
-    {"id": "openai/gpt-4o",                              "tier": "Decent"},
-    # TIER 4 — State of the Art
-    {"id": "google/gemini-3.1-pro",                      "tier": "State of the Art"},
-    {"id": "openai/gpt-5.4",                             "tier": "State of the Art"},
-    {"id": "anthropic/claude-sonnet-4.6",                "tier": "State of the Art"},
-    {"id": "anthropic/claude-opus-4.6",                  "tier": "State of the Art"},
+    # TIER 1 — Budget
+    {"id": "meta-llama/llama-4-maverick",        "tier": "Budget"},
+    {"id": "x-ai/grok-4.3",                      "tier": "Budget"},
+    {"id": "openai/gpt-4.1-mini",                "tier": "Budget"},
+    {"id": "google/gemini-2.5-flash",            "tier": "Budget"},
+    # TIER 2 — Decent
+    {"id": "google/gemini-2.5-pro",              "tier": "Decent"},
+    {"id": "openai/gpt-4.1",                     "tier": "Decent"},
+    {"id": "anthropic/claude-haiku-4.5",         "tier": "Decent"},
+    {"id": "deepseek/deepseek-r1",               "tier": "Decent"},
+    # TIER 3 — State of the Art
+    {"id": "anthropic/claude-sonnet-4-5",        "tier": "State of the Art"},
+    {"id": "openai/gpt-5.5",                     "tier": "State of the Art"},
+    {"id": "google/gemini-2.5-pro-preview",      "tier": "State of the Art"},
+    {"id": "z-ai/glm-5.2",                       "tier": "State of the Art"},
 ]
 
 
@@ -55,6 +51,7 @@ async def one_run(orch: Orchestrator, text: str, cfg: ProviderConfig) -> dict:
     try:
         resp = await orch.analyze(
             text=text, references=None, mode="lite",
+            analysis_mode="systematic_review",
             provider_config=cfg, agents=None,
         )
         flags = [
@@ -124,29 +121,27 @@ async def main() -> int:
         }, indent=2))
         print(f"  → saved progress to {OUT_PATH} ({i}/{len(MODELS)})", flush=True)
 
-    # Leaderboard table (sorted by Nu-bias-injected mean descending — truth test)
-    print("\n" + "=" * 130)
+    col_w = 14
+    header_papers = "  ".join(f"{p[:col_w]:<{col_w}}" for p in PAPERS)
+    sep = "=" * (2 + 1 + 42 + 2 + 22 + 2 + col_w * len(PAPERS) + 2 * len(PAPERS))
+    print(f"\n{sep}")
     print("LEADERBOARD — mean ± SD per (model, paper)")
-    print("=" * 130)
-    print(f"{'#':>2}  {'Model':<42}  {'Tier':<22}  {'Nu-OG':>11}  {'Nu-OG-GPT':>11}  {'Nu-Edit':>11}  {'Nu-injected':>11}")
-    print("-" * 130)
+    print(sep)
+    print(f"{'#':>2}  {'Model':<42}  {'Tier':<22}  {header_papers}")
+    print("-" * len(sep))
 
     def sortkey(r):
-        ni = r.get("papers", {}).get("Nu-bias-injected", {})
-        return -(ni.get("mean", -1))
+        scores = [v.get("mean", -1) for v in r.get("papers", {}).values() if v.get("mean") is not None]
+        return -(sum(scores) / len(scores)) if scores else 1
 
-    sorted_results = sorted(all_results, key=sortkey)
-    for rank, r in enumerate(sorted_results, 1):
+    for rank, r in enumerate(sorted(all_results, key=sortkey), 1):
         short = r["model"].split("/")[-1][:40]
         cells = []
         for p in PAPERS:
             d = r.get("papers", {}).get(p, {})
-            if d:
-                cells.append(f"{d['mean']:>5.2f}±{d['sd']:<4.2f}")
-            else:
-                cells.append(f"{'—':>11}")
-        print(f"{rank:>2}  {short:<42}  {r['tier']:<22}  {cells[0]}  {cells[1]}  {cells[2]}  {cells[3]}")
-    print("=" * 130)
+            cells.append(f"{d['mean']:>5.2f}±{d['sd']:<4.2f}" if d else f"{'—':>{col_w}}")
+        print(f"{rank:>2}  {short:<42}  {r['tier']:<22}  {'  '.join(cells)}")
+    print(sep)
     print(f"\nDone. Total elapsed: {time.time()-started:.0f}s. Raw JSON: {OUT_PATH}")
     return 0
 

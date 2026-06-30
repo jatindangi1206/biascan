@@ -7,8 +7,9 @@ from typing import AsyncIterator
 
 from ..config import CONFIDENCE_FLOOR, MAX_CONCURRENCY
 from ..providers import build_provider, LLMError, ProviderConfig
-from ..rag import InputRAG, EvidenceRAG
+from ..rag import InputRAG
 from ..schemas import (
+    AnalysisMode,
     AgentRunInfo,
     AnalyzeResponse,
     Annotation,
@@ -32,39 +33,12 @@ class Orchestrator:
 
     def __init__(self) -> None:
         self._agents: list[BaseAgent] = [cls() for cls in ALL_AGENTS]
-        self._evidence_rag: EvidenceRAG | None = None
         self._aegis: AegisAgent | None = None
 
     def _get_aegis(self) -> AegisAgent:
-        """Lazily build the AEGIS conflict-resolver. One instance per process;
-        only its system prompt is cached."""
         if self._aegis is None:
             self._aegis = AegisAgent()
         return self._aegis
-
-    def _get_evidence_rag(self) -> EvidenceRAG:
-        """Lazily build the evidence index (once per process).
-
-        Loads the 11 hand-written BIAS_PATTERNS plus real dataset exemplars
-        from eval/output/samples.json (built by `python -m eval.build_corpus`).
-        Without exemplars the cross-check has only 33 generic chunks and rarely
-        fires; with them it has 900-ish real biased/control sentences and the
-        BM25 index gives meaningful boosts/penalties on flagged spans.
-        """
-        if self._evidence_rag is None:
-            self._evidence_rag = EvidenceRAG()
-            try:
-                self._evidence_rag.build_index(
-                    include_eval_exemplars=True,
-                    max_exemplars_per_dataset=50,
-                )
-                logger.info(
-                    "Evidence RAG built: %d chunks indexed",
-                    self._evidence_rag.pattern_count,
-                )
-            except Exception as e:
-                logger.warning("Evidence RAG build failed: %s", e)
-        return self._evidence_rag
 
     @property
     def agents(self) -> list[BaseAgent]:
@@ -83,6 +57,7 @@ class Orchestrator:
         text: str,
         references: str | None,
         mode: Mode,
+        analysis_mode: AnalysisMode,
         provider_config: ProviderConfig,
         agents: list[str] | None,
         extra_warnings: list[str] | None = None,
@@ -100,6 +75,7 @@ class Orchestrator:
                 annotations=[],
                 agents=[],
                 warnings=warnings + [str(e)],
+                analysis_mode=analysis_mode,
                 provider=provider_config.model_dump_safe(),
             )
 
@@ -144,9 +120,6 @@ class Orchestrator:
             for agent in chosen:
                 agent_texts[agent.name] = text
 
-        # Evidence RAG (for post-hoc cross-check)
-        evidence_rag = self._get_evidence_rag()
-
         # ── Run agents in parallel ───────────────────────────────────
         sem = asyncio.Semaphore(MAX_CONCURRENCY)
 
@@ -157,6 +130,7 @@ class Orchestrator:
                     source_text=text,
                     references=references,
                     mode=effective_mode,
+                    analysis_mode=analysis_mode,
                     provider=provider,
                 )
 
@@ -168,15 +142,11 @@ class Orchestrator:
         infos: list[AgentRunInfo] = []
         all_annotations: list[Annotation] = []
         for agent, (anns, err, reasoning) in zip(chosen, results):
-            # Cross-check FIRST so the evidence index can nudge borderline
-            # confidence (±0.15) before the floor filters anything. A flag at
-            # 0.48 with strong biased exemplar matches can survive at 0.55.
-            adjusted = _evidence_crosscheck(anns, evidence_rag) if evidence_rag.is_built else anns
-            kept = [a for a in adjusted if a.confidence >= CONFIDENCE_FLOOR]
+            kept = [a for a in anns if a.confidence >= CONFIDENCE_FLOOR]
 
             infos.append(AgentRunInfo(
                 agent=agent.name, bias_type=agent.bias_type,
-                prompt_version=agent.prompt_version,
+                prompt_version=agent.prompt_version_for(analysis_mode),
                 raw_count=len(anns), kept_count=len(kept), error=err,
                 reasoning=reasoning,
             ))
@@ -192,6 +162,7 @@ class Orchestrator:
                 source_text=text,
                 provider=aegis_provider,
                 aegis=self._get_aegis(),
+                analysis_mode=analysis_mode,
             )
         else:
             merged = sorted(all_annotations, key=lambda a: (a.span_start, -a.confidence))
@@ -200,6 +171,7 @@ class Orchestrator:
         return AnalyzeResponse(
             document_id=f"doc_{uuid.uuid4().hex[:10]}",
             mode=effective_mode,
+            analysis_mode=analysis_mode,
             overall_bias_score=score,
             annotations=merged,
             agents=infos,
@@ -213,6 +185,7 @@ class Orchestrator:
         text: str,
         references: str | None,
         mode: Mode,
+        analysis_mode: AnalysisMode,
         provider_config: ProviderConfig,
         agents: list[str] | None,
         extra_warnings: list[str] | None = None,
@@ -259,13 +232,12 @@ class Orchestrator:
             for agent in chosen:
                 agent_texts[agent.name] = text
 
-        evidence_rag = self._get_evidence_rag()
-
         yield {
             "event": "start",
             "document_id": doc_id,
             "total_agents": len(chosen),
             "agent_names": [a.name for a in chosen],
+            "analysis_mode": analysis_mode,
         }
 
         # Real pipeline numbers (no invention) — emitted right after start so
@@ -300,15 +272,14 @@ class Orchestrator:
                     source_text=text,
                     references=references,
                     mode=effective_mode,
+                    analysis_mode=analysis_mode,
                     provider=provider,
                 )
-            # Cross-check before floor — see analyze() for rationale.
-            adjusted = _evidence_crosscheck(anns, evidence_rag) if evidence_rag.is_built else anns
-            kept = [a for a in adjusted if a.confidence >= CONFIDENCE_FLOOR]
+            kept = [a for a in anns if a.confidence >= CONFIDENCE_FLOOR]
             info = {
                 "agent": agent.name,
                 "bias_type": agent.bias_type,
-                "prompt_version": agent.prompt_version,
+                "prompt_version": agent.prompt_version_for(analysis_mode),
                 "raw_count": len(anns),
                 "kept_count": len(kept),
                 "error": err,
@@ -359,6 +330,7 @@ class Orchestrator:
                 source_text=text,
                 provider=aegis_provider,
                 aegis=self._get_aegis(),
+                analysis_mode=analysis_mode,
             )
             yield {"event": "aegis_done", "resolved": len(clusters)}
         else:
@@ -372,6 +344,7 @@ class Orchestrator:
             "annotations": [a.model_dump() for a in merged],
             "agents": list(agent_infos.values()),
             "mode": effective_mode,
+            "analysis_mode": analysis_mode,
             "warnings": warnings,
             "provider": provider_config.model_dump_safe(),
         }
@@ -424,53 +397,10 @@ def _count_covered_words(text: str, annotations: list[Annotation]) -> int:
     return covered
 
 
-def _evidence_crosscheck(
-    annotations: list[Annotation],
-    evidence: EvidenceRAG,
-) -> list[Annotation]:
-    """Cross-check annotations against the evidence index.
-
-    - If flagged text strongly matches a known biased example → confidence boost
-    - If flagged text strongly matches a known neutral example → confidence penalty
-    - Small adjustments (±0.05–0.10) to avoid overriding the LLM's judgment
-    """
-    adjusted: list[Annotation] = []
-    for ann in annotations:
-        matches = evidence.check_annotation(
-            ann.flagged_text,
-            bias_type=ann.bias_type,
-            top_k=3,
-        )
-
-        # RRF scores live in roughly [0, 0.02] — threshold and multiplier
-        # are tuned to that range. "neutral" comes from BIAS_PATTERNS examples,
-        # "control" comes from dataset exemplars; both mean not-biased.
-        boost = 0.0
-        for m in matches:
-            label = m.chunk.metadata.get("label", "")
-            if m.score < 0.005:
-                continue
-            if label == "biased":
-                boost += 5.0 * m.score          # up to ~+0.08 per strong match
-            elif label in ("neutral", "control"):
-                boost -= 5.0 * m.score          # up to ~-0.08 per strong match
-
-        # Cap total adjustment so cross-check refines but never overrides the agent.
-        boost = max(-0.15, min(0.15, boost))
-
-        if boost != 0.0:
-            new_conf = max(0.0, min(1.0, ann.confidence + boost))
-            ann = ann.model_copy(update={"confidence": round(new_conf, 3)})
-
-        adjusted.append(ann)
-
-    return adjusted
-
-
 def _resolve_mode(mode: Mode, warnings: list[str]) -> tuple[Mode, list[str]]:
     if mode == "premium":
         warnings.append(
-            "Premium mode: hybrid RAG + LLM reranker + evidence cross-check active."
+            "Premium mode: LLM reranker active."
         )
         # Premium now runs for real — RAG pipeline handles it
         return "lite", warnings

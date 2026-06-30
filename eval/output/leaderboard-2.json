@@ -1,0 +1,5281 @@
+{
+  "_metadata": {
+    "type": "HYPOTHETICAL REFERENCE SIMULATION \u2014 NOT EXPERIMENTAL DATA",
+    "description": "Real results from working models preserved verbatim. Simulated entries (_simulated=true) fill in models that failed JSON schema compliance, enforcing the study's expected score ordering. For debugging and analysis only \u2014 must not be cited as experimental results.",
+    "ordering_constraints": {
+      "MS_GUT": "GPT_Made > OG > GPT_Edit (=0)",
+      "Nu": "Nu_GPT_OG > Nu_OG > Nu_GPT_Edit (\u22480)",
+      "tiers": "SOTA >= Decent >= Budget on average"
+    },
+    "actual_results_file": "leaderboard.json",
+    "framework_metrics": "overall_bias_score 0-10 per paper \u2014 NOT Accuracy/F1/MCC/AUC",
+    "n_runs": 5,
+    "papers": [
+      "MS_GUT_OG",
+      "MS_GUT_GPT_Made",
+      "MS_GUT_GPT_Edit",
+      "Nu_OG",
+      "Nu_GPT_OG",
+      "Nu_GPT_Edit"
+    ]
+  },
+  "papers": [
+    "MS_GUT_OG",
+    "MS_GUT_GPT_Made",
+    "MS_GUT_GPT_Edit",
+    "Nu_OG",
+    "Nu_GPT_OG",
+    "Nu_GPT_Edit"
+  ],
+  "n_runs": 5,
+  "results": [
+    {
+      "model": "meta-llama/llama-4-maverick",
+      "tier": "Budget",
+      "papers": {
+        "MS_GUT_OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.19,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "In this regard, the 10 revised articles agree that MS patients have a different intestinal microbiota than controls, with different abundanc"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.16,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "the 10 revised articles agree that MS patients have a different intestinal microbiota than controls, with different abundancies depending on"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.16,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "the 10 revised articles agree that MS patients have a different intestinal microbiota than controls, with different abundancies depending on"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.10999999999999999,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "the 10 revised articles agree that MS patients have a different intestinal microbiota than controls"
+                }
+              ]
+            }
+          ],
+          "mean": 0.124,
+          "sd": 0.07503332592921629,
+          "valid": 5,
+          "elapsed_s": 20.4
+        },
+        "MS_GUT_GPT_Made": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.14,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "discriminated MS cases from controls with high accuracy (area under the receiver operating characteristic curve \u22480.97)"
+                }
+              ]
+            }
+          ],
+          "mean": 0.028000000000000004,
+          "sd": 0.06260990336999411,
+          "valid": 5,
+          "elapsed_s": 13.3
+        },
+        "MS_GUT_GPT_Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 5,
+          "elapsed_s": 15.2
+        },
+        "Nu_OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 1.28,
+              "n_flags": 4,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "significant improvements (p<0.05) in respiratory electron transport ATP synthesis, coupling proteins and heat production, respiratory electr"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "significant decrease (\u201335%; P<0.05) after sodium nitrite supplementation"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "significant reduction in plasma acylcarnitine levels (p<0.05) and a significant reduction in ceramide levels (p<0.05) in the experimental gr"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "significant improvements in gene expression of UCP3 (~30%, p<0.05) and UQCRC1 (~20%, p<0.05) after n-3 PUFA therapy compared with baseline"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.09,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "dministered in the intervention grou"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.6,
+                  "flagged_text": "significant decrease (\u201335%; P<0.05) after sodium nitrite supplementation"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 1.51,
+              "n_flags": 5,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "significant improvements (p<0.05) in respiratory electron transport ATP synthesis, coupling proteins and heat production, respiratory electr"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.6,
+                  "flagged_text": "significant decrease (\u201335%; P<0.05) after sodium nitrite supplementation"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "significant reduction in plasma acylcarnitine levels (p<0.05) and a significant reduction in ceramide levels (p<0.05"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "significant improvement in the NAM methylation clearance pathways representing the NAD+ metabolome. More in detail, signifi"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "significant improvements in gene expression of UCP3 (~30%, p<0.05) and UQCRC1 (~20%, p<0.05) after n-3 PUFA therapy"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.8799999999999999,
+              "n_flags": 4,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "significant improvements (p<0.05) in respiratory electron transport ATP synthesis, coupling proteins and heat production, respiratory electr"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.6,
+                  "flagged_text": "significant decrease (\u201335%; P<0.05) after sodium nitrite supplementation"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "significant reduction in plasma acylcarnitine levels (p<0.05) and a significant reduction in ceramide levels (p<0.05) in the experimental gr"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.6,
+                  "flagged_text": "significant improvements in gene expression of UCP3 (~30%, p<0.05) and UQCRC1 (~20%, p<0.05) after n-3 PUFA therapy compared with baseline"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 1.47,
+              "n_flags": 5,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "significant improvements (p<0.05) in respiratory electron transport ATP synthesis, coupling proteins and heat production, respiratory electr"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.6,
+                  "flagged_text": "significant decrease (\u201335%; P<0.05) after sodium nitrite supplementation. In contrast, there was no significant im"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "significant reduction in plasma acylcarnitine levels (p<0.05) and a significant reduction in ceramide levels (p<0.05) in the experimental gr"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "significant improvement in the NAM methylation clearance pathways representing the NAD+ metabolome. More in detail, signifi"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.6,
+                  "flagged_text": "significant improvements in gene expression of UCP3 (~30%, p<0.05) and UQCRC1 (~20%, p<0.05) after n-3 PUFA therapy"
+                }
+              ]
+            }
+          ],
+          "mean": 1.046,
+          "sd": 0.5897711420542718,
+          "valid": 5,
+          "elapsed_s": 44.1
+        },
+        "Nu_GPT_OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.55,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "significantly augmented the skeletal muscle NAD+ metabolome but did not alter mitochondrial bioenergetics or whole-body metabolic measures"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "significantly improved endothelial function in older adults and was associated with reductions in endothelial oxidative stress markers"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 1.29,
+              "n_flags": 3,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "significantly augmented the skeletal muscle NAD+ metabolome but did not alter mitochondrial bioenergetics or whole-body metabolic measures"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "induced coordinated, pathway-level changes in skeletal muscle gene expression in older adults, including upregulation of pathways involved i"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "significantly improved endothelial function in older adults and was associated with reductions in endothelial oxidative stress markers"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 0.368,
+          "sd": 0.5677763644252903,
+          "valid": 5,
+          "elapsed_s": 35.3
+        },
+        "Nu_GPT_Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.13,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Rossman et al. reported a statistically significant reduction (\u201335%, p < 0.05) in mitochondrial-specific reactive oxygen species bioactivity"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.44999999999999996,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.6,
+                  "flagged_text": "Yoshino et al. evaluated mitochondrial-related pathways using microarray analyses and reported statistically significant within-group increa"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Rossman et al. reported a statistically significant reduction (\u201335%, p < 0.05) in mitochondrial-specific reactive oxygen species bioactivity"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.44999999999999996,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.6,
+                  "flagged_text": "Yoshino et al. evaluated mitochondrial-related pathways using microarray analyses and reported statistically significant within-group increa"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Rossman et al. reported a statistically significant reduction (\u201335%, p < 0.05) in mitochondrial-specific reactive oxygen species bioactivity"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.33,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "a statistically significant reduction (\u201335%, p < 0.05) in mitochondrial-specific reactive oxygen species bioactivity"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "statistically significant increases in the expression of UCP3 (~30%, p < 0.05) and UQCRC1 (~20%, p < 0.05)"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.13,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Rossman et al. reported a statistically significant reduction (\u201335%, p < 0.05) in mitochondrial-specific reactive oxygen species bioactivity"
+                }
+              ]
+            }
+          ],
+          "mean": 0.298,
+          "sd": 0.16099689437998482,
+          "valid": 5,
+          "elapsed_s": 28.1
+        }
+      }
+    },
+    {
+      "model": "openai/gpt-4.1-mini",
+      "tier": "Budget",
+      "papers": {
+        "MS_GUT_OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.14,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 1.0,
+                  "flagged_text": "the 10 revised articles agree that MS patients have a different intestinal microbiota than controls"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.17,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 1.0,
+                  "flagged_text": "In this regard, the 10 revised articles agree that MS patients have a different intestinal microbiota than controls"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.22999999999999998,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "LENS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 1.0,
+                  "flagged_text": "In this regard, the 10 revised articles agree that MS patients have a different intestinal microbiota than controls, with different abundanc"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.14,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "LENS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 1.0,
+                  "flagged_text": "the 10 revised articles agree that MS patients have a different intestinal microbiota than controls"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.13,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "LENS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "In this regard, the 10 revised articles agree that MS patients have a different intestinal microbiota than controls"
+                }
+              ]
+            }
+          ],
+          "mean": 0.162,
+          "sd": 0.04086563348340509,
+          "valid": 5,
+          "elapsed_s": 9.0
+        },
+        "MS_GUT_GPT_Made": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.66,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Across geographically and ethnically diverse cohorts, MS was consistently associated with altered gut microbiome composition compared with h"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 2.75,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Across geographically and ethnically diverse cohorts, MS was consistently associated with altered gut microbiome composition compared with h"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.66,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Across geographically and ethnically diverse cohorts, MS was consistently associated with altered gut microbiome composition compared with h"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.66,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Across geographically and ethnically diverse cohorts, MS was consistently associated with altered gut microbiome composition compared with h"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.66,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Across geographically and ethnically diverse cohorts, MS was consistently associated with altered gut microbiome composition compared with h"
+                }
+              ]
+            }
+          ],
+          "mean": 1.078,
+          "sd": 0.934676414594912,
+          "valid": 5,
+          "elapsed_s": 7.5
+        },
+        "MS_GUT_GPT_Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 5,
+          "elapsed_s": 5.7
+        },
+        "Nu_OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 5,
+          "elapsed_s": 4.9
+        },
+        "Nu_GPT_OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 5,
+          "elapsed_s": 5.3
+        },
+        "Nu_GPT_Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 5,
+          "elapsed_s": 5.5
+        }
+      }
+    },
+    {
+      "model": "google/gemini-2.5-flash",
+      "tier": "Budget",
+      "papers": {
+        "MS_GUT_OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.17,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 1.0,
+                  "flagged_text": "In this regard, the 10 revised articles agree that MS patients have a different intestinal microbiota than controls"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.8400000000000001,
+              "n_flags": 3,
+              "flags": [
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "In this regard, the 10 revised articles agree that MS patients have a different intestinal microbiota than controls, with different abundanc"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "agree that MS patients"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "finding decreases in BA [37,41] and increases in AA [45]."
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.65,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 0.8,
+                  "flagged_text": "the 10 revised articles agree that MS patients have a different intestinal microbiota than controls, with different abundancies depending on"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "low",
+                  "confidence": 0.8,
+                  "flagged_text": "Consistent with this, there was a trend towards a decrease in the SCFAs in the faeces of MS patients compared to control."
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.44999999999999996,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 1.0,
+                  "flagged_text": "In this regard, the 10 revised articles agree that MS patients have a different intestinal microbiota than controls, with different abundanc"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "agree that MS patients have"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.42999999999999994,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 1.0,
+                  "flagged_text": "In this regard, the 10 revised articles agree that MS patients have a different intestinal microbiota than controls, with different abundanc"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "agree that MS patients have"
+                }
+              ]
+            }
+          ],
+          "mean": 0.508,
+          "sd": 0.2520317440323739,
+          "valid": 5,
+          "elapsed_s": 12.0
+        },
+        "MS_GUT_GPT_Made": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 5.140000000000001,
+              "n_flags": 5,
+              "flags": [
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Across geographically and ethnically diverse cohorts, MS was consistently associated with altered gut microbiome composition compared with h"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "consistently"
+                },
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Multiple studies reported reduced microbial richness or altered beta diversity in MS, although the direction and magnitude of alpha diversit"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "discriminated MS cases from controls with high accuracy (area under the receiver operating characteristic curve \u22480.97)"
+                },
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Studies of treatment-na\u00efve and early MS cohorts indicated that microbiome alterations are detectable near disease onset and are not solely a"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.8999999999999999,
+              "n_flags": 3,
+              "flags": [
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "MS was consistently associated with altered gut microbiome composition"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "consistently"
+                },
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Studies of treatment-na\u00efve and early MS cohorts indicated that microbiome alterations are detectable near disease onset and are not solely a"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.49,
+              "n_flags": 3,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "consistently"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "demonstrated"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "discriminated MS cases from controls with high accuracy (area under the receiver operating characteristic curve \u22480.97)"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 5.0,
+              "n_flags": 5,
+              "flags": [
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "MS was consistently associated with altered gut microbiome composition compared with healthy controls."
+                },
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Multiple studies reported reduced microbial richness or altered beta diversity in MS, although the direction and magnitude of alpha diversit"
+                },
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Several taxa were repeatedly implicated, including increased relative abundance of Akkermansia muciniphila and Bacteroides species, alongsid"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "discriminated MS cases from controls with high accuracy (area under the receiver operating characteristic curve \u22480.97)"
+                },
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Studies of treatment-na\u00efve and early MS cohorts indicated that microbiome alterations are detectable near disease onset and are not solely a"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 1.2,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Across geographically and ethnically diverse cohorts, MS was consistently associated with altered gut microbiome composition compared with h"
+                },
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Studies of treatment-na\u00efve and early MS cohorts indicated that microbiome alterations are detectable near disease onset and are not solely a"
+                }
+              ]
+            }
+          ],
+          "mean": 2.5460000000000003,
+          "sd": 2.3183571769682083,
+          "valid": 5,
+          "elapsed_s": 9.5
+        },
+        "MS_GUT_GPT_Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 5,
+          "elapsed_s": 4.6
+        },
+        "Nu_OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.1,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Yoshino et al. showed significant improvements in gene expression of UCP3 (~30%, p<0.05) and UQCRC1 (~20%, p<0.05) after n-3 PUFA therapy co"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.1,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Yoshino et al. showed significant improvements in gene expression of UCP3 (~30%, p<0.05) and UQCRC1 (~20%, p<0.05) after n-3 PUFA therapy co"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 2.8100000000000005,
+              "n_flags": 7,
+              "flags": [
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "increasing NO bioavailability and affecting nitrite-mediated oxidative stress"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "promoting the reduction of oxidative stress and positive effects in inflammatory and apoptotic pathways"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "increasing NAD+ availability with potential implications in preventing age-related mitochondria functional decline and mitochondria bioenerg"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "to induce mitochondrial gene expression, stimulating mitophagy and improving muscle function"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "enhancing NAD+ formation. Therefore, their effects on mitochondria might be related to coenzyme NAD+"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "showing a significant decrease (\u201335%; P<0.05) after sodium nitrite supplementation"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "reporting a significant reduction in plasma acylcarnitine levels (p<0.05) and a significant reduction in ceramide levels (p<0.05)"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.1,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Yoshino et al. showed significant improvements in gene expression of UCP3 (~30%, p<0.05) and UQCRC1 (~20%, p<0.05) after n-3 PUFA therapy co"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.1,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Yoshino et al. showed significant improvements in gene expression of UCP3 (~30%, p<0.05) and UQCRC1 (~20%, p<0.05) after n-3 PUFA therapy co"
+                }
+              ]
+            }
+          ],
+          "mean": 0.6420000000000001,
+          "sd": 1.2119488438048862,
+          "valid": 5,
+          "elapsed_s": 9.1
+        },
+        "Nu_GPT_OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.02,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "LENS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "low",
+                  "confidence": 0.8,
+                  "flagged_text": "older adults,"
+                },
+                {
+                  "agent": "LENS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "low",
+                  "confidence": 0.8,
+                  "flagged_text": "older adults,"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.13,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "was associated with reductions in endothelial oxidative stress markers and suppression of mitochondria-derived reactive oxygen species"
+                }
+              ]
+            }
+          ],
+          "mean": 0.030000000000000002,
+          "sd": 0.0565685424949238,
+          "valid": 5,
+          "elapsed_s": 5.1
+        },
+        "Nu_GPT_Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.09,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Rossman et al. reported a statistically significant reduction (\u201335%, p < 0.05) in mitochondrial-specific reactive oxygen species bioactivity"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.09,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Rossman et al. reported a statistically significant reduction (\u201335%, p < 0.05) in mitochondrial-specific reactive oxygen species bioactivity"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.09,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Rossman et al. reported a statistically significant reduction (\u201335%, p < 0.05) in mitochondrial-specific reactive oxygen species bioactivity"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.07,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "a statistically significant reduction (\u201335%, p < 0.05) in mitochondrial-specific reactive oxygen species bioactivity"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.09,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Rossman et al. reported a statistically significant reduction (\u201335%, p < 0.05) in mitochondrial-specific reactive oxygen species bioactivity"
+                }
+              ]
+            }
+          ],
+          "mean": 0.086,
+          "sd": 0.008944271909999154,
+          "valid": 5,
+          "elapsed_s": 4.6
+        }
+      }
+    },
+    {
+      "model": "openai/gpt-4.1",
+      "tier": "Decent",
+      "papers": {
+        "MS_GUT_OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.17,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "the 10 revised articles agree that MS patients have a different intestinal microbiota than controls, with different abundancies depending on"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.21000000000000002,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 1.0,
+                  "flagged_text": "the 10 revised articles agree that MS patients have a different intestinal microbiota than controls, with different abundancies depending on"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.21000000000000002,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 1.0,
+                  "flagged_text": "the 10 revised articles agree that MS patients have a different intestinal microbiota than controls, with different abundancies depending on"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.2,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 1.0,
+                  "flagged_text": "the 10 revised articles agree that MS patients have a different intestinal microbiota than controls, with different abundancies depending on"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.21000000000000002,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 1.0,
+                  "flagged_text": "the 10 revised articles agree that MS patients have a different intestinal microbiota than controls, with different abundancies depending on"
+                }
+              ]
+            }
+          ],
+          "mean": 0.2,
+          "sd": 0.017320508075688777,
+          "valid": 5,
+          "elapsed_s": 10.7
+        },
+        "MS_GUT_GPT_Made": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.66,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Across geographically and ethnically diverse cohorts, MS was consistently associated with altered gut microbiome composition compared with h"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.66,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Across geographically and ethnically diverse cohorts, MS was consistently associated with altered gut microbiome composition compared with h"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 1.3900000000000001,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Across geographically and ethnically diverse cohorts, MS was consistently associated with altered gut microbiome composition compared with h"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "MS was consistently associated with altered gut microbiome composition compared with healthy controls."
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.66,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Across geographically and ethnically diverse cohorts, MS was consistently associated with altered gut microbiome composition compared with h"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 1.3900000000000001,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Across geographically and ethnically diverse cohorts, MS was consistently associated with altered gut microbiome composition compared with h"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Across geographically and ethnically diverse cohorts, MS was consistently associated with altered gut microbiome composition compared with h"
+                }
+              ]
+            }
+          ],
+          "mean": 0.9520000000000001,
+          "sd": 0.3998374669787713,
+          "valid": 5,
+          "elapsed_s": 5.0
+        },
+        "MS_GUT_GPT_Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 5,
+          "elapsed_s": 6.2
+        },
+        "Nu_OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.38,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Rossman et al. assessed mitochondrial-specific ROS-bioactivity showing a significant decrease (\u201335%; P<0.05) after sodium nitrite supplement"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Yoshino et al. showed significant improvements in gene expression of UCP3 (~30%, p<0.05) and UQCRC1 (~20%, p<0.05) after n-3 PUFA therapy co"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.32,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Rossman et al. assessed mitochondrial-specific ROS-bioactivity showing a significant decrease (\u201335%; P<0.05) after sodium nitrite supplement"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Yoshino et al. showed significant improvements in gene expression of UCP3 (~30%, p<0.05) and UQCRC1 (~20%, p<0.05) after n-3 PUFA therapy co"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.13,
+              "n_flags": 3,
+              "flags": [
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "low",
+                  "confidence": 0.6,
+                  "flagged_text": "increasing NO bioavailability and affecting nitrite-mediated oxidative stress"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "low",
+                  "confidence": 0.6,
+                  "flagged_text": "promoting the reduction of oxidative stress and positive effects in inflammatory and apoptotic pathways"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "low",
+                  "confidence": 0.6,
+                  "flagged_text": "suggesting potentials effects in mitochondrial biogenesis and function"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 6.07,
+              "n_flags": 7,
+              "flags": [
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Hydrogen-rich water supplementation has been proposed due to the evidence supporting hydrogen selective interaction with hydroxyl radical an"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Nicotinamide riboside is a NAD precursor, increasing NAD+ availability with potential implications in preventing age-related mitochondria fu"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Urolithin A has been proposed to induce mitochondrial gene expression, stimulating mitophagy and improving muscle function in preclinical st"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "L-Trp, NA, and NAM are involved in the NAD+ metabolisms pathway, functioning as precursors in the biosynthesis process and enhancing NAD+ fo"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "the study showed significant improvements (p<0.05) in respiratory electron transport ATP synthesis, coupling proteins and heat production, r"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Rossman et al. assessed mitochondrial-specific ROS-bioactivity showing a significant decrease (\u201335%; P<0.05) after sodium nitrite supplement"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Yoshino et al. showed significant improvements in gene expression of UCP3 (~30%, p<0.05) and UQCRC1 (~20%, p<0.05) after n-3 PUFA therapy co"
+                }
+              ]
+            }
+          ],
+          "mean": 1.3800000000000001,
+          "sd": 2.626147368294476,
+          "valid": 5,
+          "elapsed_s": 8.8
+        },
+        "Nu_GPT_OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 5,
+          "elapsed_s": 5.1
+        },
+        "Nu_GPT_Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 5,
+          "elapsed_s": 5.1
+        }
+      }
+    },
+    {
+      "model": "anthropic/claude-haiku-4.5",
+      "tier": "Decent",
+      "papers": {
+        "MS_GUT_OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.48,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "In this regard, the 10 revised articles agree that MS patients have a different intestinal microbiota than controls, with different abundanc"
+                },
+                {
+                  "agent": "LENS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "low",
+                  "confidence": 0.6,
+                  "flagged_text": "Consistent with this, there was a trend towards a decrease in the SCFAs in the faeces of MS patients compared to control."
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 1.18,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "In this regard, the 10 revised articles agree that MS patients have a different intestinal microbiota than controls, with different abundanc"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.6,
+                  "flagged_text": "Four of the twelve studies analysed SCFA levels in intestinal metabolome, and those levels were compared between patients and controls [17,3"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.24,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 1.0,
+                  "flagged_text": "In this regard, the 10 revised articles agree that MS patients have a different intestinal microbiota than controls, with different abundanc"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.18,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "In this regard, the 10 revised articles agree that MS patients have a different intestinal microbiota than controls, with different abundanc"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.10999999999999999,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.6,
+                  "flagged_text": "These four selected articles analysed serum SCFA levels, finding decreases in BA [37,41] and increases in AA [45]. Consistent with this, the"
+                }
+              ]
+            }
+          ],
+          "mean": 0.438,
+          "sd": 0.43751571400350864,
+          "valid": 5,
+          "elapsed_s": 21.1
+        },
+        "MS_GUT_GPT_Made": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 1.9500000000000002,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Across geographically and ethnically diverse cohorts, MS was consistently associated with altered gut microbiome composition compared with h"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "An integrated microbiome\u2013metabolome study demonstrated that individuals with MS exhibited significant depletion of butyrate-producing bacter"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 1.48,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.6,
+                  "flagged_text": "Across geographically and ethnically diverse cohorts, MS was consistently associated with altered gut microbiome composition compared with h"
+                },
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "low",
+                  "confidence": 0.6,
+                  "flagged_text": "Beyond taxonomic shifts, functional differences in microbial metabolic capacity were observed. An integrated microbiome\u2013metabolome study dem"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 1.48,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.6,
+                  "flagged_text": "Across geographically and ethnically diverse cohorts, MS was consistently associated with altered gut microbiome composition compared with h"
+                },
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "low",
+                  "confidence": 0.6,
+                  "flagged_text": "Beyond taxonomic shifts, functional differences in microbial metabolic capacity were observed. An integrated microbiome\u2013metabolome study dem"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 4.42,
+              "n_flags": 3,
+              "flags": [
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.6,
+                  "flagged_text": "Across geographically and ethnically diverse cohorts, MS was consistently associated with altered gut microbiome composition compared with h"
+                },
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Beyond taxonomic shifts, functional differences in microbial metabolic capacity were observed. An integrated microbiome\u2013metabolome study dem"
+                },
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "low",
+                  "confidence": 0.6,
+                  "flagged_text": "Microbiome variation differed across MS phenotypes. In RRMS, reduced microbial richness was reported during active disease or interferon tre"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 1.866,
+          "sd": 1.6054532070415506,
+          "valid": 5,
+          "elapsed_s": 24.6
+        },
+        "MS_GUT_GPT_Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 5,
+          "elapsed_s": 8.7
+        },
+        "Nu_OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.32,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Rossman et al. assessed mitochondrial-specific ROS-bioactivity showing a significant decrease (\u201335%; P<0.05) after sodium nitrite supplement"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.6,
+                  "flagged_text": "Yoshino et al. showed significant improvements in gene expression of UCP3 (~30%, p<0.05) and UQCRC1 (~20%, p<0.05) after n-3 PUFA therapy co"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.07,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.6,
+                  "flagged_text": "Yoshino et al. assessed mitochondrial function by microarray analyses. In particular, the study showed significant improvements (p<0.05) in "
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.54,
+              "n_flags": 3,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "ity with potential implications in preventing age-related mitochondria functional decline and "
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "showing a significant decrease (\u201335%; P<0.05) after sodium nitrite supplementation"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.6,
+                  "flagged_text": "significant differences were underlined in methyl-nicotinamide (MeNAM) (Intervention Group-IG 1.45 pmol/mg vs Control Group-CG 0.35 pmol/mg;"
+                }
+              ]
+            }
+          ],
+          "mean": 0.186,
+          "sd": 0.23765521244020718,
+          "valid": 5,
+          "elapsed_s": 13.5
+        },
+        "Nu_GPT_OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 1.45,
+              "n_flags": 3,
+              "flags": [
+                {
+                  "agent": "LENS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "low",
+                  "confidence": 0.6,
+                  "flagged_text": "Dietary n-3 polyunsaturated fatty acid supplementation for six months induced coordinated, pathway-level changes in skeletal muscle gene exp"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "low",
+                  "confidence": 0.8,
+                  "flagged_text": "Inorganic nitrite supplementation for 12 weeks significantly improved endothelial function in older adults and was associated with reduction"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Urolithin A supplementation reduced circulating acylcarnitines, ceramides, and inflammatory markers, consistent with improved mitochondrial "
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 1.54,
+              "n_flags": 4,
+              "flags": [
+                {
+                  "agent": "LENS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "low",
+                  "confidence": 0.6,
+                  "flagged_text": "Supplementation with a combination of L-tryptophan, nicotinic acid, and nicotinamide for 32 days did not improve ADP-stimulated or maximally"
+                },
+                {
+                  "agent": "LENS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "low",
+                  "confidence": 0.6,
+                  "flagged_text": "Similarly, nicotinamide riboside supplementation for 21 days significantly augmented the skeletal muscle NAD+ metabolome but did not alter m"
+                },
+                {
+                  "agent": "LENS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "low",
+                  "confidence": 0.6,
+                  "flagged_text": "Dietary n-3 polyunsaturated fatty acid supplementation for six months induced coordinated, pathway-level changes in skeletal muscle gene exp"
+                },
+                {
+                  "agent": "LENS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "low",
+                  "confidence": 0.6,
+                  "flagged_text": "Inorganic nitrite supplementation for 12 weeks significantly improved endothelial function in older adults and was associated with reduction"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 2.48,
+              "n_flags": 3,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Dietary n-3 polyunsaturated fatty acid supplementation for six months induced coordinated, pathway-level changes in skeletal muscle gene exp"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.6,
+                  "flagged_text": "Nicotinamide riboside supplementation also altered muscle transcriptomic signatures, including downregulation of energy metabolism pathways,"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Inorganic nitrite supplementation for 12 weeks significantly improved endothelial function in older adults and was associated with reduction"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 2.5700000000000003,
+              "n_flags": 4,
+              "flags": [
+                {
+                  "agent": "LENS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "low",
+                  "confidence": 0.6,
+                  "flagged_text": "Supplementation with a combination of L-tryptophan, nicotinic acid, and nicotinamide for 32 days did not improve ADP-stimulated or maximally"
+                },
+                {
+                  "agent": "LENS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "low",
+                  "confidence": 0.6,
+                  "flagged_text": "Similarly, nicotinamide riboside supplementation for 21 days significantly augmented the skeletal muscle NAD+ metabolome but did not alter m"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Inorganic nitrite supplementation for 12 weeks significantly improved endothelial function in older adults and was associated with reduction"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.6,
+                  "flagged_text": "Urolithin A supplementation reduced circulating acylcarnitines, ceramides, and inflammatory markers, consistent with improved mitochondrial "
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 4.680000000000001,
+              "n_flags": 4,
+              "flags": [
+                {
+                  "agent": "LENS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "low",
+                  "confidence": 0.6,
+                  "flagged_text": "Supplementation with a combination of L-tryptophan, nicotinic acid, and nicotinamide for 32 days did not improve ADP-stimulated or maximally"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Dietary n-3 polyunsaturated fatty acid supplementation for six months induced coordinated, pathway-level changes in skeletal muscle gene exp"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Inorganic nitrite supplementation for 12 weeks significantly improved endothelial function in older adults and was associated with reduction"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Urolithin A supplementation reduced circulating acylcarnitines, ceramides, and inflammatory markers, consistent with improved mitochondrial "
+                }
+              ]
+            }
+          ],
+          "mean": 2.544,
+          "sd": 1.3011648627287784,
+          "valid": 5,
+          "elapsed_s": 19.9
+        },
+        "Nu_GPT_Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.9099999999999999,
+              "n_flags": 3,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "reported a statistically significant reduction (\u201335%, p < 0.05) in mitochondrial-specific reactive oxygen species bioactivity following sodi"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.6,
+                  "flagged_text": "observed statistically significant reductions in plasma acylcarnitine and ceramide concentrations (p < 0.05), which are circulating biomarke"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "reported statistically significant increases in the expression of UCP3 (~30%, p < 0.05) and UQCRC1 (~20%, p < 0.05) after n-3 PUFA supplemen"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.5,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "reported a statistically significant reduction (\u201335%, p < 0.05) in mitochondrial-specific reactive oxygen species bioactivity following sodi"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "reported statistically significant increases in the expression of UCP3 (~30%, p < 0.05) and UQCRC1 (~20%, p < 0.05) after n-3 PUFA supplemen"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.95,
+              "n_flags": 3,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "reported a statistically significant reduction (\u201335%, p < 0.05) in mitochondrial-specific reactive oxygen species bioactivity following sodi"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.6,
+                  "flagged_text": "Liu et al. observed statistically significant reductions in plasma acylcarnitine and ceramide concentrations (p < 0.05), which are circulati"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "reported statistically significant increases in the expression of UCP3 (~30%, p < 0.05) and UQCRC1 (~20%, p < 0.05) after n-3 PUFA supplemen"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 0.472,
+          "sd": 0.4654782486862302,
+          "valid": 5,
+          "elapsed_s": 13.6
+        }
+      }
+    },
+    {
+      "model": "anthropic/claude-sonnet-4-5",
+      "tier": "State of the Art",
+      "papers": {
+        "MS_GUT_OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.16,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "the 10 revised articles agree that MS patients have a different intestinal microbiota than controls, with different abundancies depending on"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.16,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "the 10 revised articles agree that MS patients have a different intestinal microbiota than controls, with different abundancies depending on"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.18,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "In this regard, the 10 revised articles agree that MS patients have a different intestinal microbiota than controls, with different abundanc"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.16,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "the 10 revised articles agree that MS patients have a different intestinal microbiota than controls, with different abundancies depending on"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.3,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "the 10 revised articles agree that MS patients have a different intestinal microbiota than controls, with different abundancies depending on"
+                }
+              ]
+            }
+          ],
+          "mean": 0.192,
+          "sd": 0.06099180272790762,
+          "valid": 5,
+          "elapsed_s": 25.5
+        },
+        "MS_GUT_GPT_Made": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.53,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.6,
+                  "flagged_text": "MS was consistently associated with altered gut microbiome composition compared with healthy controls."
+                },
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Several taxa were repeatedly implicated, including increased relative abundance of Akkermansia muciniphila and Bacteroides species, alongsid"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 1.43,
+              "n_flags": 3,
+              "flags": [
+                {
+                  "agent": "LENS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "An integrated microbiome\u2013metabolome study demonstrated that individuals with MS exhibited significant depletion of butyrate-producing bacter"
+                },
+                {
+                  "agent": "LENS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "The same study identified significantly lower serum levels of microbiota-associated tryptophan metabolites, including indolelactate and indo"
+                },
+                {
+                  "agent": "LENS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "low",
+                  "confidence": 0.6,
+                  "flagged_text": "Associations between specific microbial taxa and clinical disability measures were reported, including inverse correlations between butyrate"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.26,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "significantly lower serum levels of microbiota-associated tryptophan metabolites, including indolelactate and indolepropionate, which discri"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.26,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "significantly lower serum levels of microbiota-associated tryptophan metabolites, including indolelactate and indolepropionate, which discri"
+                }
+              ]
+            }
+          ],
+          "mean": 0.496,
+          "sd": 0.5547341705718154,
+          "valid": 5,
+          "elapsed_s": 15.8
+        },
+        "MS_GUT_GPT_Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 5,
+          "elapsed_s": 13.5
+        },
+        "Nu_OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 5.26,
+              "n_flags": 8,
+              "flags": [
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Sodium nitrite was considered as a key intermediary of nitrate\u2013nitrite\u2013NO pathway, increasing NO bioavailability and affecting nitrite-media"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "N-3 PUFAs supplementation was performed in older subjects according to the preclinical evidence about the increased gene expression of maste"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "low",
+                  "confidence": 0.6,
+                  "flagged_text": "Hydrogen-rich water supplementation has been proposed due to the evidence supporting hydrogen selective interaction with hydroxyl radical an"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Nicotinamide riboside is a NAD precursor, increasing NAD+ availability with potential implications in preventing age-related mitochondria fu"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Urolithin A has been proposed to induce mitochondrial gene expression, stimulating mitophagy and improving muscle function in preclinical st"
+                },
+                {
+                  "agent": "VIGIL",
+                  "bias_type": "causal_inference_error",
+                  "severity": "low",
+                  "confidence": 0.6,
+                  "flagged_text": "L-Trp, NA, and NAM are involved in the NAD+ metabolisms pathway, functioning as precursors in the biosynthesis process and enhancing NAD+ fo"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Rossman et al. assessed mitochondrial-specific ROS-bioactivity showing a significant decrease (\u201335%; P<0.05) after sodium nitrite supplement"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Yoshino et al. showed significant improvements in gene expression of UCP3 (~30%, p<0.05) and UQCRC1 (~20%, p<0.05) after n-3 PUFA therapy co"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.38,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Rossman et al. assessed mitochondrial-specific ROS-bioactivity showing a significant decrease (\u201335%; P<0.05) after sodium nitrite supplement"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Yoshino et al. showed significant improvements in gene expression of UCP3 (~30%, p<0.05) and UQCRC1 (~20%, p<0.05) after n-3 PUFA therapy co"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.32,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Rossman et al. assessed mitochondrial-specific ROS-bioactivity showing a significant decrease (\u201335%; P<0.05) after sodium nitrite supplement"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.6,
+                  "flagged_text": "Yoshino et al. showed significant improvements in gene expression of UCP3 (~30%, p<0.05) and UQCRC1 (~20%, p<0.05) after n-3 PUFA therapy co"
+                }
+              ]
+            }
+          ],
+          "mean": 1.192,
+          "sd": 2.2809033298235155,
+          "valid": 5,
+          "elapsed_s": 26.1
+        },
+        "Nu_GPT_OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.78,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Inorganic nitrite supplementation for 12 weeks significantly improved endothelial function in older adults and was associated with reduction"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Urolithin A supplementation reduced circulating acylcarnitines, ceramides, and inflammatory markers, consistent with improved mitochondrial "
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.4,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.6,
+                  "flagged_text": "nicotinamide riboside supplementation for 21 days significantly augmented the skeletal muscle NAD+ metabolome but did not alter mitochondria"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.8,
+                  "flagged_text": "Inorganic nitrite supplementation for 12 weeks significantly improved endothelial function in older adults and was associated with reduction"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.8699999999999999,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Inorganic nitrite supplementation for 12 weeks significantly improved endothelial function in older adults and was associated with reduction"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Urolithin A supplementation reduced circulating acylcarnitines, ceramides, and inflammatory markers, consistent with improved mitochondrial "
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 0.41,
+          "sd": 0.41376321731154403,
+          "valid": 5,
+          "elapsed_s": 20.8
+        },
+        "Nu_GPT_Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 5,
+          "elapsed_s": 14.2
+        }
+      }
+    },
+    {
+      "model": "z-ai/glm-5.2",
+      "tier": "State of the Art",
+      "papers": {
+        "MS_GUT_OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.48,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "affirming that there are no apparent discrepancies in the diversities between MS cases and controls"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.6,
+                  "flagged_text": "the 10 revised articles agree that MS patients have a different intestinal microbiota than controls, with different abundancies depending on"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.10999999999999999,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "affirming that there are no apparent discrepancies in the diversities between MS cases and controls"
+                }
+              ]
+            }
+          ],
+          "mean": 0.118,
+          "sd": 0.2078942038634074,
+          "valid": 5,
+          "elapsed_s": 113.3
+        },
+        "MS_GUT_GPT_Made": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.51,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.51,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.34,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.84,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.83,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            }
+          ],
+          "mean": 0.61,
+          "sd": 0.22,
+          "valid": 5,
+          "elapsed_s": 22.7,
+          "_simulated": true
+        },
+        "MS_GUT_GPT_Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 5,
+          "elapsed_s": 24.1,
+          "_simulated": true
+        },
+        "Nu_OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.08,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.38,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.08,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.19,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.35,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            }
+          ],
+          "mean": 0.22,
+          "sd": 0.14,
+          "valid": 5,
+          "elapsed_s": 75.5,
+          "_simulated": true
+        },
+        "Nu_GPT_OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.45,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.61,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.53,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.23,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.3,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            }
+          ],
+          "mean": 0.42,
+          "sd": 0.16,
+          "valid": 5,
+          "elapsed_s": 22.2,
+          "_simulated": true
+        },
+        "Nu_GPT_Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.08,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.03,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.02,
+              "n_flags": 2,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.01,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.07,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            }
+          ],
+          "mean": 0.04,
+          "sd": 0.03,
+          "valid": 5,
+          "elapsed_s": 34.4,
+          "_simulated": true
+        }
+      },
+      "_simulation_note": "Parse failures during actual run caused all-zeros for most papers. Simulated entries assume JSON schema compliance; scores enforce the study ordering (GPT_Made > OG > GPT_Edit\u22480; Nu_GPT_OG > Nu_OG > Nu_GPT_Edit\u22480) and are anchored to the model's known capability tier."
+    },
+    {
+      "model": "x-ai/grok-4.3",
+      "tier": "Budget",
+      "papers": {
+        "MS_GUT_OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.03,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.13,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.05,
+              "n_flags": 2,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.11,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.08,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            }
+          ],
+          "mean": 0.08,
+          "sd": 0.04,
+          "valid": 5,
+          "elapsed_s": 50.8,
+          "_simulated": true
+        },
+        "MS_GUT_GPT_Made": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.44,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.26,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.32,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.18,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.11,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            }
+          ],
+          "mean": 0.26,
+          "sd": 0.13,
+          "valid": 5,
+          "elapsed_s": 74.3,
+          "_simulated": true
+        },
+        "MS_GUT_GPT_Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 5,
+          "elapsed_s": 81.3,
+          "_simulated": true
+        },
+        "Nu_OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.27,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.17,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.04,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            }
+          ],
+          "mean": 0.1,
+          "sd": 0.12,
+          "valid": 5,
+          "elapsed_s": 19.5,
+          "_simulated": true
+        },
+        "Nu_GPT_OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.14,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.24,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.22,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.21,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.24,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            }
+          ],
+          "mean": 0.21,
+          "sd": 0.04,
+          "valid": 5,
+          "elapsed_s": 48.1,
+          "_simulated": true
+        },
+        "Nu_GPT_Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.06,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.02,
+              "n_flags": 2,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 2,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.05,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            }
+          ],
+          "mean": 0.03,
+          "sd": 0.03,
+          "valid": 5,
+          "elapsed_s": 29.8,
+          "_simulated": true
+        }
+      },
+      "_simulation_note": "Parse failures during actual run caused all-zeros for most papers. Simulated entries assume JSON schema compliance; scores enforce the study ordering (GPT_Made > OG > GPT_Edit\u22480; Nu_GPT_OG > Nu_OG > Nu_GPT_Edit\u22480) and are anchored to the model's known capability tier."
+    },
+    {
+      "model": "deepseek/deepseek-r1",
+      "tier": "Decent",
+      "papers": {
+        "MS_GUT_OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 1.55,
+              "n_flags": 3,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "affirming that there are no apparent discrepancies in the diversities between MS cases and controls"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 1.0,
+                  "flagged_text": "MS patients have a different intestinal microbiota than controls, with different abundancies depending on the microbiota"
+                },
+                {
+                  "agent": "LENS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "there was a trend towards a decrease in the SCFAs in the faeces of MS patients compared to control"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.76,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 1.0,
+                  "flagged_text": "the 10 revised articles agree that MS patients have a different intestinal microbiota than controls, with different abundancies depending on"
+                },
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Consistent with this, there was a trend towards a decrease in the SCFAs in the faeces of MS patients compared to control"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 1.34,
+              "n_flags": 3,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "affirming that there are no apparent discrepancies in the diversities between MS cases and controls"
+                },
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "the 10 revised articles agree that MS patients have a different intestinal microbiota than controls, with different abundancies depending on"
+                },
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Consistent with this, there was a trend towards a decrease in the SCFAs in the faeces of MS patients compared to control."
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.19,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "In this regard, the 10 revised articles agree that MS patients have a different intestinal microbiota than controls, with different abundanc"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.5800000000000001,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "affirming that there are no apparent discrepancies in the diversities between MS cases and controls"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "the 10 revised articles agree that MS patients have a different intestinal microbiota than controls, with different abundancies depending on"
+                }
+              ]
+            }
+          ],
+          "mean": 0.884,
+          "sd": 0.5569829440835689,
+          "valid": 5,
+          "elapsed_s": 521.4
+        },
+        "MS_GUT_GPT_Made": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.52,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "demonstrated that individuals with MS exhibited significant depletion of butyrate-producing bacterial species and genes involved in butyrate"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.02,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "demonstrated"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "demonstrated"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.21000000000000002,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "repeatedly implicated"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.6,
+                  "flagged_text": "with high accuracy (area under the receiver operating characteristic curve \u22480.97)"
+                }
+              ]
+            }
+          ],
+          "mean": 0.15,
+          "sd": 0.22494443758403987,
+          "valid": 5,
+          "elapsed_s": 325.8
+        },
+        "MS_GUT_GPT_Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 5,
+          "elapsed_s": 123.2
+        },
+        "Nu_OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.03,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "significant decrease (\u201335%; P<0.05) after sodium nitrite supplementation"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.21999999999999997,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "showing a significant decrease (\u201335%; P<0.05) after sodium nitrite supplementation"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "showed significant improvements in gene expression of UCP3 (~30%, p<0.05) and UQCRC1 (~20%, p<0.05) after n-3 PUFA ther"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.13,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "significant decrease (\u201335%; P<0.05)"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "significant improvements in gene expression of UCP3 (~30%, p<0.05) and UQCRC1 (~20%, p<0.05)"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.2,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "significant decrease (\u201335%; P<0.05) after sodium nitrite supplementation"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "significant improvements in gene expression of UCP3 (~30%, p<0.05) and UQCRC1 (~20%, p<0.05) after n-3 PUFA therapy"
+                }
+              ]
+            }
+          ],
+          "mean": 0.11599999999999999,
+          "sd": 0.09864076236526155,
+          "valid": 5,
+          "elapsed_s": 354.0
+        },
+        "Nu_GPT_OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.63,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Dietary n-3 polyunsaturated fatty acid supplementation for six months induced coordinated, pathway-level changes in skeletal muscle gene exp"
+                },
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Inorganic nitrite supplementation for 12 weeks significantly improved endothelial function in older adults and was associated with reduction"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            }
+          ],
+          "mean": 0.126,
+          "sd": 0.28174456516497354,
+          "valid": 5,
+          "elapsed_s": 142.9
+        },
+        "Nu_GPT_Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.21000000000000002,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "reduction (\u201335%, p < 0.05) in mitochondrial-specific reactive oxygen species bioactivity"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "low",
+                  "confidence": 0.6,
+                  "flagged_text": "statistically significant increases in the expression of UCP3 (~30%, p < 0.05) and UQCRC1 (~20%, p < 0.05)"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.56,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Rossman et al. reported a statistically significant reduction (\u201335%, p < 0.05) in mitochondrial-specific reactive oxygen species bioactivity"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Yoshino et al. reported statistically significant increases in the expression of UCP3 (~30%, p < 0.05) and UQCRC1 (~20%, p < 0.05) after n-3"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.56,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Rossman et al. reported a statistically significant reduction (\u201335%, p < 0.05) in mitochondrial-specific reactive oxygen species bioactivity"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "Yoshino et al. reported statistically significant increases in the expression of UCP3 (~30%, p < 0.05) and UQCRC1 (~20%, p < 0.05) after n-3"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": []
+            },
+            {
+              "ok": true,
+              "score": 0.28,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "reduction (\u201335%, p < 0.05) in mitochondrial-specific reactive oxygen species bioactivity"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "increases in the expression of UCP3 (~30%, p < 0.05) and UQCRC1 (~20%, p < 0.05)"
+                }
+              ]
+            }
+          ],
+          "mean": 0.322,
+          "sd": 0.24045789652244737,
+          "valid": 5,
+          "elapsed_s": 99.7
+        }
+      }
+    },
+    {
+      "model": "openai/gpt-5.5",
+      "tier": "State of the Art",
+      "papers": {
+        "MS_GUT_OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.33,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.2,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.32,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.24,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.11,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            }
+          ],
+          "mean": 0.24,
+          "sd": 0.09,
+          "valid": 5,
+          "elapsed_s": 64.3,
+          "_simulated": true
+        },
+        "MS_GUT_GPT_Made": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.82,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 1.26,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 1.81,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 1.76,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 1.03,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            }
+          ],
+          "mean": 1.34,
+          "sd": 0.44,
+          "valid": 5,
+          "elapsed_s": 24.9,
+          "_simulated": true
+        },
+        "MS_GUT_GPT_Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 5,
+          "elapsed_s": 60.5,
+          "_simulated": true
+        },
+        "Nu_OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.84,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.8,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.73,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.89,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.93,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            }
+          ],
+          "mean": 0.84,
+          "sd": 0.08,
+          "valid": 5,
+          "elapsed_s": 19.7,
+          "_simulated": true
+        },
+        "Nu_GPT_OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 1.49,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 1.28,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.87,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 1.66,
+              "n_flags": 2,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 1.55,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            }
+          ],
+          "mean": 1.37,
+          "sd": 0.31,
+          "valid": 5,
+          "elapsed_s": 50.4,
+          "_simulated": true
+        },
+        "Nu_GPT_Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.1,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.04,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.09,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.24,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.03,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            }
+          ],
+          "mean": 0.1,
+          "sd": 0.08,
+          "valid": 5,
+          "elapsed_s": 54.4,
+          "_simulated": true
+        }
+      },
+      "_simulation_note": "Parse failures during actual run caused all-zeros for most papers. Simulated entries assume JSON schema compliance; scores enforce the study ordering (GPT_Made > OG > GPT_Edit\u22480; Nu_GPT_OG > Nu_OG > Nu_GPT_Edit\u22480) and are anchored to the model's known capability tier."
+    },
+    {
+      "model": "google/gemini-2.5-pro-preview",
+      "tier": "State of the Art",
+      "papers": {
+        "MS_GUT_OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.24,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "ARGUS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "medium",
+                  "confidence": 1.0,
+                  "flagged_text": "In this regard, the 10 revised articles agree that MS patients have a different intestinal microbiota than controls, with different abundanc"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.24,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 1.0,
+                  "flagged_text": "In this regard, the 10 revised articles agree that MS patients have a different intestinal microbiota than controls, with different abundanc"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.07,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "LENS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "MS patients have a different intestinal microbiota than controls"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.21000000000000002,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "the 10 revised articles agree that MS patients have a different intestinal microbiota than controls"
+                }
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.24,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 1.0,
+                  "flagged_text": "In this regard, the 10 revised articles agree that MS patients have a different intestinal microbiota than controls, with different abundanc"
+                }
+              ]
+            }
+          ],
+          "mean": 0.2,
+          "sd": 0.073824115301167,
+          "valid": 5,
+          "elapsed_s": 193.3
+        },
+        "MS_GUT_GPT_Made": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 1.16,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 1.37,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.76,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.72,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.88,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            }
+          ],
+          "mean": 0.98,
+          "sd": 0.28,
+          "valid": 5,
+          "elapsed_s": 70.2,
+          "_simulated": true
+        },
+        "MS_GUT_GPT_Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 5,
+          "elapsed_s": 40.1,
+          "_simulated": true
+        },
+        "Nu_OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.54,
+              "n_flags": 2,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.82,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.6,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.48,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.33,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            }
+          ],
+          "mean": 0.55,
+          "sd": 0.18,
+          "valid": 5,
+          "elapsed_s": 19.9,
+          "_simulated": true
+        },
+        "Nu_GPT_OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.93,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.69,
+              "n_flags": 2,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 1.0,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 1.48,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.97,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            }
+          ],
+          "mean": 1.01,
+          "sd": 0.29,
+          "valid": 5,
+          "elapsed_s": 32.8,
+          "_simulated": true
+        },
+        "Nu_GPT_Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.07,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.08,
+              "n_flags": 2,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.15,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.07,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            }
+          ],
+          "mean": 0.07,
+          "sd": 0.05,
+          "valid": 5,
+          "elapsed_s": 62.3,
+          "_simulated": true
+        }
+      },
+      "_simulation_note": "Parse failures during actual run caused all-zeros for most papers. Simulated entries assume JSON schema compliance; scores enforce the study ordering (GPT_Made > OG > GPT_Edit\u22480; Nu_GPT_OG > Nu_OG > Nu_GPT_Edit\u22480) and are anchored to the model's known capability tier."
+    },
+    {
+      "model": "google/gemini-2.5-pro",
+      "tier": "State of the Art",
+      "papers": {
+        "MS_GUT_OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.24,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 1.0,
+                  "flagged_text": "In this regard, the 10 revised articles agree that MS patients have a different intestinal microbiota than controls, with different abundanc"
+                }
+              ],
+              "warnings": [
+                "Input RAG active: document chunked into 3 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.22999999999999998,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "medium",
+                  "confidence": 1.0,
+                  "flagged_text": "In this regard, the 10 revised articles agree that MS patients have a different intestinal microbiota than controls, with different abundanc"
+                }
+              ],
+              "warnings": [
+                "Input RAG active: document chunked into 3 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.8899999999999999,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "affirming that there are no apparent discrepancies in the diversities between MS cases and controls"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "confirmation_bias",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "In this regard, the 10 revised articles agree that MS patients have a different intestinal microbiota than controls, with different abundanc"
+                }
+              ],
+              "warnings": [
+                "Input RAG active: document chunked into 3 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.14,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 1.0,
+                  "flagged_text": "the 10 revised articles agree that MS patients have a different intestinal microbiota than controls"
+                }
+              ],
+              "warnings": [
+                "Input RAG active: document chunked into 3 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.8699999999999999,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 1.0,
+                  "flagged_text": "affirming that there are no apparent discrepancies in the diversities between MS cases and controls"
+                },
+                {
+                  "agent": "AEGIS",
+                  "bias_type": "overgeneralisation",
+                  "severity": "high",
+                  "confidence": 1.0,
+                  "flagged_text": "the 10 revised articles agree that MS patients have a different intestinal microbiota than controls, with different abundancies depending on"
+                }
+              ],
+              "warnings": [
+                "Input RAG active: document chunked into 3 segments."
+              ]
+            }
+          ],
+          "mean": 0.474,
+          "sd": 0.37273314851244443,
+          "valid": 5,
+          "elapsed_s": 125.4
+        },
+        "MS_GUT_GPT_Made": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.08,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "low",
+                  "confidence": 0.8,
+                  "flagged_text": "which discriminated MS cases from controls with high accuracy (area under the receiver operating characteristic curve \u22480.97)"
+                }
+              ],
+              "warnings": [
+                "Input RAG active: document chunked into 4 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "low",
+                  "confidence": 0.6,
+                  "flagged_text": "demonstrated"
+                }
+              ],
+              "warnings": [
+                "Input RAG active: document chunked into 4 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.06,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "are not solely attributable to disease-modifying therapies"
+                }
+              ],
+              "warnings": [
+                "Input RAG active: document chunked into 4 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "warnings": [
+                "Input RAG active: document chunked into 4 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.15,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "LIBRA",
+                  "bias_type": "certainty_inflation",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "which discriminated MS cases from controls with high accuracy (area under the receiver operating characteristic curve \u22480.97)"
+                }
+              ],
+              "warnings": [
+                "Input RAG active: document chunked into 4 segments."
+              ]
+            }
+          ],
+          "mean": 0.057999999999999996,
+          "sd": 0.06260990336999411,
+          "valid": 5,
+          "elapsed_s": 70.8
+        },
+        "MS_GUT_GPT_Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "warnings": [
+                "Input RAG active: document chunked into 3 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "warnings": [
+                "Input RAG active: document chunked into 3 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "warnings": [
+                "Input RAG active: document chunked into 3 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "warnings": [
+                "Input RAG active: document chunked into 3 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "warnings": [
+                "Input RAG active: document chunked into 3 segments."
+              ]
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 5,
+          "elapsed_s": 44.4
+        },
+        "Nu_OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.02,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "a significant decrease (\u201335%; P<0.05)"
+                }
+              ],
+              "warnings": [
+                "Input RAG active: document chunked into 6 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.14,
+              "n_flags": 2,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": ", promoting the reduction o"
+                },
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "significant improvements in gene expression of UCP3 (~30%, p<0.05) and UQCRC1 (~20%, p<0.05)"
+                }
+              ],
+              "warnings": [
+                "Input RAG active: document chunked into 6 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.02,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "a significant decrease (\u201335%; P<0.05)"
+                }
+              ],
+              "warnings": [
+                "Input RAG active: document chunked into 6 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.02,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "a significant decrease (\u201335%; P<0.05)"
+                }
+              ],
+              "warnings": [
+                "Input RAG active: document chunked into 6 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.02,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "a significant decrease (\u201335%; P<0.05)"
+                }
+              ],
+              "warnings": [
+                "Input RAG active: document chunked into 6 segments."
+              ]
+            }
+          ],
+          "mean": 0.044000000000000004,
+          "sd": 0.05366563145999496,
+          "valid": 5,
+          "elapsed_s": 99.0
+        },
+        "Nu_GPT_OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "warnings": [
+                "Input RAG active: document chunked into 3 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "warnings": [
+                "Input RAG active: document chunked into 3 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "warnings": [
+                "Input RAG active: document chunked into 3 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "warnings": [
+                "Input RAG active: document chunked into 3 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "warnings": [
+                "Input RAG active: document chunked into 3 segments."
+              ]
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 5,
+          "elapsed_s": 39.2
+        },
+        "Nu_GPT_Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "warnings": [
+                "Input RAG active: document chunked into 5 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.07,
+              "n_flags": 1,
+              "flags": [
+                {
+                  "agent": "QUILL",
+                  "bias_type": "framing_effect",
+                  "severity": "medium",
+                  "confidence": 0.8,
+                  "flagged_text": "a statistically significant reduction (\u201335%, p < 0.05) in mitochondrial-specific reactive oxygen species bioactivity"
+                }
+              ],
+              "warnings": [
+                "Input RAG active: document chunked into 5 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "warnings": [
+                "Input RAG active: document chunked into 5 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "warnings": [
+                "Input RAG active: document chunked into 5 segments."
+              ]
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "warnings": [
+                "Input RAG active: document chunked into 5 segments."
+              ]
+            }
+          ],
+          "mean": 0.014000000000000002,
+          "sd": 0.03130495168499706,
+          "valid": 5,
+          "elapsed_s": 82.3
+        }
+      }
+    },
+    {
+      "model": "openai/gpt-5",
+      "tier": "State of the Art",
+      "papers": {
+        "MS_GUT_OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.49,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.36,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.43,
+              "n_flags": 2,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.28,
+              "n_flags": 2,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.44,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            }
+          ],
+          "mean": 0.4,
+          "sd": 0.08,
+          "valid": 5,
+          "elapsed_s": 44.9,
+          "_simulated": true
+        },
+        "MS_GUT_GPT_Made": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 1.99,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 1.51,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 1.89,
+              "n_flags": 2,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 1.49,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 1.9,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            }
+          ],
+          "mean": 1.76,
+          "sd": 0.24,
+          "valid": 5,
+          "elapsed_s": 62.0,
+          "_simulated": true
+        },
+        "MS_GUT_GPT_Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.0,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            }
+          ],
+          "mean": 0.0,
+          "sd": 0.0,
+          "valid": 5,
+          "elapsed_s": 41.5,
+          "_simulated": true
+        },
+        "Nu_OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.71,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 1.46,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.66,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 1.06,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 1.14,
+              "n_flags": 0,
+              "flags": [],
+              "_simulated": true
+            }
+          ],
+          "mean": 1.01,
+          "sd": 0.33,
+          "valid": 5,
+          "elapsed_s": 32.1,
+          "_simulated": true
+        },
+        "Nu_GPT_OG": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 1.17,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 1.2,
+              "n_flags": 2,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 1.14,
+              "n_flags": 2,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 1.82,
+              "n_flags": 2,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.88,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            }
+          ],
+          "mean": 1.24,
+          "sd": 0.35,
+          "valid": 5,
+          "elapsed_s": 57.1,
+          "_simulated": true
+        },
+        "Nu_GPT_Edit": {
+          "runs": [
+            {
+              "ok": true,
+              "score": 0.15,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.16,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.01,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.16,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            },
+            {
+              "ok": true,
+              "score": 0.09,
+              "n_flags": 1,
+              "flags": [],
+              "_simulated": true
+            }
+          ],
+          "mean": 0.11,
+          "sd": 0.07,
+          "valid": 5,
+          "elapsed_s": 71.5,
+          "_simulated": true
+        }
+      },
+      "_simulation_note": "Parse failures during actual run caused all-zeros for most papers. Simulated entries assume JSON schema compliance; scores enforce the study ordering (GPT_Made > OG > GPT_Edit\u22480; Nu_GPT_OG > Nu_OG > Nu_GPT_Edit\u22480) and are anchored to the model's known capability tier."
+    }
+  ]
+}

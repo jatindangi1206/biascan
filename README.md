@@ -1,6 +1,11 @@
 # BiasScan
 
-Open-source agentic cognitive bias detection for AI-generated systematic review synthesis text. Five specialised agents — **ARGUS** (confirmation), **LIBRA** (certainty inflation), **LENS** (overgeneralisation), **QUILL** (framing), **VIGIL** (causal inference) — run in parallel against your chosen LLM.
+Open-source agentic cognitive bias detection for research writing. BiasScan now supports two analysis modes:
+
+- **General research** (`v2`) for abstracts, conclusions, grant prose, policy prose, headlines, and mixed research-facing writing.
+- **Systematic review** (`v1`) for the original stricter specialist workflow.
+
+Five specialised agents — **ARGUS** (confirmation), **LIBRA** (certainty inflation), **LENS** (overgeneralisation), **QUILL** (framing), **VIGIL** (causal inference) — run in parallel against your chosen LLM.
 
 This implements the architecture in `biasscan_plan.html` and the prompt-engineering design in `biasscan_prompts_v1.html`.
 
@@ -60,7 +65,7 @@ cd frontend
 npm install && npm run dev
 ```
 
-Open `http://localhost:5173`. The Settings panel will be pre-filled for Ollama at `localhost:11434`. Click **Test connection** to verify, then paste synthesis text and click Analyse.
+Open `http://localhost:5173`. The Settings panel will be pre-filled for Ollama at `localhost:11434`. Click **Test connection** to verify, choose your **Research mode**, then paste text and click Analyse.
 
 ## Switching providers
 
@@ -89,7 +94,8 @@ Latency is bounded by the slowest agent regardless of how many you select (they 
 backend/
   app/
     agents/            # base + 5 agents + orchestrator + meta-evaluator
-    prompts/v1/        # versioned system prompts (~7-10 kB each)
+    prompts/v1/        # frozen systematic-review prompts
+    prompts/v2/        # general-research prompts
     providers/         # ollama, anthropic, openai_compat, gemini
     rag/               # stub vector store + reference fetcher (premium, v0.2)
     config.py
@@ -121,6 +127,7 @@ Verifies connectivity with a tiny round-trip. Used by the **Test connection** bu
   "text": "The synthesis section text...",
   "references": "Optional reference list, newline-separated.",
   "mode": "lite",
+  "analysis_mode": "general_research",
   "provider": {
     "provider": "ollama",
     "model": "qwen2.5:7b",
@@ -138,6 +145,7 @@ Response shape (abbreviated):
 {
   "document_id": "doc_a1b2c3d4e5",
   "mode": "lite",
+  "analysis_mode": "general_research",
   "overall_bias_score": 0.42,
   "annotations": [ { "bias_type": "causal_inference_error", "span_start": 412, "span_end": 489, "confidence": 0.88, "severity": "high", "agent_name": "VIGIL", "...": "..." } ],
   "agents": [ { "agent": "ARGUS", "raw_count": 2, "kept_count": 1, "...": "..." } ],
