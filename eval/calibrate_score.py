@@ -93,7 +93,7 @@ async def score_one(orch: Orchestrator, text: str, provider_cfg: ProviderConfig)
             text=text,
             references=None,
             mode="lite",
-            analysis_mode="general_research",
+            analysis_mode="systematic_review",
             provider_config=provider_cfg,
             agents=None,  # all 5
         )

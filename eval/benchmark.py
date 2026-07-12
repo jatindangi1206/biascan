@@ -364,7 +364,7 @@ async def run_agent_model(
                     text=sample["input_text"],
                     references=None,
                     mode="lite",
-                    analysis_mode="general_research",
+                    analysis_mode="systematic_review",
                     provider_config=provider_config,
                     agents=[backend_agent_name],
                 )

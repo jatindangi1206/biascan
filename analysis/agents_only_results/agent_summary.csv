@@ -1,0 +1,6 @@
+Agent,Bias Type,Gold Examples,True Positives,Misses,Recall (%),Fire Count
+QUILL,framing_effect,50,39,11,78.0,70
+LENS,overgeneralisation,50,35,15,70.0,171
+LIBRA,certainty_inflation,50,35,15,70.0,59
+ARGUS,confirmation_bias,40,23,17,57.5,106
+VIGIL,causal_inference_error,50,11,39,22.0,78

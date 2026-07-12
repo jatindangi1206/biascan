@@ -89,7 +89,7 @@ async def main() -> int:
     print("\n[1/2] Analysing clean fixture (expected: 0–1 low-severity flags)…")
     clean_resp = await orch.analyze(
         text=CLEAN_TEXT, references=None, mode="lite",
-        analysis_mode="general_research",
+        analysis_mode="systematic_review",
         provider_config=cfg, agents=None,
     )
     print(fmt_anns("CLEAN", clean_resp.overall_bias_score, clean_resp.annotations))
@@ -97,7 +97,7 @@ async def main() -> int:
     print("\n[2/2] Analysing biased fixture (expected: 3–5 flags, ≥1 high-severity)…")
     biased_resp = await orch.analyze(
         text=BIASED_TEXT, references=None, mode="lite",
-        analysis_mode="general_research",
+        analysis_mode="systematic_review",
         provider_config=cfg, agents=None,
     )
     print(fmt_anns("BIASED", biased_resp.overall_bias_score, biased_resp.annotations))

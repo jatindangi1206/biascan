@@ -28,7 +28,7 @@ For local LLM dev, the default provider is Ollama on `localhost:11434`; `ollama 
 
 Eval scripts (standalone, not imported by backend):
 ```bash
-python -m eval.build_corpus          # regenerates eval/output/samples.json (Evidence RAG input)
+python -m eval.build_corpus          # regenerates eval/output/samples.json (eval-only artifact)
 python -m eval.sentence_eval         # sentence-level multi-model validation (needs OPENROUTER_API_KEY)
 python -m eval.probe_models          # raw JSON probe against ARGUS for a single sentence
 python -m eval.benchmark             # cross-provider/model benchmark
@@ -48,8 +48,10 @@ The request field `analysis_mode` selects which prompt version is loaded — it 
 
 | `analysis_mode` | prompt version | directory |
 |---|---|---|
-| `general_research` (default) | `v2` | `app/prompts/v2/` |
-| `systematic_review` | `v1` | `app/prompts/v1/` |
+| `systematic_review` (default, **the product**) | `v1` | `app/prompts/v1/` |
+| `general_research` | `v2` | `app/prompts/v2/` |
+
+`systematic_review` (v1) is the only user-facing mode: the frontend no longer exposes a mode toggle, and `DEFAULT_ANALYSIS_MODE` / the `AnalyzeRequest.analysis_mode` default are both `systematic_review`. The `general_research` (v2) path and its prompt dir are retained only for the eval harness (e.g. `sentence_eval_v2.py`) — do not surface v2 in the product UI.
 
 `app/config.py` exposes three resolver functions used throughout the backend:
 - `resolve_prompt_version(analysis_mode)` → `"v1"` or `"v2"`
@@ -111,7 +113,7 @@ To add a provider: implement `complete(...)`, add to `build_provider`, and appen
 
 ### Frontend
 
-Vite + React 18 + TypeScript, no state library. `App.tsx` owns provider config (persisted in `localStorage` under `biasscan.provider`), theme preference (`biasscan.theme` — light/dark), agent selection, and request lifecycle. `api.ts` wraps `fetch` to the backend (default `http://localhost:8000`) and consumes the SSE stream. Components: `SettingsPanel` (provider + key + Test connection), `AgentPicker`, `InputPanel`, `ProgressPanel` (live SSE-driven status), `AnnotatedOutput` (span highlights), `ResultsPanel`. Dark mode is toggled via `document.documentElement.dataset.theme` and CSS custom property overrides in `styles.css`.
+Vite + React 18 + TypeScript, no state library and no router. `App.tsx` owns provider config (persisted in `localStorage` under `biasscan.provider`), theme preference (`biasscan.theme` — light/dark), agent selection, and request lifecycle. Full-page views (`HowItWorks`, `Leaderboard`) are boolean-toggled in `App.tsx` rather than routed. `analysisMode` is hardcoded to `systematic_review` (the `ANALYSIS_MODE` constant) — the research-mode selector was removed from `SettingsPanel`. `api.ts` wraps `fetch` to the backend (default `http://localhost:8000`) and consumes the SSE stream. Components: `SettingsPanel` (provider + key + Test connection), `AgentPicker`, `InputPanel`, `ProgressPanel` (live SSE-driven status), `AnnotatedOutput` (span highlights), `ResultsPanel`, `Leaderboard` (top-right nav; renders the ranked table from the checked-in `src/leaderboard.json`, generated from the systematic-review eval run). Dark mode is toggled via `document.documentElement.dataset.theme` and CSS custom property overrides in `styles.css`.
 
 ### Tuning knobs (env, optional)
 
@@ -133,14 +135,19 @@ See `backend/.env.example` for a template.
 
 `eval/` is a standalone package (not imported by the backend). Key scripts:
 
+There are two eval tracks — **sentence-level** (Phase 1) and **document-level** (Phase 2, the leaderboard).
+
 | script | purpose |
 |---|---|
 | `build_corpus.py` | assembles `eval/output/samples.json` (eval-only artifact since Evidence RAG was removed) |
 | `sentence_eval.py` | sentence-level multi-model validation across 5 models via OpenRouter; writes `eval/output/sentence_eval_*.csv/json` |
 | `sentence_eval_v2.py` | same as above but for v2 (general_research) prompts |
+| `multi_model_benchmark.py` | document-level benchmark (`analysis_mode="systematic_review"`); produces `eval/output/leaderboard.json` (per-model × per-document runs) |
 | `probe_models.py` | raw JSON probe against ARGUS for a single sentence — quick sanity check for new models |
 | `benchmark.py` | cross-provider/model comparison |
 | `auto_eval.py` / `manual_eval.py` | automated and human scoring of agent output |
 | `generate_report.py` / `generate_leaderboard_html.py` | output formatting |
 
-`eval/datasets/suites/` holds named evaluation suites used by `sentence_eval.py`. Results land in `eval/output/` and `eval/results/`. The eval package has its own `eval_config.py` separate from `app/config.py`. The `*_viz.py` / `study_figs.py` scripts (e.g. `leaderboard_viz.py`, `sentence_eval_viz.py`) are matplotlib figure generators that read those result JSON/CSV files and write PNGs under `eval/output/*_figs/`.
+**Document-level scoring is recomputed, not read from the JSON.** `leaderboard.json`'s stored `score` field predates the current formula. `_doc_metrics.py` is the single source of truth: it re-derives coverage / impact / score from each run's raw flags per `docs/SCORING.md` (substring-matching each flag's `flagged_text` against the source synthesis `.txt`). Both the figure scripts and `edit_significance.py` (exact paired permutation + Wilcoxon significance tests, dependency-free — scipy is unavailable) import from it. When changing the scoring formula, update `_doc_metrics.py` and `docs/SCORING.md` together. The frontend's `src/leaderboard.json` is generated from these recomputed metrics (systematic-review, working models only).
+
+`eval/datasets/suites/` holds named evaluation suites used by `sentence_eval.py`. Results land in `eval/output/` and `eval/results/`. The eval package has its own `eval_config.py` separate from `app/config.py`. The `*_viz.py` scripts (`leaderboard_viz.py`, `leaderboard_viz_extra.py`, `leaderboard_table_viz.py`, `leaderboard_scale_viz.py`, `sentence_eval_viz.py`, `sentence_eval_v1v2_viz.py`) are matplotlib figure generators that read the result JSON/CSV files and write PNGs under `eval/output/*_figs/`.

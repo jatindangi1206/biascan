@@ -4,7 +4,7 @@ from pydantic import BaseModel, Field
 from .providers.base import ProviderConfig
 
 Mode = Literal["lite", "premium", "adaptive"]
-AnalysisMode = Literal["systematic_review", "general_research"]
+AnalysisMode = Literal["systematic_review"]
 Severity = Literal["low", "medium", "high"]
 BiasType = Literal[
     "confirmation_bias",

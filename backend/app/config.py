@@ -9,7 +9,6 @@ PROMPTS_DIR = BASE_DIR / "prompts"
 DEFAULT_ANALYSIS_MODE = "systematic_review"
 PROMPT_VERSION_BY_ANALYSIS_MODE = {
     "systematic_review": "v1",
-    "general_research": "v2",
 }
 AVAILABLE_ANALYSIS_MODES = tuple(PROMPT_VERSION_BY_ANALYSIS_MODE.keys())
 

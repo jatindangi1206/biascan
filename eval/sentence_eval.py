@@ -3,9 +3,8 @@
 Runs BiasScan over one named evaluation suite at a time.
 
 Supported suites:
-  - legacy: the existing sentence dataset
+  - legacy: the existing sentence dataset (systematic-review v1 prompts)
   - systematic_review_v1: frozen specialist systematic-review prompts
-  - general_research_v2: broader general-research prompts
 
 For each labeled example:
   - Run BiasScan analyze() N times per (example, model) pair
@@ -51,7 +50,7 @@ LABEL_MAP = {
 SUITES = {
     "legacy": {
         "dataset": ROOT / "backend" / "app" / "sentences-dataset" / "dataset .csv",
-        "analysis_mode": "general_research",
+        "analysis_mode": "systematic_review",
         "id_col": "Sentence ID",
         "text_col": "Sentence Text",
         "label_col": "Annotated Bias",
@@ -59,13 +58,6 @@ SUITES = {
     "systematic_review_v1": {
         "dataset": ROOT / "eval" / "datasets" / "suites" / "systematic_review_v1.csv",
         "analysis_mode": "systematic_review",
-        "id_col": "Item ID",
-        "text_col": "Text",
-        "label_col": "Annotated Bias",
-    },
-    "general_research_v2": {
-        "dataset": ROOT / "eval" / "datasets" / "suites" / "general_research_v2.csv",
-        "analysis_mode": "general_research",
         "id_col": "Item ID",
         "text_col": "Text",
         "label_col": "Annotated Bias",
@@ -80,7 +72,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--suite",
         choices=sorted(SUITES.keys()),
-        default="general_research_v2",
+        default="legacy",
         help="Evaluation suite to run.",
     )
     parser.add_argument(

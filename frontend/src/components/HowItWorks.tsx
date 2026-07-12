@@ -12,9 +12,8 @@ export function HowItWorks({ onBack }: Props) {
       <h1 className="howitworks-title">How it works</h1>
 
       <div className="video-frame">
-        {/* TODO: replace VIDEO_ID with the actual YouTube video ID */}
         <iframe
-          src="https://www.youtube-nocookie.com/embed/VIDEO_ID"
+          src="https://www.youtube-nocookie.com/embed/vlxvTlvt9hk"
           title="BiasScan walkthrough"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
